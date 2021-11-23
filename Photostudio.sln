@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotostudioDLL", "Photostud
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotostudioGUI", "PhotostudioGUI\PhotostudioGUI.csproj", "{E6BACC3D-76DF-4FDA-A962-FDAC4FF3115A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{40306D7C-3D69-4300-8AA6-D999CD752B5E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{E6BACC3D-76DF-4FDA-A962-FDAC4FF3115A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E6BACC3D-76DF-4FDA-A962-FDAC4FF3115A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E6BACC3D-76DF-4FDA-A962-FDAC4FF3115A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40306D7C-3D69-4300-8AA6-D999CD752B5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40306D7C-3D69-4300-8AA6-D999CD752B5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40306D7C-3D69-4300-8AA6-D999CD752B5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40306D7C-3D69-4300-8AA6-D999CD752B5E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
