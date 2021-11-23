@@ -1,45 +1,59 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.IO;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using PhotostudioDLL.Entity;
 
 namespace PhotostudioDLL
 {
-    public class ApplicationContext : DbContext
+    public sealed class ApplicationContext : DbContext
     {
-        public DbSet<Client> Clients { get; set; }
-        public DbSet<Contract> Contracts { get; set; }
-        public DbSet<Employee> Employees { get; set; }
-        public DbSet<Role> Role { get; set; }
-        public DbSet<Equipment> Equipments { get; set; }
-        public DbSet<Inventory> Inventories { get; set; }
-        public DbSet<Service> Services { get; set; }
-        public DbSet<Hall> Halls { get; set; }
-        public DbSet<RentedItem> RentedItems { get; set; }
-        public DbSet<ServiceProvided> ServicesProvided { get; set; }
-        public DbSet<Order> Orders { get; set; }
+        private static string _config;
 
-        public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
+        public ApplicationContext()
         {
+            // TODO: Добавить миграцию (?), указвыать путь к файлу с данными БД
             Database.EnsureCreated();
         }
 
-        public static DbContextOptions<ApplicationContext> getConnet(string path)
+        // TODO: Добавление объектов в их таблицы, удаление и обновдение данных
+
+        public DbSet<Client> Client { get; set; }
+        public DbSet<Contract> Contract { get; set; }
+        public DbSet<Employee> Employee { get; set; }
+        public DbSet<Role> Role { get; set; }
+        public DbSet<Equipment> Equipment { get; set; }
+        public DbSet<Inventory> Inventory { get; set; }
+        public DbSet<Service> Service { get; set; }
+        public DbSet<Hall> Hall { get; set; }
+        public DbSet<RentedItem> RentedItem { get; set; }
+        public DbSet<ServiceProvided> ServiceProvided { get; set; }
+        public DbSet<Order> Order { get; set; }
+
+        public static void Login(string login, string password)
         {
             var builder = new ConfigurationBuilder();
-            builder.SetBasePath(path);
+            builder.SetBasePath(Directory.GetCurrentDirectory());
             builder.AddJsonFile("appsettings.json");
-            var config = builder.Build();
-            string connectionString = config.GetConnectionString("DefaultConnection");
-            var optionsBuilder = new DbContextOptionsBuilder<ApplicationContext>();
-            return optionsBuilder.UseNpgsql(connectionString).Options;
+            var configJson = builder.Build();
+            var host = configJson.GetConnectionString("Host");
+            var port = configJson.GetConnectionString("Port");
+            var database = configJson.GetConnectionString("Database");
+
+            _config =
+                $"Host={host};Port={port};Database={database};Username={login};Password={password}";
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Client>().HasIndex(e => e.PhoneNumber).IsUnique(true);
-            modelBuilder.Entity<Employee>().HasIndex(e => e.PhoneNumber).IsUnique(true);
-            modelBuilder.Entity<Employee>().HasIndex(e => e.PassData).IsUnique(true);
-            modelBuilder.Entity<Employee>().HasIndex(e => e.EMail).IsUnique(true);
+            modelBuilder.Entity<Client>().HasIndex(e => e.PhoneNumber).IsUnique();
+            modelBuilder.Entity<Employee>().HasIndex(e => e.PhoneNumber).IsUnique();
+            modelBuilder.Entity<Employee>().HasIndex(e => e.PassData).IsUnique();
+            modelBuilder.Entity<Employee>().HasIndex(e => e.EMail).IsUnique();
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseNpgsql(_config);
         }
     }
 }
