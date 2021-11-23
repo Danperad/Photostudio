@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.SqlTypes;
 
-namespace PhotostudioDLL
+namespace PhotostudioDLL.Entity
 {
-    public class RentedItem
+    public class Service
     {
         public int ID { get; set; }
         [Required]
@@ -11,9 +12,8 @@ namespace PhotostudioDLL
         [Required]
         public string Description { get; set; }
         [Required]
-        public int Number { get; set; }
-        [Required]
         [Column(TypeName = "money")]
-        public decimal UnitPrice { get; set; }
+        public decimal Price { get; set; }
+        public Inventory Inventory { get; set; }
     }
 }

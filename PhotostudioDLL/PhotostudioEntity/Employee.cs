@@ -2,7 +2,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace PhotostudioDLL
+namespace PhotostudioDLL.Entity
 {
     public class Employee
     {

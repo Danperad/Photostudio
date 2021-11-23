@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.SqlTypes;
 
-namespace PhotostudioDLL
+namespace PhotostudioDLL.Entity
 {
-    public class Service
+    public class Hall
     {
         public int ID { get; set; }
         [Required]
@@ -13,7 +13,6 @@ namespace PhotostudioDLL
         public string Description { get; set; }
         [Required]
         [Column(TypeName = "money")]
-        public decimal Price { get; set; }
-        public Inventory Inventory { get; set; }
+        public decimal PricePerHour { get; set; }
     }
 }

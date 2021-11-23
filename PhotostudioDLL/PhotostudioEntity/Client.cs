@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
-namespace PhotostudioDLL
+namespace PhotostudioDLL.Entity
 {
     public class Client
     {
