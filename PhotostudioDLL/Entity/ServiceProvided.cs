@@ -5,7 +5,7 @@ namespace PhotostudioDLL.Entity
 {
     public class ServiceProvided
     {
-        public int ID { get; set; }
+        public uint ID { get; set; }
 
         [Required] public Employee Employee { get; set; }
 
@@ -18,7 +18,9 @@ namespace PhotostudioDLL.Entity
         public DateTime StartRent { get; set; }
         public DateTime EndRent { get; set; }
         public string PhotoLocation { get; set; }
-        public DateTime PhotographingDateTime { get; set; }
+        public DateTime PhotoStartDateTime { get; set; }
+        public DateTime PhotoEndDateTime { get; set; }
+
 
         [Required] public Order Order { get; set; }
     }
