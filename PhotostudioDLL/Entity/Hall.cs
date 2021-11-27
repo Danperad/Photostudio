@@ -17,10 +17,7 @@ namespace PhotostudioDLL.Entity
         [Column(TypeName = "money")]
         public decimal PricePerHour { get; set; }
 
-        public string GetTitle()
-        {
-            return Title;
-        }
+        public string GetTitle() => Title;
 
         public static void Add(Hall hall)
         {

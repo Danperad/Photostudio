@@ -11,6 +11,7 @@ namespace PhotostudioGUI
         public MainWindow()
         {
             InitializeComponent();
+            MainFrame.NavigationService.Navigate(new Login(this));
         }
     }
 }

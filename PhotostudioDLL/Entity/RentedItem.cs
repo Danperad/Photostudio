@@ -21,10 +21,7 @@ namespace PhotostudioDLL.Entity
         [Column(TypeName = "money")]
         public decimal UnitPrice { get; set; }
 
-        public string GetTitle()
-        {
-            return Title;
-        }
+        public string GetTitle() => Title;
 
         public static void Add(RentedItem rentedItem)
         {
