@@ -1,5 +1,3 @@
-﻿/PhotostudioDLL/bin/
+﻿*/bin/
 /.idea/
-/PhotostudioDLL/obj/
-/PhotostudioGUI/bin/
-/PhotostudioGUI/obj/
+*/obj/

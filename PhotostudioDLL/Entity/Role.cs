@@ -1,61 +1,56 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
+﻿global using System.ComponentModel.DataAnnotations;
 
-namespace PhotostudioDLL.Entity
+namespace PhotostudioDLL.Entity;
+
+public class Role
 {
-    public class Role
+    private static ApplicationContext db = Context.db;
+
+    public int ID { get; set; }
+
+    [Required] public string Title { get; set; }
+
+    [Required] public string Rights { get; set; }
+
+    [Required] public string Responsibilities { get; set; }
+    public ICollection<Employee> Employees { get; set; }
+
+    public Role()
     {
-        public uint ID { get; set; }
+        Employees = new List<Employee>();
+    }
 
-        [Required] public string Title { get; set; }
+    public static void Add(Role role)
+    {
+        db.Role.Add(role);
+        db.SaveChanges();
+    }
 
-        [Required] public string Rights { get; set; }
+    public static void AddAsync(Role role)
+    {
+        db.Role.AddAsync(role);
+        db.SaveChanges();
+    }
 
-        [Required] public string Responsibilities { get; set; }
+    public static void AddRange(params Role[] roles)
+    {
+        foreach (var role in roles) db.Role.Add(role);
+        db.SaveChanges();
+    }
 
-        public static void Add(Role role)
-        {
-            using (var db = new ApplicationContext())
-            {
-                db.Role.Add(role);
-                db.SaveChanges();
-            }
-        }
+    public static void AddRangeAsync(params Role[] roles)
+    {
+        foreach (var role in roles) db.Role.AddAsync(role);
+        db.SaveChanges();
+    }
 
-        public static void AddAsync(Role role)
-        {
-            using (var db = new ApplicationContext())
-            {
-                db.Role.AddAsync(role);
-                db.SaveChanges();
-            }
-        }
+    public static List<Role> Get()
+    {
+        return db.Role.ToList();
+    }
 
-        public static void AddRange(params Role[] roles)
-        {
-            using (var db = new ApplicationContext())
-            {
-                foreach (var role in roles) db.Role.Add(role);
-                db.SaveChanges();
-            }
-        }
-
-        public static void AddRangeAsync(params Role[] roles)
-        {
-            using (var db = new ApplicationContext())
-            {
-                foreach (var role in roles) db.Role.AddAsync(role);
-                db.SaveChanges();
-            }
-        }
-
-        public static List<Role> Get()
-        {
-            using (var db = new ApplicationContext())
-            {
-                return db.Role.ToList();
-            }
-        }
+    public static Role GetByID(int id)
+    {
+        return db.Role.Where(d => d.ID == id).FirstOrDefault();
     }
 }

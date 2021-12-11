@@ -1,60 +1,49 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
+﻿namespace PhotostudioDLL.Entity;
 
-namespace PhotostudioDLL.Entity
+public class Client
 {
-    public class Client
+    private static ApplicationContext db = Context.db;
+    
+    public int ID { get; set; }
+    [Required] [MaxLength(50)] public string LastName { get; set; }
+    [Required] [MaxLength(50)] public string FirstName { get; set; }
+    [MaxLength(50)] public string MiddleName { get; set; }
+    [Required] [MaxLength(15)] public string PhoneNumber { get; set; }
+    [MaxLength(50)] public string EMail { get; set; }
+
+    public string GetName()
     {
-        public uint ID { get; set; }
-        [Required] [MaxLength(50)] public string LastName { get; set; }
-        [Required] [MaxLength(50)] public string FirstName { get; set; }
-        [MaxLength(50)] public string MiddleName { get; set; }
-        [Required] [MaxLength(15)] public string PhoneNumber { get; set; }
-        [MaxLength(50)] public string EMail { get; set; }
+        var temp = $"{LastName} {FirstName.Substring(0, 1)}.";
+        if (MiddleName != null) temp += $" {MiddleName.Substring(0, 1)}.";
+        return temp;
+    }
 
-        public static void Add(Client client)
-        {
-            using (var db = new ApplicationContext())
-            {
-                db.Client.Add(client);
-                db.SaveChanges();
-            }
-        }
+    public static void Add(Client client)
+    {
+        db.Client.Add(client);
+        db.SaveChanges();
+    }
 
-        public static void AddAsync(Client client)
-        {
-            using (var db = new ApplicationContext())
-            {
-                db.Client.AddAsync(client);
-                db.SaveChanges();
-            }
-        }
+    public static void AddAsync(Client client)
+    {
+        db.Client.AddAsync(client);
+        db.SaveChanges();
+    }
 
-        public static void AddRange(params Client[] clients)
-        {
-            using (var db = new ApplicationContext())
-            {
-                foreach (var client in clients) db.Client.Add(client);
-                db.SaveChanges();
-            }
-        }
+    public static void AddRange(params Client[] clients)
+    {
+        foreach (var client in clients) db.Client.Add(client);
+        db.SaveChanges();
+    }
 
-        public static void AddRangeAsync(params Client[] clients)
-        {
-            using (var db = new ApplicationContext())
-            {
-                foreach (var client in clients) db.Client.AddAsync(client);
-                db.SaveChanges();
-            }
-        }
+    public static void AddRangeAsync(params Client[] clients)
+    {
+        foreach (var client in clients) db.Client.AddAsync(client);
+        db.SaveChanges();
+    }
 
-        public static List<Client> Get()
-        {
-            using (var db = new ApplicationContext())
-            {
-                return db.Client.ToList();
-            }
-        }
+    public static List<Client> Get()
+    {
+        return db.Client.ToList();
     }
 }

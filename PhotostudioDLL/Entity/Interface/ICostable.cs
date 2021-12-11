@@ -1,7 +1,6 @@
-﻿namespace PhotostudioDLL.Entity.Interface
+﻿namespace PhotostudioDLL.Entity.Interface;
+
+public interface ICostable
 {
-    public interface ICostable
-    {
-        string GetTitle();
-    }
+    string GetTitle();
 }

@@ -2,13 +2,41 @@
 
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
-        <TargetFramework>netcoreapp3.1-windows</TargetFramework>
+        <TargetFramework>net6.0-windows</TargetFramework>
         <Nullable>enable</Nullable>
         <UseWPF>true</UseWPF>
+        <RootNamespace>PhotostudioGUI6</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\PhotostudioDLL\PhotostudioDLL.csproj" />
+        <Compile Update="Pages\ClientPage.xaml.cs">
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Pages\ClientPage.xaml.cs">
+            <SubType>Code</SubType>
+            <DependentUpon>ClientPage.xaml</DependentUpon>
+        </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Page Update="Pages\ClientPage.xaml">
+            <SubType>Designer</SubType>
+        </Page>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="FluentWPF" Version="0.10.2" />
+        <PackageReference Include="FontAwesome5" Version="2.1.6" />
+        <PackageReference Include="MaterialDesignColors" Version="2.0.4" />
+        <PackageReference Include="MaterialDesignThemes" Version="4.3.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\PhotostudioDLL\PhotostudioDLL.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="bin\Debug\net6.0-windows\ref" />
     </ItemGroup>
 
 </Project>
