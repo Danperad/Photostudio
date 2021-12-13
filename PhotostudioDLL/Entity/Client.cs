@@ -7,9 +7,9 @@ public class Client
     public int ID { get; set; }
     [Required] [MaxLength(50)] public string LastName { get; set; }
     [Required] [MaxLength(50)] public string FirstName { get; set; }
-    [MaxLength(50)] public string MiddleName { get; set; }
+    [MaxLength(50)] public string? MiddleName { get; set; }
     [Required] [MaxLength(15)] public string PhoneNumber { get; set; }
-    [MaxLength(50)] public string EMail { get; set; }
+    [MaxLength(50)] public string? EMail { get; set; }
 
     public string GetName()
     {
@@ -42,8 +42,21 @@ public class Client
         db.SaveChanges();
     }
 
-    public static List<Client> Get()
+    public static List<ClearClient> Get()
     {
-        return db.Client.ToList();
+        return db.Client.Select(d => new ClearClient(d)).ToList();
+    }
+    public struct ClearClient
+    {
+        public string LastName { get; set; }
+        public string FirstName { get; set; }
+        public string? MiddleName { get; set; }
+        public string PhoneNumber { get; set; }
+        public string? EMail { get; set; }
+
+        public ClearClient(Client c)
+        {
+            (LastName, FirstName, MiddleName, PhoneNumber, EMail) = (c.LastName, c.FirstName, c.MiddleName, c.PhoneNumber, c.EMail);
+        }
     }
 }

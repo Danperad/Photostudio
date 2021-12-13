@@ -7,7 +7,7 @@
         mc:Ignorable=""
         Title="Photostudio"
         fw:AcrylicWindow.Enabled="True"
-        fw:AcrylicWindow.ExtendViewIntoTitleBar="True">
+        fw:AcrylicWindow.ExtendViewIntoTitleBar="True" MinWidth="1050" MinHeight="600">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -15,7 +15,7 @@
         </Grid.ColumnDefinitions>
         <Grid fw:PointerTracker.Enabled="True" Background="#25FFFFFF">
             <StackPanel>
-                <TextBlock Text="Photostudio" FontWeight="DemiBold" FontSize="18"
+                <TextBlock Text="Sunrise" FontWeight="DemiBold" FontSize="18"
                            fw:PointerTracker.Enabled="False" Margin=" 10 5 7 4"/>
                 <ListViewItem PreviewMouseLeftButtonDown="HideBar">
                     <StackPanel Orientation="Horizontal">
@@ -26,10 +26,10 @@
                 </ListViewItem>
 
                 <ListView FontSize="15">
-                    <ListViewItem PreviewMouseLeftButtonDown="videoBox_Click">
+                    <ListViewItem PreviewMouseLeftButtonDown="clientBox_Click">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Person" Margin="0 2 7 0" />
-                            <TextBlock VerticalAlignment="Center">Client</TextBlock>
+                            <TextBlock VerticalAlignment="Center" >Client</TextBlock>
                         </StackPanel>
                     </ListViewItem>
                     <ListViewItem PreviewMouseLeftButtonDown="audioBox_Click">
@@ -42,6 +42,12 @@
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="PersonCardDetails" Margin="0 2 7 0" />
                             <TextBlock VerticalAlignment="Center">Order</TextBlock>
+                        </StackPanel>
+                    </ListViewItem>
+                    <ListViewItem PreviewMouseLeftButtonDown="serviceBox_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Brush"  Margin="0 2 7 0" />
+                            <TextBlock VerticalAlignment="Center">Services</TextBlock>
                         </StackPanel>
                     </ListViewItem>
                 </ListView>

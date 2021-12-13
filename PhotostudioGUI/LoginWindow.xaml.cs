@@ -22,16 +22,6 @@ public partial class LoginWindow
         ApplicationContext.LoadDB();
         InitializeComponent();
         _bw = (BackgroundWorker) FindResource("backgroundWoker");
-        /*var role = new Role {Title = "Admin", Responsibilities = "All", Rights = "All"};
-        var emp = new Employee
-        {
-            EMail = "s",
-            Profile = new EmployeeProfile
-                {Login = "Admin", Password = "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918"},
-            EmploymentDate = DateTime.Now, FirstName = "First", Role = role, LastName = "Last", PassData = "6214532089",
-            PhoneNumber = "+78005553535"
-        };
-        Employee.Add(emp);*/
     }
 
     private void SignInButton_OnClick(object sender, RoutedEventArgs e)
@@ -70,7 +60,7 @@ public partial class LoginWindow
             ButtonText.Inlines.Clear();
             ButtonText.Text = "Войти";
             LoginButton.IsEnabled = true;
-            ErroTextBlock.Text = "Incorrect in Login or Password";
+            ErroTextBlock.Text = "Incorrect Login or Password";
         }
     }
 

@@ -4,7 +4,7 @@ public class EmployeeProfile
 {
     public int ID { get; set; }
 
-    [MaxLength(50)] public string Login { get; set; }
-    [MaxLength(64)] public string Password { get; set; }
-    public Employee Employee { get; set; }
+    [Required] [MaxLength(50)] public string Login { get; set; }
+    [Required] [MaxLength(64)] public string Password { get; set; }
+    [Required] public Employee Employee { get; set; }
 }

@@ -13,13 +13,14 @@ public partial class MainWindow : Window
     private readonly Page Client = new ClientPage();
     private readonly Page Employee = new EmployeePage();
     private readonly Page Order = new OrderPage();
+    private readonly Page Service = new ServicePage();
 
     public MainWindow()
     {
         InitializeComponent();
     }
 
-    private void videoBox_Click(object sender, MouseButtonEventArgs e)
+    private void clientBox_Click(object sender, MouseButtonEventArgs e)
     {
         mainFrame.Navigate(Client);
     }
@@ -32,6 +33,11 @@ public partial class MainWindow : Window
     private void orderBox_Click(object sender, MouseButtonEventArgs e)
     {
         mainFrame.Navigate(Order);
+    }
+
+    private void serviceBox_Click(object sender, MouseButtonEventArgs e)
+    {
+        mainFrame.Navigate(Service);
     }
 
     private void HideBar(object sender, MouseButtonEventArgs e)

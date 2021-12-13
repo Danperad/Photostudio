@@ -3,21 +3,28 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       mc:Ignorable="d"
       Title="OrderPage">
-    <Grid>
+    <Grid Name="MainOrderGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <Grid Grid.Column="0" Margin="0 10 0 0">
+        <Grid Grid.Column="0" Margin="3 10 0 0">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition />
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" FontWeight="Light" FontSize="20" Margin="4">Список заявок</TextBlock>
-            <DataGrid Name="OrderData" Grid.Row="1" Margin="0 10 0 0" IsReadOnly="True" />
+            <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0 10 0 0 ">
+                <TextBox Name="SearchBox" materialDesign:HintAssist.Hint="Поиск" FontSize="15" Width="200"></TextBox>
+            </StackPanel>
+            <DataGrid Name="OrderData" Grid.Row="2" Margin="0 10 0 0" IsReadOnly="True" Background="#25000000"/>
         </Grid>
-
+        <StackPanel Grid.Column="1">
+            <TextBlock FontWeight="Light" FontSize="20" Margin="4 14 4 4">Новая заявка</TextBlock>
+        </StackPanel>
     </Grid>
 </Page>

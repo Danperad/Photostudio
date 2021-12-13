@@ -14,7 +14,7 @@ public class Employee
     [Required] public Role Role { get; set; }
 
     [MaxLength(50)] public string? MiddleName { get; set; }
-    [MaxLength(50)] public string EMail { get; set; }
+    [MaxLength(50)] public string? EMail { get; set; }
     [Required] [MaxLength(50)] public string LastName { get; set; }
     [Required] [MaxLength(50)] public string FirstName { get; set; }
     [Required] [MaxLength(13)] public string PhoneNumber { get; set; }

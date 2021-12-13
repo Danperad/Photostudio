@@ -47,9 +47,21 @@ public class Service : ICostable
         db.SaveChanges();
     }
 
-    public static List<Service> Get()
+    public static List<ClearService> Get()
     {
-        return db.Service.ToList();
+        return db.Service.Select(d => new ClearService(d)).ToList();
+    }
+
+    public struct ClearService
+    {
+        public string Title { get; }
+        public string Description { get; }
+        public decimal Price { get; }
+
+        internal ClearService(Service s)
+        {
+            (Title, Description, Price) = (s.Title, s.Description, s.Price);
+        }
     }
 
     private static bool CheckHall(Service service)

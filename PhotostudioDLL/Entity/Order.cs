@@ -1,4 +1,5 @@
-﻿using PhotostudioDLL.Exception;
+﻿using System.Text;
+using PhotostudioDLL.Exception;
 
 namespace PhotostudioDLL.Entity;
 
@@ -15,6 +16,12 @@ public class Order
     [Required] public DateTime DateTime { get; set; }
 
     [Required] public string Status { get; set; }
+    [Required] public List<ServiceProvided> Services { get; set; }
+
+    public Order()
+    {
+        Services = new List<ServiceProvided>();
+    }
 
     public static void Add(Order order)
     {
@@ -57,7 +64,8 @@ public class Order
             Contract = e.Contract.ID,
             Client = e.Client.GetName(),
             DateTime = e.DateTime,
-            Status = e.Status
+            Status = e.Status,
+            Services = GetServiceName(e.Services)
         }).ToList();
     }
 
@@ -77,5 +85,18 @@ public class Order
         public string Client { get; set; }
         public DateTime DateTime { get; set; }
         public string Status { get; set; }
+        public string Services { get; set; }
+    }
+
+    public static string GetServiceName(List<ServiceProvided> services)
+    {
+        StringBuilder temp = new StringBuilder();
+        foreach (var provided in services)
+        {
+            temp.Append($"{provided.Service.Title}, ");
+        }
+
+        temp.Remove(temp.Length - 2, 2);
+        return temp.ToString();
     }
 }
