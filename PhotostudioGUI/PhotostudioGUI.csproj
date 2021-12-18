@@ -39,4 +39,8 @@
       <Folder Include="bin\Debug\net6.0-windows\ref" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Include="bin\Debug\net6.0-windows\appsettings.json" />
+    </ItemGroup>
+
 </Project>

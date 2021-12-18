@@ -6,8 +6,6 @@ namespace PhotostudioDLL.Entity;
 
 public class Service : ICostable
 {
-    private static ApplicationContext db = Context.db;
-
     public int ID { get; set; }
 
     [Required] public string Title { get; set; }
@@ -21,52 +19,5 @@ public class Service : ICostable
     public string GetTitle()
     {
         return Title;
-    }
-
-    public static void Add(Service service)
-    {
-        db.Service.Add(service);
-        db.SaveChanges();
-    }
-
-    public static void AddAsync(Service service)
-    {
-        db.Service.AddAsync(service);
-        db.SaveChanges();
-    }
-
-    public static void AddRange(params Service[] services)
-    {
-        foreach (var service in services) db.Service.Add(service);
-        db.SaveChanges();
-    }
-
-    public static void AddRangeAsync(params Service[] services)
-    {
-        foreach (var service in services) db.Service.AddAsync(service);
-        db.SaveChanges();
-    }
-
-    public static List<ClearService> Get()
-    {
-        return db.Service.Select(d => new ClearService(d)).ToList();
-    }
-
-    public struct ClearService
-    {
-        public string Title { get; }
-        public string Description { get; }
-        public decimal Price { get; }
-
-        internal ClearService(Service s)
-        {
-            (Title, Description, Price) = (s.Title, s.Description, s.Price);
-        }
-    }
-
-    private static bool CheckHall(Service service)
-    {
-        if (service.Price < 0) throw new MoneyException("Цена не может быть меньше нуля", service);
-        return true;
     }
 }

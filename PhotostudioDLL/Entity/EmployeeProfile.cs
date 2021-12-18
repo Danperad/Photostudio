@@ -6,5 +6,5 @@ public class EmployeeProfile
 
     [Required] [MaxLength(50)] public string Login { get; set; }
     [Required] [MaxLength(64)] public string Password { get; set; }
-    [Required] public Employee Employee { get; set; }
+    [Required] public virtual Employee Employee { get; set; }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using PhotostudioDLL;
 using PhotostudioDLL.Entity;
 
 
@@ -14,7 +15,7 @@ public partial class ServicePage : Page
     public ServicePage()
     {
         InitializeComponent();
-        ServiceData.ItemsSource = Service.Get();
+        ServiceData.ItemsSource = ContextDB.GetServices();
     }
 
     private void AddServiceClick(object sender, RoutedEventArgs e)
@@ -25,7 +26,7 @@ public partial class ServicePage : Page
             Description = DescriptionBox.Text,
             Price = Convert.ToDecimal(PriceBox.Text)
         };
-        Service.Add(service);
-        ServiceData.ItemsSource = Service.Get();
+        ContextDB.Add(service);
+        ServiceData.ItemsSource = ContextDB.GetServices();
     }
 }

@@ -22,7 +22,7 @@
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" FontWeight="Light" FontSize="20" Margin="4">Список Клиентов</TextBlock>
             <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0 10 0 0 ">
-                <TextBox Name="SearchBox" materialDesign:HintAssist.Hint="Поиск" FontSize="15" Width="200"></TextBox>
+                <TextBox Name="SearchBox" materialDesign:HintAssist.Hint="Поиск" FontSize="15" Width="200" TextChanged="SearchBox_OnTextChanged"></TextBox>
             </StackPanel>
             <DataGrid Name="ClientData" Grid.Row="2" Margin="0 10 0 0" IsReadOnly="True" Background="#20000000" />
         </Grid>

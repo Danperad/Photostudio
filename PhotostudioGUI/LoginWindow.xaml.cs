@@ -41,7 +41,7 @@ public partial class LoginWindow
 
     private void BackgroundWorker_DoWork(object sender, DoWorkEventArgs doWorkEventArgs)
     {
-        Profile = Employee.GetEmployee(login, pass);
+        Profile = ContextDB.GetAuth(login, pass);
         if (Profile != null)
         {
             login = string.Empty;

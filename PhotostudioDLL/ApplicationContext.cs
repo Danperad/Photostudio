@@ -11,7 +11,7 @@ public sealed class ApplicationContext : DbContext
     {
         // Database.EnsureCreated();
         Database.Migrate();
-        Context.AddDB(this);
+        ContextDB.AddDB(this);
     }
 
     // TODO: Удаление и обновдение данных в таблицах
@@ -36,7 +36,7 @@ public sealed class ApplicationContext : DbContext
 
         string connectionString = config.GetConnectionString("DefaultConnection");
         var optionsBuilder = new DbContextOptionsBuilder<ApplicationContext>();
-        return optionsBuilder.UseNpgsql(connectionString).Options;
+        return optionsBuilder.UseLazyLoadingProxies().UseNpgsql(connectionString).Options;
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

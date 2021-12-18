@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using Castle.Core.Internal;
+using PhotostudioDLL;
 using PhotostudioDLL.Entity;
 
 namespace PhotostudioGUI.Pages;
@@ -16,7 +18,7 @@ public partial class ClientPage : Page
     public ClientPage()
     {
         InitializeComponent();
-        ClientData.ItemsSource = Client.Get();
+        ClientData.ItemsSource = ContextDB.GetClients();
     }
 
     private void AddClientClick(object sender, RoutedEventArgs e)
@@ -31,17 +33,17 @@ public partial class ClientPage : Page
         if (MiddleNameBox.Text != String.Empty) client.MiddleName = MiddleNameBox.Text;
         try
         {
-            Client.Add(client);
+            ContextDB.Add(client);
         }
         catch
         {
             MessageBox.Show("Номер телефона уже используется у другого клиента");
         }
 
-        ClientData.ItemsSource = Client.Get();
+        ClientData.ItemsSource = ContextDB.GetClients();
     }
 
-    private char[] phonesymb = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+    private char[] phonesymb = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
 
     private void PhoneBox_OnTextChanged(object sender, TextChangedEventArgs e)
     {
@@ -53,10 +55,23 @@ public partial class ClientPage : Page
             {
                 text += c;
             }
-            
         }
 
         PhoneBox.Text = text;
         PhoneBox.CaretIndex = index;
+    }
+
+    private void SearchBox_OnTextChanged(object sender, TextChangedEventArgs e)
+    {
+        if (SearchBox.Text.IsNullOrEmpty()) ClientData.ItemsSource = ContextDB.GetClients();
+        else
+        {
+            var list = ContextDB.GetClients();
+            var search = SearchBox.Text.ToLower();
+            ClientData.ItemsSource = list.Where(d =>
+                d.EMail.ToLower().Contains(search) || d.FirstName.ToLower().Contains(search) ||
+                d.LastName.ToLower().Contains(search) || d.MiddleName.ToLower().Contains(search) ||
+                d.PhoneNumber.Contains(search)).ToList();
+        }
     }
 }
