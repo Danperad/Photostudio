@@ -21,21 +21,9 @@ public static class ContextDB
         db.SaveChanges();
     }
 
-    public static void AddAsync(Client client)
-    {
-        db.Client.AddAsync(client);
-        db.SaveChanges();
-    }
-
     public static void AddRange(params Client[] clients)
     {
-        foreach (var client in clients) db.Client.Add(client);
-        db.SaveChanges();
-    }
-
-    public static void AddRangeAsync(params Client[] clients)
-    {
-        foreach (var client in clients) db.Client.AddAsync(client);
+        db.Client.AddRange(clients);
         db.SaveChanges();
     }
 
@@ -44,48 +32,32 @@ public static class ContextDB
         return db.Client.ToList();
     }
 
+    public static void ChangeActive(int ID)
+    {
+        Client temp = db.Client.Where(c => c.ID == ID).FirstOrDefault()!;
+        temp.IsActive = !temp.IsActive;
+        db.SaveChanges();
+    }
+
     #endregion
 
     #region Contract
 
     public static void Add(Contract contract)
     {
-        if (CheckContract(contract)) db.Contract.Add(contract);
-        db.SaveChanges();
-    }
-
-    public static void AddAsync(Contract contract)
-    {
-        if (CheckContract(contract)) db.Contract.AddAsync(contract);
+        db.Contract.Add(contract);
         db.SaveChanges();
     }
 
     public static void AddRange(params Contract[] contracts)
     {
-        foreach (var contract in contracts)
-            if (CheckContract(contract))
-                db.Contract.Add(contract);
-        db.SaveChanges();
-    }
-
-    public static void AddRangeAsync(params Contract[] contracts)
-    {
-        foreach (var contract in contracts)
-            if (CheckContract(contract))
-                db.Contract.AddAsync(contract);
+        db.Contract.AddRange(contracts);
         db.SaveChanges();
     }
 
     public static List<Contract> GetContracts()
     {
         return db.Contract.ToList();
-    }
-
-    private static bool CheckContract(Contract contract)
-    {
-        if (contract.StartDate > contract.EndDate)
-            throw new ContractDateException("Не соответствие дат в контракте", contract);
-        return true;
     }
 
     #endregion
@@ -98,21 +70,9 @@ public static class ContextDB
         db.SaveChanges();
     }
 
-    public static void AddAsync(Employee employee)
-    {
-        db.Employee.AddAsync(employee);
-        db.SaveChanges();
-    }
-
     public static void AddRange(params Employee[] employees)
     {
-        foreach (var employee in employees) db.Employee.Add(employee);
-        db.SaveChanges();
-    }
-
-    public static void AddRangeAsync(params Employee[] employees)
-    {
-        foreach (var employee in employees) db.Employee.AddAsync(employee);
+        db.Employee.AddRange(employees);
         db.SaveChanges();
     }
 
@@ -126,6 +86,11 @@ public static class ContextDB
         return db.Employee.Where(d => d.Profile.Login == login && d.Profile.Password == pass).FirstOrDefault();
     }
 
+    public static Employee GetEmployeeByID(int ID)
+    {
+        return db.Employee.Where(employee => employee.ID == ID).FirstOrDefault();
+    }
+
     #endregion
 
     #region Equipment
@@ -136,21 +101,9 @@ public static class ContextDB
         db.SaveChanges();
     }
 
-    public static void AddAsync(Equipment equipment)
-    {
-        db.Equipment.AddAsync(equipment);
-        db.SaveChanges();
-    }
-
     public static void AddRange(params Equipment[] equipments)
     {
-        foreach (var equipment in equipments) db.Equipment.Add(equipment);
-        db.SaveChanges();
-    }
-
-    public static void AddRangeAsync(params Equipment[] equipments)
-    {
-        foreach (var equipment in equipments) db.Equipment.AddAsync(equipment);
+        db.Equipment.AddRange(equipments);
         db.SaveChanges();
     }
 
@@ -169,33 +122,15 @@ public static class ContextDB
         db.SaveChanges();
     }
 
-    public static void AddAsync(Hall hall)
-    {
-        db.Hall.AddAsync(hall);
-        db.SaveChanges();
-    }
-
     public static void AddRange(params Hall[] halls)
     {
-        foreach (var hall in halls) db.Hall.Add(hall);
-        db.SaveChanges();
-    }
-
-    public static void AddRangeAsync(params Hall[] halls)
-    {
-        foreach (var hall in halls) db.Hall.AddAsync(hall);
+        db.Hall.AddRange(halls);
         db.SaveChanges();
     }
 
     public static List<Hall> GetHalls()
     {
         return db.Hall.ToList();
-    }
-
-    private static bool CheckHall(Hall hall)
-    {
-        if (hall.PricePerHour < 0) throw new MoneyException("Цена не может быть меньше нуля", hall);
-        return true;
     }
 
     #endregion
@@ -208,21 +143,9 @@ public static class ContextDB
         db.SaveChanges();
     }
 
-    public static void AddAsync(Inventory inventory)
-    {
-        db.Inventory.AddAsync(inventory);
-        db.SaveChanges();
-    }
-
     public static void AddRange(params Inventory[] inventories)
     {
-        foreach (var inventory in inventories) db.Inventory.Add(inventory);
-        db.SaveChanges();
-    }
-
-    public static void AddRangeAsync(params Inventory[] inventories)
-    {
-        foreach (var inventory in inventories) db.Inventory.AddAsync(inventory);
+        db.Inventory.AddRange(inventories);
         db.SaveChanges();
     }
 
@@ -241,25 +164,11 @@ public static class ContextDB
         db.SaveChanges();
     }
 
-    public static void AddAsync(Order order)
-    {
-        if (CheckOrder(order)) db.Order.AddAsync(order);
-        db.SaveChanges();
-    }
-
     public static void AddRange(params Order[] orders)
     {
         foreach (var order in orders)
             if (CheckOrder(order))
                 db.Order.Add(order);
-        db.SaveChanges();
-    }
-
-    public static void AddRangeAsync(params Order[] orders)
-    {
-        foreach (var order in orders)
-            if (CheckOrder(order))
-                db.Order.AddAsync(order);
         db.SaveChanges();
     }
 
@@ -278,9 +187,7 @@ public static class ContextDB
 
     private static bool CheckOrder(Order order)
     {
-        if (order.Contract.StartDate > order.Contract.EndDate)
-            throw new ContractDateException("Не соответствие дат в контракте", order.Contract);
-        if (order.Contract.StartDate < order.DateTime)
+        if (order.Contract.StartDate < DateOnly.FromDateTime(order.DateTime.Date))
             throw new OrderDateException("Не соответствие дат в контракте и заявке", order);
         return true;
     }
@@ -317,21 +224,9 @@ public static class ContextDB
         db.SaveChanges();
     }
 
-    public static void AddAsync(RentedItem rentedItem)
-    {
-        db.RentedItem.AddAsync(rentedItem);
-        db.SaveChanges();
-    }
-
     public static void AddRange(params RentedItem[] rentedItems)
     {
-        foreach (var rentedItem in rentedItems) db.RentedItem.Add(rentedItem);
-        db.SaveChanges();
-    }
-
-    public static void AddRangeAsync(params RentedItem[] rentedItems)
-    {
-        foreach (var rentedItem in rentedItems) db.RentedItem.AddAsync(rentedItem);
+        db.RentedItem.AddRange(rentedItems);
         db.SaveChanges();
     }
 
@@ -350,21 +245,9 @@ public static class ContextDB
         db.SaveChanges();
     }
 
-    public static void AddAsync(Role role)
-    {
-        db.Role.AddAsync(role);
-        db.SaveChanges();
-    }
-
     public static void AddRange(params Role[] roles)
     {
-        foreach (var role in roles) db.Role.Add(role);
-        db.SaveChanges();
-    }
-
-    public static void AddRangeAsync(params Role[] roles)
-    {
-        foreach (var role in roles) db.Role.AddAsync(role);
+        db.Role.AddRange(roles);
         db.SaveChanges();
     }
 
@@ -388,26 +271,15 @@ public static class ContextDB
         db.SaveChanges();
     }
 
-    public static void AddAsync(Service service)
-    {
-        db.Service.AddAsync(service);
-        db.SaveChanges();
-    }
-
     public static void AddRange(params Service[] services)
     {
-        foreach (var service in services) db.Service.Add(service);
-        db.SaveChanges();
-    }
-
-    public static void AddRangeAsync(params Service[] services)
-    {
-        foreach (var service in services) db.Service.AddAsync(service);
+        db.Service.AddRange(services);
         db.SaveChanges();
     }
 
     public static List<Service> GetServices()
     {
+        Console.WriteLine(db.Service.GetType().Name);
         return db.Service.ToList();
     }
 

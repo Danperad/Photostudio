@@ -74,7 +74,7 @@ public partial class LoginWindow
 
     private void OpenMainWindow()
     {
-        var window = new MainWindow();
+        var window = new MainWindow(Profile);
         window.Show();
         Close();
     }

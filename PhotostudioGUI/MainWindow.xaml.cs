@@ -1,46 +1,36 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using PhotostudioDLL.Entity;
 using PhotostudioGUI.Pages;
 
 namespace PhotostudioGUI;
 
-/// <summary>
-///     Interaction logic for MainWindow.xaml
-/// </summary>
 public partial class MainWindow : Window
 {
-    private readonly Page Client = new ClientPage();
-    private readonly Page Employee = new EmployeePage();
-    private readonly Page Order = new OrderPage();
-    private readonly Page Service = new ServicePage();
+    private Employee _employee;
 
-    public MainWindow()
+    private Page Client;
+    private Page Employee;
+    private Page Order;
+    private Page Service;
+    private Page Role;
+
+    public MainWindow(Employee employee)
     {
+        _employee = employee;
         InitializeComponent();
-    }
-
-    private void clientBox_Click(object sender, MouseButtonEventArgs e)
-    {
+        BuildWindow();
         mainFrame.Navigate(Client);
     }
 
-    private void audioBox_Click(object sender, MouseButtonEventArgs e)
+    private void BuildWindow()
     {
-        mainFrame.Navigate(Employee);
-    }
-
-    private void orderBox_Click(object sender, MouseButtonEventArgs e)
-    {
-        mainFrame.Navigate(Order);
-    }
-
-    private void serviceBox_Click(object sender, MouseButtonEventArgs e)
-    {
-        mainFrame.Navigate(Service);
-    }
-
-    private void HideBar(object sender, MouseButtonEventArgs e)
-    {
+        switch (_employee.RoleID)
+        {
+            case 1:
+                MainWindowBuilder.AdminBuild(this,out Employee,out Role,out Service);
+                break;
+        }
     }
 }

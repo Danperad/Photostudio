@@ -1,4 +1,6 @@
-﻿namespace PhotostudioDLL.Entity;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace PhotostudioDLL.Entity;
 
 public class ServiceProvided
 {
@@ -17,6 +19,15 @@ public class ServiceProvided
     public string? PhotoLocation { get; set; }
     public DateTime? PhotoStartDateTime { get; set; }
     public DateTime? PhotoEndDateTime { get; set; }
-    
+
     [Required] public virtual Order Order { get; set; }
+    
+    public ServiceProvided(){}
+
+    public ServiceProvided(Employee Employee, Service Service, Order Order)
+    {
+        this.Employee = Employee;
+        this.Service = Service;
+        this.Order = Order;
+    }
 }

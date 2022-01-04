@@ -1,10 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using PhotostudioDLL.Entity.Interface;
-using PhotostudioDLL.Exception;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PhotostudioDLL.Entity;
 
-public class Hall : ICostable
+public class Hall
 {
     public int ID { get; set; }
     [Required] public string Title { get; set; }
@@ -13,9 +12,12 @@ public class Hall : ICostable
     [Required]
     [Column(TypeName = "money")]
     public decimal PricePerHour { get; set; }
+    public Hall(){}
 
-    public string GetTitle()
+    public Hall(string Title, string Description, decimal PricePerHour)
     {
-        return Title;
+        this.Title = Title;
+        this.Description = Description;
+        this.PricePerHour = PricePerHour;
     }
 }

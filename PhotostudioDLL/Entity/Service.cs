@@ -1,10 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using PhotostudioDLL.Entity.Interface;
-using PhotostudioDLL.Exception;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PhotostudioDLL.Entity;
 
-public class Service : ICostable
+public class Service
 {
     public int ID { get; set; }
 
@@ -15,9 +14,13 @@ public class Service : ICostable
     [Required]
     [Column(TypeName = "money")]
     public decimal Price { get; set; }
+    
+    public Service(){}
 
-    public string GetTitle()
+    public Service(string Title, string Description, uint Number, decimal Price)
     {
-        return Title;
+        this.Title = Title;
+        this.Description = Description;
+        this.Price = Price;
     }
 }

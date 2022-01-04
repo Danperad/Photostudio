@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PhotostudioDLL.Entity;
 
@@ -17,5 +18,16 @@ public class Employee
     [Required] [MaxLength(50)] public string FirstName { get; set; }
     [Required] [MaxLength(13)] public string PhoneNumber { get; set; }
     [Required] [MaxLength(10)] public string PassData { get; set; }
-    [Column(TypeName = "date")] [Required] public DateTime EmploymentDate { get; set; }
+    [Column(TypeName = "date")] [Required] public DateOnly EmploymentDate { get; set; }
+
+    public Employee()
+    {
+    }
+
+    public Employee(int RoleID,string LastName, string FirstName, string PhoneNumber,
+        string PassData, DateOnly EmploymentDate)
+    {
+        ( this.RoleID ,this.LastName, this.FirstName, this.PhoneNumber, this.PassData, this.EmploymentDate) =
+            (RoleID ,LastName, FirstName, PhoneNumber, PassData, EmploymentDate);
+    }
 }

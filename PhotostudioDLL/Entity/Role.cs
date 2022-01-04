@@ -1,4 +1,4 @@
-﻿global using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace PhotostudioDLL.Entity;
 
@@ -11,10 +11,17 @@ public class Role
     [Required] public string Rights { get; set; }
 
     [Required] public string Responsibilities { get; set; }
-    public virtual ICollection<Employee> Employees { get; set; }
-
+    public virtual List<Employee> Employees { get; set; }
+    
     public Role()
     {
         Employees = new List<Employee>();
+    }
+
+    public Role(string Title, string Rights, string Responsibilities) : base()
+    {
+        this.Title = Title;
+        this.Rights = Rights;
+        this.Responsibilities = Responsibilities;
     }
 }

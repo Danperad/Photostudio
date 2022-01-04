@@ -9,6 +9,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <None Remove="sunrise.png" />
+    </ItemGroup>
+
+    <ItemGroup>
         <Compile Update="Pages\ClientPage.xaml.cs">
             <SubType>Code</SubType>
         </Compile>
@@ -37,6 +41,10 @@
 
     <ItemGroup>
       <Folder Include="bin\Debug\net6.0-windows\ref" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Resource Include="sunrise.png" />
     </ItemGroup>
 
     <ItemGroup>

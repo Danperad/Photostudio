@@ -12,6 +12,6 @@ public class OrderDateException : System.Exception
     }
 
     public DateTime OrderDate { get; }
-    public DateTime ContractDate { get; }
+    public DateOnly ContractDate { get; }
     public string Name { get; }
 }

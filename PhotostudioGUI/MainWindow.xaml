@@ -5,9 +5,9 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:fw="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
         mc:Ignorable=""
-        Title="Photostudio"
+        Title="Sunrise"
         fw:AcrylicWindow.Enabled="True"
-        fw:AcrylicWindow.ExtendViewIntoTitleBar="True" MinWidth="1050" MinHeight="600">
+        fw:AcrylicWindow.ExtendViewIntoTitleBar="True" MinWidth="1050" MinHeight="600" Icon="/sunrise.png">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -17,40 +17,8 @@
             <StackPanel>
                 <TextBlock Text="Sunrise" FontWeight="DemiBold" FontSize="18"
                            fw:PointerTracker.Enabled="False" Margin=" 10 5 7 4"/>
-                <ListViewItem PreviewMouseLeftButtonDown="HideBar">
-                    <StackPanel Orientation="Horizontal">
-                        <materialDesign:PackIcon Kind="ArrowLeft" Margin="0 3 7 0" />
-                        <TextBlock Text="Hide" FontWeight="DemiBold" FontSize="15"
-                                   fw:PointerTracker.Enabled="False"/>
-                    </StackPanel>
-                </ListViewItem>
 
-                <ListView FontSize="15">
-                    <ListViewItem PreviewMouseLeftButtonDown="clientBox_Click">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Person" Margin="0 2 7 0" />
-                            <TextBlock VerticalAlignment="Center" >Client</TextBlock>
-                        </StackPanel>
-                    </ListViewItem>
-                    <ListViewItem PreviewMouseLeftButtonDown="audioBox_Click">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="PersonCardDetails" Margin="0 2 7 0" />
-                            <TextBlock VerticalAlignment="Center">Employee</TextBlock>
-                        </StackPanel>
-                    </ListViewItem>
-                    <ListViewItem PreviewMouseLeftButtonDown="orderBox_Click">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="PersonCardDetails" Margin="0 2 7 0" />
-                            <TextBlock VerticalAlignment="Center">Order</TextBlock>
-                        </StackPanel>
-                    </ListViewItem>
-                    <ListViewItem PreviewMouseLeftButtonDown="serviceBox_Click">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Brush"  Margin="0 2 7 0" />
-                            <TextBlock VerticalAlignment="Center">Services</TextBlock>
-                        </StackPanel>
-                    </ListViewItem>
-                </ListView>
+                <ListView FontSize="15" Name="mainListView"/>
             </StackPanel>
         </Grid>
         <Frame Name="mainFrame" Grid.Column="1" NavigationUIVisibility="Hidden" />
