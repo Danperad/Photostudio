@@ -7,7 +7,7 @@ using FontAwesome5;
 using PhotostudioDLL;
 using PhotostudioDLL.Entity;
 
-namespace PhotostudioGUI;
+namespace PhotostudioGUI.Windows;
 
 public partial class LoginWindow
 {
@@ -19,7 +19,6 @@ public partial class LoginWindow
 
     public LoginWindow()
     {
-        ApplicationContext.LoadDB();
         InitializeComponent();
         _bw = (BackgroundWorker) FindResource("backgroundWoker");
     }
@@ -41,7 +40,7 @@ public partial class LoginWindow
 
     private void BackgroundWorker_DoWork(object sender, DoWorkEventArgs doWorkEventArgs)
     {
-        Profile = ContextDB.GetAuth(login, pass);
+        Profile = Employee.GetAuth(login, pass);
         if (Profile != null)
         {
             login = string.Empty;

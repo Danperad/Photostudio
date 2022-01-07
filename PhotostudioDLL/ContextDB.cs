@@ -1,12 +1,13 @@
 ﻿using System.Text;
+using Castle.Core.Internal;
 using PhotostudioDLL.Entity;
 using PhotostudioDLL.Exception;
 
 namespace PhotostudioDLL;
 
-public static class ContextDB
+internal static class ContextDB
 {
-    public static ApplicationContext db { get; private set; }
+    private static ApplicationContext db { get; set; }
 
     internal static void AddDB(ApplicationContext dbb)
     {
@@ -18,12 +19,6 @@ public static class ContextDB
     public static void Add(Client client)
     {
         db.Client.Add(client);
-        db.SaveChanges();
-    }
-
-    public static void AddRange(params Client[] clients)
-    {
-        db.Client.AddRange(clients);
         db.SaveChanges();
     }
 
@@ -49,12 +44,6 @@ public static class ContextDB
         db.SaveChanges();
     }
 
-    public static void AddRange(params Contract[] contracts)
-    {
-        db.Contract.AddRange(contracts);
-        db.SaveChanges();
-    }
-
     public static List<Contract> GetContracts()
     {
         return db.Contract.ToList();
@@ -67,12 +56,6 @@ public static class ContextDB
     public static void Add(Employee employee)
     {
         db.Employee.Add(employee);
-        db.SaveChanges();
-    }
-
-    public static void AddRange(params Employee[] employees)
-    {
-        db.Employee.AddRange(employees);
         db.SaveChanges();
     }
 
@@ -101,12 +84,6 @@ public static class ContextDB
         db.SaveChanges();
     }
 
-    public static void AddRange(params Equipment[] equipments)
-    {
-        db.Equipment.AddRange(equipments);
-        db.SaveChanges();
-    }
-
     public static List<Equipment> GetEquipments()
     {
         return db.Equipment.ToList();
@@ -119,12 +96,6 @@ public static class ContextDB
     public static void Add(Hall hall)
     {
         db.Hall.Add(hall);
-        db.SaveChanges();
-    }
-
-    public static void AddRange(params Hall[] halls)
-    {
-        db.Hall.AddRange(halls);
         db.SaveChanges();
     }
 
@@ -143,12 +114,6 @@ public static class ContextDB
         db.SaveChanges();
     }
 
-    public static void AddRange(params Inventory[] inventories)
-    {
-        db.Inventory.AddRange(inventories);
-        db.SaveChanges();
-    }
-
     public static List<Inventory> GetInventories()
     {
         return db.Inventory.ToList();
@@ -164,25 +129,9 @@ public static class ContextDB
         db.SaveChanges();
     }
 
-    public static void AddRange(params Order[] orders)
+    public static List<Order> GetOrders()
     {
-        foreach (var order in orders)
-            if (CheckOrder(order))
-                db.Order.Add(order);
-        db.SaveChanges();
-    }
-
-    public static List<FullOrder> GetOrders()
-    {
-        return db.Order.Select(e => new FullOrder
-        {
-            ID = e.ID,
-            Contract = e.Contract.ID,
-            Client = e.Client.GetName(),
-            DateTime = e.DateTime,
-            Status = e.Status,
-            Services = GetServiceName(e.Services)
-        }).ToList();
+        return db.Order.ToList();
     }
 
     private static bool CheckOrder(Order order)
@@ -224,12 +173,6 @@ public static class ContextDB
         db.SaveChanges();
     }
 
-    public static void AddRange(params RentedItem[] rentedItems)
-    {
-        db.RentedItem.AddRange(rentedItems);
-        db.SaveChanges();
-    }
-
     public static List<RentedItem> GetRentedItems()
     {
         return db.RentedItem.ToList();
@@ -242,12 +185,6 @@ public static class ContextDB
     public static void Add(Role role)
     {
         db.Role.Add(role);
-        db.SaveChanges();
-    }
-
-    public static void AddRange(params Role[] roles)
-    {
-        db.Role.AddRange(roles);
         db.SaveChanges();
     }
 
@@ -271,16 +208,25 @@ public static class ContextDB
         db.SaveChanges();
     }
 
-    public static void AddRange(params Service[] services)
-    {
-        db.Service.AddRange(services);
-        db.SaveChanges();
-    }
-
     public static List<Service> GetServices()
     {
         Console.WriteLine(db.Service.GetType().Name);
         return db.Service.ToList();
+    }
+
+    #endregion
+
+    #region ServiceProvided
+
+    public static void Add(ServiceProvided serviceProvided)
+    {
+        db.ServiceProvided.Add(serviceProvided);
+        db.SaveChanges();
+    }
+
+    public static List<ServiceProvided> GetServiceProvideds()
+    {
+        return db.ServiceProvided.ToList();
     }
 
     #endregion

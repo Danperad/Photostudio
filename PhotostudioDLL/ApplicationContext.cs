@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.Extensions.Configuration;
+using System.Text.Json;
 using PhotostudioDLL.Entity;
 
 namespace PhotostudioDLL;
@@ -29,8 +30,16 @@ public sealed class ApplicationContext : DbContext
 
     public static DbContextOptions<ApplicationContext> GetDB()
     {
-        var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json");
+        var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory());
+        if (!File.Exists("appsettings.json"))
+        {
+            using (var sw = File.Open("appsettings.json", FileMode.Create, FileAccess.Write))
+            {
+                sw.Write(JsonSerializer.SerializeToUtf8Bytes(new AppConfig()));
+            }
+        }
+
+        builder.AddJsonFile("appsettings.json");
         var config = builder.Build();
 
         string connectionString = config.GetConnectionString("DefaultConnection");
@@ -40,46 +49,41 @@ public sealed class ApplicationContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Role>(RoleConfigure);
-        modelBuilder.Entity<Employee>(EmployeeConfigure);
-        modelBuilder.Entity<Client>().HasIndex(e => e.PhoneNumber).IsUnique();
-        modelBuilder.Entity<Client>().Property(c => c.IsActive).HasDefaultValue(true);
+        modelBuilder.Ignore<People>();
+        modelBuilder.Entity<Role>(EntityConfigure.RoleConfigure);
+        modelBuilder.Entity<Employee>(EntityConfigure.EmployeeConfigure);
+        modelBuilder.Entity<Client>(EntityConfigure.ClientConfigure);
+        modelBuilder.Entity<Order>().Ignore(o => o.ListServices);
+        modelBuilder.Entity<Order>().Ignore(o => o.TextStatus);
         modelBuilder.Entity<EmployeeProfile>().HasIndex(e => e.Login).IsUnique();
         modelBuilder.Entity<EmployeeProfile>().HasData(new EmployeeProfile("admin",
-            "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918") {ID = 1});
-    }
-
-    public void EmployeeConfigure(EntityTypeBuilder<Employee> builder)
-    {
-        builder.HasIndex(e => e.PhoneNumber).IsUnique();
-        builder.HasIndex(e => e.PassData).IsUnique();
-        builder.HasIndex(e => e.EMail).IsUnique();
-        builder.HasOne(e => e.Profile).WithOne(p => p.Employee)
-            .HasForeignKey<EmployeeProfile>(p => p.ID);
-        var employee = new Employee(1, "Берёзов", "Вячеслав",
-            "+78005553535", "6024978234", DateOnly.FromDateTime(DateTime.Today)) {ID = 1};
-        builder.HasData(employee);
-    }
-
-    public void RoleConfigure(EntityTypeBuilder<Role> builder)
-    {
-        builder.HasData(
-            new Role("Администратор", "Доступ ко всем данным",
-                "Добавлять новые услуги, новые должности и новых сотрудники (по мере необходимости)") {ID = 1},
-            new Role("Фотограф", "Доступ к предоставляемым им услугам, и инвентарю услуги",
-                "Фотографировать согласно услуге") {ID = 2},
-            new Role("Ретушер", "Доступ к предоставляемым им услугам, и данным фотографиям",
-                "Обрабатывать фотогафии согласно услуге") {ID = 3},
-            new Role("Оператор", "Доступ к предоставляемым им услугам, и инвентарю услуги",
-                "Снимать видеоматериалы согласно услуге") {ID = 4},
-            new Role("Монтажер", "Доступ к предоставляемым им услугам, и данным видеоматериалами",
-                "Обрабатывать видеоматериалы согласно услуге") {ID = 5},
-            new Role("Стилист", "Доступ к предоставляемым им услугам, и инвентарю услуги",
-                "Видоизменять клиента, согласно заявке") {ID = 6});
+            "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918") { ID = 1 });
+        modelBuilder.Entity<EmployeeProfile>().HasData(new EmployeeProfile("photo",
+            "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918") { ID = 2 });
     }
 
     public static void LoadDB()
     {
         new ApplicationContext(GetDB());
+    }
+
+    private class AppConfig
+    {
+        internal class conn
+        {
+            public string DefaultConnection { get; set; }
+
+            public conn()
+            {
+                DefaultConnection = "Host=;Port=;Database=;Username=;Password=";
+            }
+        }
+
+        public conn ConnectionStrings { get; set; }
+
+        public AppConfig()
+        {
+            ConnectionStrings = new conn();
+        }
     }
 }

@@ -4,27 +4,39 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:entity="clr-namespace:PhotostudioDLL.Entity;assembly=PhotostudioDLL"
       mc:Ignorable="d"
       Title="OrderPage">
-    <Grid Name="MainOrderGrid">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*" />
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
-        <Grid Grid.Column="0" Margin="3 10 0 0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition />
-            </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" FontWeight="Light" FontSize="20" Margin="4">Список заявок</TextBlock>
-            <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0 10 0 0 ">
-                <TextBox Name="SearchBox" materialDesign:HintAssist.Hint="Поиск" FontSize="15" Width="200"></TextBox>
-            </StackPanel>
-            <DataGrid Name="OrderData" Grid.Row="2" Margin="0 10 0 0" IsReadOnly="True" Background="#25000000"/>
-        </Grid>
-        <StackPanel Grid.Column="1">
-            <TextBlock FontWeight="Light" FontSize="20" Margin="4 14 4 4">Новая заявка</TextBlock>
+    <Grid Name="MainOrderGrid" Margin="3 10 0 0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" FontWeight="Light" FontSize="20" Margin="4">Список заявок</TextBlock>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0 10 0 0 ">
+            <TextBox Name="SearchBox" materialDesign:HintAssist.Hint="Поиск" FontSize="15" Width="200"></TextBox>
         </StackPanel>
+        <ListView Name="OrderData" Grid.Row="2" Margin="0 10 0 0" ItemsSource="{Binding}"
+                  Initialized="OrderData_OnInitialized">
+            <ListView.DataContext>
+                <entity:Order />
+            </ListView.DataContext>
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Клиент" DisplayMemberBinding="{Binding Path=Client.FullName}" />
+                    <GridViewColumn Header="Сотрудник"
+                                    DisplayMemberBinding="{Binding Path=Contract.Employee.FullName}" />
+                    <GridViewColumn Header="Дата" DisplayMemberBinding="{Binding Path=DateTime}" />
+                    <GridViewColumn Header="Статус" DisplayMemberBinding="{Binding Path=Status}" />
+                    <GridViewColumn Header="Услуги" DisplayMemberBinding="{Binding Path=ListServices}" />
+                </GridView>
+            </ListView.View>
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem" BasedOn="{StaticResource MaterialDesignGridViewItem}">
+                    <EventSetter Event="MouseDoubleClick" Handler="ListViewItem_PreviewMouseLeftButtonDown" />
+                </Style>
+            </ListView.ItemContainerStyle>
+        </ListView>
     </Grid>
 </Page>

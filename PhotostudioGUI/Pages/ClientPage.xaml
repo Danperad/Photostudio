@@ -11,8 +11,8 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*" />
             <ColumnDefinition />
+            <ColumnDefinition Width="250"/>
         </Grid.ColumnDefinitions>
         <Grid Grid.Column="0" Margin="3 10 0 0">
             <Grid.RowDefinitions>
@@ -27,7 +27,7 @@
                 </TextBox>
             </StackPanel>
             <DataGrid Name="ClientData" Grid.Row="2" Margin="0 10 0 0" IsReadOnly="True" Background="#20000000"
-                      ItemsSource="{Binding}" AutoGenerateColumns="False">
+                      ItemsSource="{Binding}" AutoGenerateColumns="False" Initialized="ClientData_OnInitialized">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Фамилия" Binding="{Binding Path=LastName}" />
                     <DataGridTextColumn Header="Имя" Binding="{Binding Path=FirstName}" />

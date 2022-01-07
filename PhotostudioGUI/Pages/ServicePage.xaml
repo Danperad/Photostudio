@@ -5,7 +5,6 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:PhotostudioGUI.Pages"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-      xmlns:fw="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ServicePage">
@@ -32,7 +31,7 @@
             <TextBox Name="TitleBox" materialDesign:HintAssist.Hint="Название" FontSize="15" Margin="5"></TextBox>
             <TextBox Name="DescriptionBox" materialDesign:HintAssist.Hint="Описание" FontSize="15" Margin="5"></TextBox>
             <TextBox Name="PriceBox" materialDesign:HintAssist.Hint="Цена" FontSize="15" Margin="5"></TextBox>
-            <Button Content="Добавить" fw:PointerTracker.Enabled="True" Style="{StaticResource ButtonRevealStyle}" Click="AddServiceClick" Margin="0 15 0 0" Height="50" Width="125"/>
+            <Button Content="Добавить" Click="AddServiceClick" Margin="0 15 0 0" Height="50" Width="125"/>
         </StackPanel>
     </Grid>
 </Page>

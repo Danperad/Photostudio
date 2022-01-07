@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace PhotostudioGUI6.Pages;
+namespace PhotostudioGUI.Pages;
 
 public partial class RolePage : Page
 {

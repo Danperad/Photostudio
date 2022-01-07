@@ -3,24 +3,24 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PhotostudioDLL.Entity;
 
-public class Service
+public class RentedItem
 {
     public int ID { get; set; }
 
     [Required] public string Title { get; set; }
-
     [Required] public string Description { get; set; }
-
+    [Required] public uint Number { get; set; }
     [Required]
     [Column(TypeName = "money")]
-    public decimal Price { get; set; }
+    public decimal UnitPrice { get; set; }
     
-    public Service(){}
+    public RentedItem(){}
 
-    public Service(string Title, string Description, uint Number, decimal Price)
+    public RentedItem(string Title, string Description, uint Number, decimal UnitPrice)
     {
         this.Title = Title;
         this.Description = Description;
-        this.Price = Price;
+        this.Number = Number;
+        this.UnitPrice = UnitPrice;
     }
 }

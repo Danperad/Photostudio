@@ -3,27 +3,32 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PhotostudioDLL.Entity;
 
-public class RentedItem
+public class Service
 {
     public int ID { get; set; }
 
     [Required] public string Title { get; set; }
-
     [Required] public string Description { get; set; }
-
-    [Required] public uint Number { get; set; }
 
     [Required]
     [Column(TypeName = "money")]
-    public decimal UnitPrice { get; set; }
-    
-    public RentedItem(){}
+    public decimal Price { get; set; }
 
-    public RentedItem(string Title, string Description, uint Number, decimal UnitPrice)
+    public Service()
+    {
+    }
+
+    public Service(string Title, string Description, decimal Price)
     {
         this.Title = Title;
         this.Description = Description;
-        this.Number = Number;
-        this.UnitPrice = UnitPrice;
+        this.Price = Price;
     }
+
+    public static void Add(Service service)
+    {
+        ContextDB.Add(service);
+    }
+
+    public static List<Service> Get() => ContextDB.GetServices();
 }

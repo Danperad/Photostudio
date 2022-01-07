@@ -5,7 +5,7 @@
         <TargetFramework>net6.0-windows</TargetFramework>
         <Nullable>enable</Nullable>
         <UseWPF>true</UseWPF>
-        <RootNamespace>PhotostudioGUI6</RootNamespace>
+        <RootNamespace>PhotostudioGUI</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -48,7 +48,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Include="bin\Debug\net6.0-windows\appsettings.json" />
+      <None Include="bin\Debug\net6.0-windows\appsettings1.json" />
     </ItemGroup>
 
 </Project>

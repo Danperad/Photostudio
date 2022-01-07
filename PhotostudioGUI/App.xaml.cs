@@ -1,6 +1,8 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using MaterialDesignThemes.Wpf;
+using PhotostudioDLL;
 
 namespace PhotostudioGUI;
 
@@ -9,16 +11,18 @@ namespace PhotostudioGUI;
 /// </summary>
 public partial class App : Application
 {
-    public static ListViewItem AddItem(string title, Frame frame, PackIconKind icon, Page page)
+    protected override void OnStartup(StartupEventArgs e)
     {
-        ListViewItem listViewItem = new ListViewItem();
-        listViewItem.PreviewMouseLeftButtonDown += (sender, args) => { frame.Navigate(page); };
-        PackIcon tempIcon = new PackIcon {Margin = new Thickness(0, 2, 7, 0), Kind = icon};
-        StackPanel tempStack = new StackPanel {Orientation = Orientation.Horizontal};
-        TextBlock textBlock = new TextBlock {VerticalAlignment = VerticalAlignment.Center, Text = title};
-        tempStack.Children.Add(tempIcon);
-        tempStack.Children.Add(textBlock);
-        listViewItem.Content = tempStack;
-        return listViewItem;
+        base.OnStartup(e);
+        try
+        {
+            ApplicationContext.LoadDB();
+        }
+        catch
+        {
+            MessageBox.Show("Заполните файл конфигурации");
+            this.Shutdown();
+        }
     }
+    
 }

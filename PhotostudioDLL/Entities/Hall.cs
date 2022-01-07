@@ -5,6 +5,8 @@ namespace PhotostudioDLL.Entity;
 
 public class Hall
 {
+    #region Properties
+
     public int ID { get; set; }
     [Required] public string Title { get; set; }
     [Required] public string Description { get; set; }
@@ -12,7 +14,14 @@ public class Hall
     [Required]
     [Column(TypeName = "money")]
     public decimal PricePerHour { get; set; }
-    public Hall(){}
+
+    #endregion
+
+    #region Constructors
+
+    public Hall()
+    {
+    }
 
     public Hall(string Title, string Description, decimal PricePerHour)
     {
@@ -20,4 +29,6 @@ public class Hall
         this.Description = Description;
         this.PricePerHour = PricePerHour;
     }
+
+    #endregion
 }

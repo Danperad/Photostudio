@@ -15,7 +15,7 @@ public partial class ServicePage : Page
     public ServicePage()
     {
         InitializeComponent();
-        ServiceData.ItemsSource = ContextDB.GetServices();
+        ServiceData.ItemsSource = Service.Get();
     }
 
     private void AddServiceClick(object sender, RoutedEventArgs e)
@@ -26,7 +26,7 @@ public partial class ServicePage : Page
             Description = DescriptionBox.Text,
             Price = Convert.ToDecimal(PriceBox.Text)
         };
-        ContextDB.Add(service);
-        ServiceData.ItemsSource = ContextDB.GetServices();
+        Service.Add(service);
+        ServiceData.ItemsSource = Service.Get();
     }
 }

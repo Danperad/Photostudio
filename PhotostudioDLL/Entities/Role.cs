@@ -7,9 +7,7 @@ public class Role
     public int ID { get; set; }
 
     [Required] public string Title { get; set; }
-
     [Required] public string Rights { get; set; }
-
     [Required] public string Responsibilities { get; set; }
     public virtual List<Employee> Employees { get; set; }
     
@@ -24,4 +22,11 @@ public class Role
         this.Rights = Rights;
         this.Responsibilities = Responsibilities;
     }
+
+    public static void Add(Role role)
+    {
+        ContextDB.Add(role);
+    }
+
+    public static List<Role> Get() => ContextDB.GetRoles();
 }
