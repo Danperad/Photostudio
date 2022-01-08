@@ -1,7 +1,6 @@
 ﻿using System.Text;
-using Castle.Core.Internal;
-using PhotostudioDLL.Entity;
-using PhotostudioDLL.Exception;
+using PhotostudioDLL.Entities;
+using PhotostudioDLL.Exceptions;
 
 namespace PhotostudioDLL;
 
@@ -12,6 +11,11 @@ internal static class ContextDB
     internal static void AddDB(ApplicationContext dbb)
     {
         db = dbb;
+    }
+
+    public static void Save()
+    {
+        db.SaveChanges();
     }
 
     #region Client
@@ -29,7 +33,7 @@ internal static class ContextDB
 
     public static void ChangeActive(int ID)
     {
-        Client temp = db.Client.Where(c => c.ID == ID).FirstOrDefault()!;
+        var temp = db.Client.Where(c => c.ID == ID).FirstOrDefault()!;
         temp.IsActive = !temp.IsActive;
         db.SaveChanges();
     }
@@ -153,11 +157,8 @@ internal static class ContextDB
 
     public static string GetServiceName(List<ServiceProvided> services)
     {
-        StringBuilder temp = new StringBuilder();
-        foreach (var provided in services)
-        {
-            temp.Append($"{provided.Service.Title}, ");
-        }
+        var temp = new StringBuilder();
+        foreach (var provided in services) temp.Append($"{provided.Service.Title}, ");
 
         temp.Remove(temp.Length - 2, 2);
         return temp.ToString();

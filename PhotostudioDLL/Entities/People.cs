@@ -1,10 +1,20 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Castle.Core.Internal;
 
-namespace PhotostudioDLL.Entity;
+namespace PhotostudioDLL.Entities;
 
 public abstract class People
 {
+    protected static void Check(People people)
+    {
+        if (people.FirstName.IsNullOrEmpty())
+            throw new Exception("FirstNameError");
+        if (people.LastName.IsNullOrEmpty())
+            throw new Exception("LastNameError");
+        if (people.PhoneNumber.IsNullOrEmpty())
+            throw new Exception("PhoneNumberError");
+    }
+
     #region Properties
 
     [Required] [MaxLength(50)] public string LastName { get; set; }
@@ -57,14 +67,4 @@ public abstract class People
     }
 
     #endregion
-
-    protected static void Check(People people)
-    {
-        if (people.FirstName.IsNullOrEmpty())
-            throw new System.Exception("FirstNameError");
-        if (people.LastName.IsNullOrEmpty())
-            throw new System.Exception("LastNameError");
-        if (people.PhoneNumber.IsNullOrEmpty())
-            throw new System.Exception("PhoneNumberError");
-    }
 }

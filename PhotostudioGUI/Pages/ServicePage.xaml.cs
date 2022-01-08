@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using PhotostudioDLL;
-using PhotostudioDLL.Entity;
+using PhotostudioDLL.Entities;
 
 
 namespace PhotostudioGUI.Pages;

@@ -6,9 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using Castle.Core.Internal;
-using PhotostudioDLL;
-using PhotostudioDLL.Entity;
-using PhotostudioGUI.Windows;
+using PhotostudioDLL.Entities;
 
 namespace PhotostudioGUI.Pages;
 
@@ -19,11 +17,11 @@ public partial class EmployeePage : Page
 {
     private List<String> country = new List<string>(new[] {"+7", "+1", "+381"});
     private List<Employee> _employees = Employee.Get();
-    private readonly MainWindow _window;
+    private readonly Frame _frame;
 
-    public EmployeePage(MainWindow window)
+    public EmployeePage(Frame frame)
     {
-        _window = window;
+        _frame = frame;
         InitializeComponent();
     }
 
@@ -44,17 +42,17 @@ public partial class EmployeePage : Page
 
     private void EmployeeData_OnInitialized(object? sender, EventArgs e)
     {
-        (sender as ListView).ItemsSource = _employees;
+        (sender as ListView)!.ItemsSource = _employees;
     }
 
     private void CountryBox_OnInitialized(object? sender, EventArgs e)
     {
-        ComboBox temp = ((ComboBox) sender);
+        ComboBox temp = (ComboBox) sender!;
         temp.ItemsSource = country;
         temp.SelectedItem = temp.Items[0];    
     }
 
-    private char[] phonesymb = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+    private static char[] phonesymb = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 
     private void PhoneBox_OnTextChanged(object sender, TextChangedEventArgs e)
     {
@@ -80,7 +78,7 @@ public partial class EmployeePage : Page
     private void ListViewItem_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
         var employee = ((ListViewItem) sender).Content as Employee;
-        _window.NavigateWindow(new CurrentEmployeePage(employee, _window));
+        _frame.Navigate(new CurrentEmployeePage(employee, _frame));
     }
 
     private void RoleBox_OnInitialized(object? sender, EventArgs e)

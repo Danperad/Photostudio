@@ -1,48 +1,31 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using System.Text.Json;
-using PhotostudioDLL.Entity;
+using PhotostudioDLL.Entities;
 
 namespace PhotostudioDLL;
 
 public sealed class ApplicationContext : DbContext
 {
-    public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
+    internal ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
     {
         Database.Migrate();
         ContextDB.AddDB(this);
     }
 
-    // TODO: Обновдение данных в таблицах
-
-    public DbSet<Client> Client { get; set; }
-    public DbSet<Contract> Contract { get; set; }
-    public DbSet<Employee> Employee { get; set; }
-    public DbSet<Role> Role { get; set; }
-    public DbSet<Equipment> Equipment { get; set; }
-    public DbSet<Inventory> Inventory { get; set; }
-    public DbSet<Service> Service { get; set; }
-    public DbSet<Hall> Hall { get; set; }
-    public DbSet<RentedItem> RentedItem { get; set; }
-    public DbSet<ServiceProvided> ServiceProvided { get; set; }
-    public DbSet<Order> Order { get; set; }
-
-    public static DbContextOptions<ApplicationContext> GetDB()
+    internal static DbContextOptions<ApplicationContext> GetDb()
     {
         var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory());
         if (!File.Exists("appsettings.json"))
         {
-            using (var sw = File.Open("appsettings.json", FileMode.Create, FileAccess.Write))
-            {
-                sw.Write(JsonSerializer.SerializeToUtf8Bytes(new AppConfig()));
-            }
+            using var sw = File.Open("appsettings.json", FileMode.Create, FileAccess.Write);
+            sw.Write(JsonSerializer.SerializeToUtf8Bytes(new AppConfig()));
         }
 
         builder.AddJsonFile("appsettings.json");
         var config = builder.Build();
 
-        string connectionString = config.GetConnectionString("DefaultConnection");
+        var connectionString = config.GetConnectionString("DefaultConnection");
         var optionsBuilder = new DbContextOptionsBuilder<ApplicationContext>();
         return optionsBuilder.UseLazyLoadingProxies().UseNpgsql(connectionString).Options;
     }
@@ -50,40 +33,55 @@ public sealed class ApplicationContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Ignore<People>();
-        modelBuilder.Entity<Role>(EntityConfigure.RoleConfigure);
         modelBuilder.Entity<Employee>(EntityConfigure.EmployeeConfigure);
         modelBuilder.Entity<Client>(EntityConfigure.ClientConfigure);
-        modelBuilder.Entity<Order>().Ignore(o => o.ListServices);
-        modelBuilder.Entity<Order>().Ignore(o => o.TextStatus);
-        modelBuilder.Entity<EmployeeProfile>().HasIndex(e => e.Login).IsUnique();
-        modelBuilder.Entity<EmployeeProfile>().HasData(new EmployeeProfile("admin",
-            "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918") { ID = 1 });
-        modelBuilder.Entity<EmployeeProfile>().HasData(new EmployeeProfile("photo",
-            "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918") { ID = 2 });
+        modelBuilder.Entity<Order>(EntityConfigure.OrderConfigure);
+        modelBuilder.Entity<EmployeeProfile>(EntityConfigure.EmployeeProfileConfigure);
+
+        modelBuilder.Entity<Role>(EntityConfigure.RoleDataConfigure);
+        modelBuilder.Entity<Employee>(EntityConfigure.EmployeeDataConfigure);
+        modelBuilder.Entity<EmployeeProfile>(EntityConfigure.EmployeeProfileDataConfigure);
+        modelBuilder.Entity<Client>(EntityConfigure.ClientDataConfigure);
     }
 
-    public static void LoadDB()
+    public static void LoadDb()
     {
-        new ApplicationContext(GetDB());
+        new ApplicationContext(GetDb());
     }
 
     private class AppConfig
     {
-        internal class conn
+        public AppConfig()
         {
-            public string DefaultConnection { get; set; }
+            ConnectionStrings = new Conn();
+        }
 
-            public conn()
+        private Conn ConnectionStrings { get; }
+
+        private class Conn
+        {
+            public Conn()
             {
                 DefaultConnection = "Host=;Port=;Database=;Username=;Password=";
             }
-        }
 
-        public conn ConnectionStrings { get; set; }
-
-        public AppConfig()
-        {
-            ConnectionStrings = new conn();
+            private string DefaultConnection { get; }
         }
     }
+
+    #region Tables
+
+    public DbSet<Client> Client { get; set; } = null!;
+    public DbSet<Contract> Contract { get; set; } = null!;
+    public DbSet<Employee> Employee { get; set; } = null!;
+    public DbSet<Role> Role { get; set; } = null!;
+    public DbSet<Equipment> Equipment { get; set; } = null!;
+    public DbSet<Inventory> Inventory { get; set; } = null!;
+    public DbSet<Service> Service { get; set; } = null!;
+    public DbSet<Hall> Hall { get; set; } = null!;
+    public DbSet<RentedItem> RentedItem { get; set; } = null!;
+    public DbSet<ServiceProvided> ServiceProvided { get; set; } = null!;
+    public DbSet<Order> Order { get; set; } = null!;
+
+    #endregion
 }

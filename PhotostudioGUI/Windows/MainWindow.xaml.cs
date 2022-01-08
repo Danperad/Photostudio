@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using PhotostudioDLL.Entity;
+using PhotostudioDLL.Entities;
 using PhotostudioGUI.Pages;
 
 namespace PhotostudioGUI.Windows;
 
 public partial class MainWindow : Window
 {
-    private Employee _employee;
+    internal Employee Employee { get; private set; }
     private Dictionary<EPages, Page> _pages;
 
     public MainWindow(Employee employee)
     {
-        _employee = employee;
+        Employee = employee;
         InitializeComponent();
     }
 
@@ -36,14 +36,18 @@ public partial class MainWindow : Window
 
     private void MainWindow_OnInitialized(object? sender, EventArgs e)
     {
-        userName.Text = _employee.FullName;
-        switch (_employee.RoleID)
+        userName.Text = Employee.FullName;
+        switch (Employee.RoleID)
         {
             case 1:
                 MainWindowBuilder.AdminBuild(this, out _pages);
                 mainFrame.Navigate(_pages[EPages.EMPLOYEE]);
                 break;
             case 2:
+                break;
+            case 7:
+                MainWindowBuilder.ManagerBuild(this, out _pages);
+                mainFrame.Navigate(_pages[EPages.CLIENT]);
                 break;
         }
     }

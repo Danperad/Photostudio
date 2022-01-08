@@ -1,10 +1,10 @@
-﻿using PhotostudioDLL.Entity;
+﻿using PhotostudioDLL.Entities;
 
-namespace PhotostudioDLL.Exception;
+namespace PhotostudioDLL.Exceptions;
 
-public class ServiceProvidedExeption : System.Exception
+public class ServiceProvidedExeption : Exception
 {
-    public ServiceProvided ServiceProvided { get; private set; }
+    public ServiceProvided ServiceProvided { get; }
     public override string Message { get; }
 
     #region Constructors
@@ -18,11 +18,11 @@ public class ServiceProvidedExeption : System.Exception
     {
         Message = message;
     }
-    
-    public ServiceProvidedExeption(string message,ServiceProvided serviceProvided) : base(message)
+
+    public ServiceProvidedExeption(string message, ServiceProvided serviceProvided) : base(message)
     {
         ServiceProvided = serviceProvided;
     }
-    
+
     #endregion
 }

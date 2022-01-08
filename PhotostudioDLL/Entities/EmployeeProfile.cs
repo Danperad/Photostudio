@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace PhotostudioDLL.Entity;
+namespace PhotostudioDLL.Entities;
 
 public class EmployeeProfile
 {

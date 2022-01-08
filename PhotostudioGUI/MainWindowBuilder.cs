@@ -14,10 +14,10 @@ public static class MainWindowBuilder
     {
         List<string> titles = new List<string>(new[] {"Сотрудники", "Должности", "Услуги", "Заявки"});
         pages = new Dictionary<EPages, Page>();
-        pages.Add(EPages.EMPLOYEE, new EmployeePage(window));
+        pages.Add(EPages.EMPLOYEE, new EmployeePage(window.mainFrame));
         pages.Add(EPages.ROLE, new RolePage());
         pages.Add(EPages.SERVICE, new ServicePage());
-        pages.Add(EPages.ORDER, new OrderPage());
+        pages.Add(EPages.ORDER, new OrderPage(window.Employee));
         foreach (var title in titles)
         {
             PackIconKind icon;
@@ -47,7 +47,7 @@ public static class MainWindowBuilder
     {
         List<string> titles = new List<string>(new[] {"Сотрудники", "Должности", "Услуги"});
         pages = new Dictionary<EPages, Page>();
-        pages.Add(EPages.EMPLOYEE, new EmployeePage(window));
+        pages.Add(EPages.EMPLOYEE, new EmployeePage(window.mainFrame));
         pages.Add(EPages.ROLE, new RolePage());
         pages.Add(EPages.SERVICE, new ServicePage());
         foreach (var title in titles)
@@ -66,6 +66,34 @@ public static class MainWindowBuilder
                 case "Услуги":
                     icon = PackIconKind.PersonCardDetails;
                     window.mainListView.Items.Add(AddItem(title, window.mainFrame, icon, pages[EPages.SERVICE]));
+                    break;
+            }
+        }
+    }
+    
+    public static void ManagerBuild(MainWindow window, out Dictionary<EPages, Page> pages)
+    {
+        List<string> titles = new List<string>(new[] {"Клиенты", "Услуги", "Заявки"});
+        pages = new Dictionary<EPages, Page>();
+        pages.Add(EPages.CLIENT, new ClientPage(window.mainFrame));
+        pages.Add(EPages.SERVICE, new ServicePage());
+        pages.Add(EPages.ORDER, new OrderPage(window.Employee));
+        foreach (var title in titles)
+        {
+            PackIconKind icon;
+            switch (title)
+            {
+                case "Клиенты":
+                    icon = PackIconKind.PersonCardDetails;
+                    window.mainListView.Items.Add(AddItem(title, window.mainFrame, icon, pages[EPages.CLIENT]));
+                    break;
+                case "Услуги":
+                    icon = PackIconKind.PersonCardDetails;
+                    window.mainListView.Items.Add(AddItem(title, window.mainFrame, icon, pages[EPages.SERVICE]));
+                    break;
+                case "Заявки":
+                    icon = PackIconKind.PersonCardDetails;
+                    window.mainListView.Items.Add(AddItem(title, window.mainFrame, icon, pages[EPages.ORDER]));
                     break;
             }
         }

@@ -1,11 +1,11 @@
-﻿namespace PhotostudioDLL.Attribute;
+﻿namespace PhotostudioDLL.Attributes;
 
-public class StringValueAttribute : System.Attribute
+public class StringValueAttribute : Attribute
 {
-    public string StringValue { get; protected set; }
-
     public StringValueAttribute(string value)
     {
-        this.StringValue = value;
+        StringValue = value;
     }
+
+    public string StringValue { get; protected set; }
 }

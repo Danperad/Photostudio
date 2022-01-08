@@ -5,7 +5,7 @@ using System.Text;
 using System.Windows;
 using FontAwesome5;
 using PhotostudioDLL;
-using PhotostudioDLL.Entity;
+using PhotostudioDLL.Entities;
 
 namespace PhotostudioGUI.Windows;
 

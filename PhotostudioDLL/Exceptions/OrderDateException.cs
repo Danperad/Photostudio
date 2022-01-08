@@ -1,8 +1,8 @@
-﻿using PhotostudioDLL.Entity;
+﻿using PhotostudioDLL.Entities;
 
-namespace PhotostudioDLL.Exception;
+namespace PhotostudioDLL.Exceptions;
 
-public class OrderDateException : System.Exception
+public class OrderDateException : Exception
 {
     public OrderDateException(string message, Order order) : base(message)
     {

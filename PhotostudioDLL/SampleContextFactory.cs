@@ -6,6 +6,6 @@ public class SampleContextFactory : IDesignTimeDbContextFactory<ApplicationConte
 {
     public ApplicationContext CreateDbContext(string[] args)
     {
-        return new ApplicationContext(ApplicationContext.GetDB());
+        return new ApplicationContext(ApplicationContext.GetDb());
     }
 }

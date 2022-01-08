@@ -1,23 +1,34 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using PhotostudioDLL.Entity;
-using PhotostudioGUI.Windows;
+using MaterialDesignThemes.Wpf;
+using PhotostudioDLL.Entities;
+using fw = SourceChord.FluentWPF;
 
 namespace PhotostudioGUI.Pages;
 
 public partial class CurrentEmployeePage : Page
 {
-    private readonly MainWindow _window;
+    private readonly Frame _frame;
     private Employee _employee;
-    public CurrentEmployeePage(Employee employee,MainWindow window)
+
+    public CurrentEmployeePage(Employee employee, Frame frame)
     {
         _employee = employee;
-        _window = window;
+        _frame = frame;
         InitializeComponent();
+        AddButtonBack();
     }
 
-    private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+    public void AddButtonBack()
     {
-        _window.BackWindow();
+        var button = new Button
+        {
+            HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top,
+            Height = Width = 35,
+        };
+        button.Click += ((sender, args) => _frame.GoBack());
+        button.Content = new PackIcon { Kind = PackIconKind.ArrowLeft };
+        button.Style = new Style(typeof(fw.RevealElement));
+        MainGrid.Children.Add(button);
     }
 }

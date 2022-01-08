@@ -55,8 +55,7 @@
         <PasswordBox Name="PasswordBox" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="5" FontSize="18"
                                            BorderThickness="2" materialDesign:HintAssist.Hint="Password" Padding="5 0 0 0 " />
         <Button Name="LoginButton" Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="8" Grid.RowSpan="2" Cursor="Hand"
-                Click="SignInButton_OnClick" fw:PointerTracker.Enabled="True"
-                Style="{StaticResource ButtonRevealStyle}">
+                Click="SignInButton_OnClick">
             <TextBlock Name="ButtonText" FontSize="15" Text="Войти" />
         </Button>
         <TextBlock Name="ErroTextBlock" FontWeight="Medium" FontSize="14" Foreground="#e60000" Grid.Row="10"

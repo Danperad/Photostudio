@@ -8,10 +8,11 @@
       xmlns:local="clr-namespace:PhotostudioGUI.Pages"
       mc:Ignorable="d"
       Title="CurrentEmployeePage">
-    <Grid>
-        <Button Click="ButtonBase_OnClick" Height="35" Width="35" fw:PointerTracker.Enabled="True"
-                Style="{StaticResource ButtonRevealStyle}" HorizontalAlignment="Left" VerticalAlignment="Top">
-            <mD:PackIcon Kind="ArrowLeft"></mD:PackIcon>
-        </Button>
+    <Page.Resources>
+        <Style TargetType="Button" BasedOn="{StaticResource ButtonRevealStyle}">
+            <Setter Property="fw:PointerTracker.Enabled" Value="True"></Setter>
+        </Style>
+    </Page.Resources>
+    <Grid Name="MainGrid">
     </Grid>
 </Page>
