@@ -1,9 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace PhotostudioDLL.Entities;
+﻿namespace PhotostudioDLL.Entities;
 
 public class Role
 {
+    #region Methods
     public static void Add(Role role)
     {
         ContextDB.Add(role);
@@ -18,6 +17,7 @@ public class Role
     {
         ContextDB.Save();
     }
+    #endregion
 
     #region Constructors
 
@@ -40,9 +40,9 @@ public class Role
 
     public int ID { get; set; }
 
-    [Required] public string Title { get; set; }
-    [Required] public string Rights { get; set; }
-    [Required] public string Responsibilities { get; set; }
+    public string Title { get; set; }
+    public string Rights { get; set; }
+    public string Responsibilities { get; set; }
     public virtual List<Employee> Employees { get; set; }
 
     #endregion

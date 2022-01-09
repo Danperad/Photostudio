@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Castle.Core.Internal;
+﻿using Castle.Core.Internal;
 
 namespace PhotostudioDLL.Entities;
 
@@ -17,11 +16,11 @@ public abstract class People
 
     #region Properties
 
-    [Required] [MaxLength(50)] public string LastName { get; set; }
-    [Required] [MaxLength(50)] public string FirstName { get; set; }
-    [MaxLength(50)] public string? MiddleName { get; set; }
-    [Required] [MaxLength(15)] public string PhoneNumber { get; set; }
-    [MaxLength(50)] public string? EMail { get; set; }
+    public string LastName { get; set; }
+    public string FirstName { get; set; }
+    public string? MiddleName { get; set; }
+    public string PhoneNumber { get; set; }
+    public string? EMail { get; set; }
 
     public string FullName
     {
@@ -34,8 +33,7 @@ public abstract class People
     }
 
     #endregion
-
-
+    
     #region Constructors
 
     public People()

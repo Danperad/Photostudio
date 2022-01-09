@@ -7,9 +7,9 @@ public class EmployeeProfile
     #region Properties
 
     public int ID { get; set; }
-    [Required] public virtual Employee Employee { get; set; }
-    [Required] [MaxLength(50)] public string Login { get; set; }
-    [Required] [MaxLength(64)] public string Password { get; set; }
+    public virtual Employee Employee { get; set; }
+    [MinLength(3)] public string Login { get; set; }
+    public string Password { get; set; }
 
     #endregion
 

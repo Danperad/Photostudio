@@ -1,10 +1,8 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows;
 using FontAwesome5;
-using PhotostudioDLL;
 using PhotostudioDLL.Entities;
 
 namespace PhotostudioGUI.Windows;
@@ -12,15 +10,15 @@ namespace PhotostudioGUI.Windows;
 public partial class LoginWindow
 {
     private readonly BackgroundWorker _bw;
-
-    private Employee Profile;
     private string login = string.Empty;
     private string pass = string.Empty;
+
+    private Employee Profile;
 
     public LoginWindow()
     {
         InitializeComponent();
-        _bw = (BackgroundWorker) FindResource("backgroundWoker");
+        _bw = (BackgroundWorker)FindResource("BackgroundWoker");
     }
 
     private void SignInButton_OnClick(object sender, RoutedEventArgs e)

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls;
-using MaterialDesignThemes.Wpf;
+﻿using System.Windows;
 using PhotostudioDLL;
 
 namespace PhotostudioGUI;
@@ -21,8 +18,7 @@ public partial class App : Application
         catch
         {
             MessageBox.Show("Заполните файл конфигурации");
-            this.Shutdown();
+            Shutdown();
         }
     }
-    
 }

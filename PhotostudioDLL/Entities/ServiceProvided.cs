@@ -1,10 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
-using PhotostudioDLL.Exceptions;
+﻿using PhotostudioDLL.Exceptions;
 
 namespace PhotostudioDLL.Entities;
 
 public class ServiceProvided
 {
+    #region Methods
+
     public static void Add(ServiceProvided serviceProvided)
     {
         Check(serviceProvided);
@@ -29,17 +30,18 @@ public class ServiceProvided
         ContextDB.Save();
     }
 
+    #endregion
 
     #region Properties
 
     public int ID { get; set; }
 
-    [Required] public virtual Order Order { get; set; }
+    public virtual Order Order { get; set; }
     public int OrderID { get; set; }
-    [Required] public virtual Service Service { get; set; }
+    public virtual Service Service { get; set; }
     public int ServiceID { get; set; }
     public string? Description { get; set; }
-    [Required] public virtual Employee Employee { get; set; }
+    public virtual Employee Employee { get; set; }
     public int EmployeeID { get; set; }
 
     public virtual RentedItem? RentedItem { get; set; }
@@ -49,8 +51,9 @@ public class ServiceProvided
     public virtual Hall? Hall { get; set; }
     public int? HallID { get; set; }
 
-    public DateTime? StartRent { get; set; }
-    public DateTime? EndRent { get; set; }
+    public DateOnly? RentDate { get; set; }
+    public TimeOnly? StartRent { get; set; }
+    public TimeOnly? EndRent { get; set; }
 
     public string? PhotoLocation { get; set; }
     public DateTime? PhotoStartDateTime { get; set; }
@@ -71,38 +74,29 @@ public class ServiceProvided
         this.Order = Order;
     }
 
-    public ServiceProvided(Employee Employee, Service Service, Order Order, Hall Hall, DateTime StartRent,
-        DateTime EndRent)
+    public ServiceProvided(Employee Employee, Service Service, Order Order, Hall Hall, DateOnly RentDate,
+        TimeOnly StartRent, TimeOnly EndRent)
     {
         this.Employee = Employee;
         this.Service = Service;
         this.Order = Order;
         this.Hall = Hall;
+        this.RentDate = RentDate;
         this.StartRent = StartRent;
         this.EndRent = EndRent;
     }
 
-    public ServiceProvided(Employee Employee, Service Service, Order Order, RentedItem RentedItem, DateTime StartRent,
-        DateTime EndRent, int Number)
+    public ServiceProvided(Employee Employee, Service Service, Order Order, RentedItem RentedItem, DateOnly RentDate,
+        TimeOnly StartRent, TimeOnly EndRent, int Number)
     {
         this.Employee = Employee;
         this.Service = Service;
         this.Order = Order;
         this.RentedItem = RentedItem;
+        this.RentDate = RentDate;
         this.StartRent = StartRent;
         this.EndRent = EndRent;
         this.Number = Number;
-    }
-
-    public ServiceProvided(Employee Employee, Service Service, Order Order, string PhotoLocation, DateTime StartRent,
-        DateTime EndRent)
-    {
-        this.Employee = Employee;
-        this.Service = Service;
-        this.Order = Order;
-        RentedItem = RentedItem;
-        this.StartRent = StartRent;
-        this.EndRent = EndRent;
     }
 
     public ServiceProvided(Employee Employee, Service Service, Order Order, RentedItem RentedItem,

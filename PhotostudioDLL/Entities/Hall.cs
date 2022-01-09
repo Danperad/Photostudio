@@ -1,20 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using PhotostudioDLL.Entities.Interfaces;
+﻿namespace PhotostudioDLL.Entities;
 
-namespace PhotostudioDLL.Entities;
-
-public class Hall : ICostable
+public class Hall : Costable
 {
-    public string GetTitle()
-    {
-        return Title;
-    }
-
-    public decimal GetCost()
-    {
-        return PricePerHour;
-    }
+    #region Methods
 
     public static void Add(Hall hall)
     {
@@ -31,16 +19,11 @@ public class Hall : ICostable
         ContextDB.Save();
     }
 
+    #endregion
+
     #region Properties
 
     public int ID { get; set; }
-    [Required] public string Title { get; set; }
-    [Required] public string Description { get; set; }
-
-    [Required]
-    [Column(TypeName = "money")]
-    public decimal PricePerHour { get; set; }
-
     public virtual List<ServiceProvided> Services { get; set; }
 
     #endregion
@@ -51,11 +34,8 @@ public class Hall : ICostable
     {
     }
 
-    public Hall(string Title, string Description, decimal PricePerHour)
+    public Hall(string Title, string Description, decimal Cost) : base(Title, Description, Cost)
     {
-        this.Title = Title;
-        this.Description = Description;
-        this.PricePerHour = PricePerHour;
     }
 
     #endregion

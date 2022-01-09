@@ -1,11 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using Castle.Core.Internal;
+﻿using Castle.Core.Internal;
 
 namespace PhotostudioDLL.Entities;
 
 public class Employee : People
 {
+    #region Methods
+
     public static void Add(Employee employee)
     {
         Check(employee);
@@ -38,14 +38,16 @@ public class Employee : People
         ContextDB.Save();
     }
 
+    #endregion
+
     #region Properties
 
     public int ID { get; set; }
-    [Required] public virtual EmployeeProfile Profile { get; set; }
-    [Required] [MaxLength(10)] public string PassData { get; set; }
-    [Column(TypeName = "date")] [Required] public DateOnly EmploymentDate { get; set; }
-    [Required] public int RoleID { get; set; }
-    [Required] public virtual Role Role { get; set; }
+    public virtual EmployeeProfile Profile { get; set; }
+    public string PassData { get; set; }
+    public DateOnly EmploymentDate { get; set; }
+    public int RoleID { get; set; }
+    public virtual Role Role { get; set; }
 
     public virtual List<Contract> Contracts { get; set; }
     public virtual List<ServiceProvided> Services { get; set; }

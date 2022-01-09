@@ -1,9 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace PhotostudioDLL.Entities;
+﻿namespace PhotostudioDLL.Entities;
 
 public class Inventory
 {
+    #region Methods
+
     public static void Add(Inventory inventory)
     {
         ContextDB.Add(inventory);
@@ -18,6 +18,8 @@ public class Inventory
     {
         ContextDB.Save();
     }
+
+    #endregion
 
     #region Constructors
 
@@ -40,9 +42,9 @@ public class Inventory
     public int ID { get; set; }
 
     public virtual List<Equipment> Equipment { get; set; }
-    [Required] public virtual Service Service { get; set; }
+    public virtual Service Service { get; set; }
     public int ServiceID { get; set; }
-    [Required] public string Appointment { get; set; }
+    public string Appointment { get; set; }
 
     #endregion
 }

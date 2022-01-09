@@ -1,9 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace PhotostudioDLL.Entities;
+﻿namespace PhotostudioDLL.Entities;
 
 public class Contract
 {
+    #region Methods
     public static void Add(Contract contract)
     {
         Check(contract);
@@ -25,18 +24,19 @@ public class Contract
     {
         ContextDB.Save();
     }
+    #endregion
 
     #region Properties
 
     public int ID { get; set; }
-    [Required] public virtual Client Client { get; set; }
+    public virtual Client Client { get; set; }
     public int ClientID { get; set; }
-    [Required] public virtual Employee Employee { get; set; }
+    public virtual Employee Employee { get; set; }
     public int EmployeeID { get; set; }
-    [Required] public DateOnly StartDate { get; set; }
-    [Required] public DateOnly EndDate { get; set; }
+    public DateOnly StartDate { get; set; }
+    public DateOnly EndDate { get; set; }
 
-    [Required] public virtual Order Order { get; set; }
+    public virtual Order Order { get; set; }
     public int OrderID { get; set; }
 
     #endregion

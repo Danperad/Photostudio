@@ -31,13 +31,6 @@ internal static class ContextDB
         return db.Client.ToList();
     }
 
-    public static void ChangeActive(int ID)
-    {
-        var temp = db.Client.Where(c => c.ID == ID).FirstOrDefault()!;
-        temp.IsActive = !temp.IsActive;
-        db.SaveChanges();
-    }
-
     #endregion
 
     #region Contract

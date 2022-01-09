@@ -24,9 +24,9 @@ public partial class CurrentEmployeePage : Page
         var button = new Button
         {
             HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top,
-            Height = Width = 35,
+            Height = Width = 35
         };
-        button.Click += ((sender, args) => _frame.GoBack());
+        button.Click += (sender, args) => _frame.GoBack();
         button.Content = new PackIcon { Kind = PackIconKind.ArrowLeft };
         button.Style = new Style(typeof(fw.RevealElement));
         MainGrid.Children.Add(button);

@@ -1,9 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace PhotostudioDLL.Entities;
+﻿namespace PhotostudioDLL.Entities;
 
 public class Client : People
 {
+    #region Methods
+
     public static void Add(Client client)
     {
         Check(client);
@@ -20,13 +20,15 @@ public class Client : People
         ContextDB.Save();
     }
 
+    #endregion
+
     #region Properties
 
     public int ID { get; set; }
-    [Required] public bool IsActive { get; set; }
-
     public virtual List<Order> Orders { get; set; }
     public virtual List<Contract> Contracts { get; set; }
+    
+    public string? Company { get; set; }
 
     #endregion
 

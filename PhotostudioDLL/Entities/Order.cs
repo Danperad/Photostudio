@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using PhotostudioDLL.Attributes;
+﻿using PhotostudioDLL.Attributes;
 using PhotostudioDLL.Exceptions;
 
 namespace PhotostudioDLL.Entities;
@@ -8,9 +7,16 @@ public class Order
 {
     public enum OrderStatus
     {
-        [StringValue("В процессе")] COMPLETE,
-        [StringValue("В процессе")] INPROGRESS
+        [StringValue("Завершена")] COMPLETE,
+        [StringValue("Подготовка")] PREWORK,
+        [StringValue("Фотографирование")] INPHOTO,
+        [StringValue("Создание Видео")] INVIDEO,
+        [StringValue("На ретушировании")] INRETUSH,
+        [StringValue("Отменён")] CLOSED,
+        [StringValue("Печать")] PRINT,
     }
+
+    #region Methods
 
     public static void Add(Order order)
     {
@@ -35,35 +41,40 @@ public class Order
         ContextDB.Save();
     }
 
-    public decimal GetCost()
-    {
-        decimal cost = 0;
-        foreach (var service in Services)
-        {
-            cost += service.Service.GetCost();
-            if (service.RentedItem != null)
-                cost += service.RentedItem.GetCost() * service.Number.Value *
-                        (decimal)(service.EndRent - service.StartRent).Value.TotalHours;
-            if (service.Hall != null)
-                cost += service.Hall.GetCost() * (decimal)(service.EndRent - service.StartRent).Value.TotalHours;
-            if (service.PhotoLocation != null)
-                cost += service.Service.GetCost() *
-                        ((decimal)(service.EndRent - service.StartRent).Value.TotalHours - 1);
-        }
-
-        return cost;
-    }
+    #endregion
 
     #region Properties
 
     public int ID { get; set; }
-    [Required] public virtual Contract Contract { get; set; }
+    public virtual Contract Contract { get; set; }
     public int ContractID { get; set; }
-    [Required] public virtual Client Client { get; set; }
+    public virtual Client Client { get; set; }
     public int ClientID { get; set; }
-    [Required] public DateTime DateTime { get; set; }
-    [Required] public OrderStatus Status { get; set; }
-    [Required] public virtual List<ServiceProvided> Services { get; set; }
+    public DateTime DateTime { get; set; }
+    public OrderStatus Status { get; set; }
+    public virtual List<ServiceProvided> Services { get; set; }
+
+    public decimal AllGetCost
+    {
+        get
+        {
+            decimal cost = 0;
+            foreach (var service in Services)
+            {
+                cost += service.Service.Cost;
+                if (service.RentedItem != null)
+                    cost += service.RentedItem.Cost * service.Number.Value *
+                            (decimal)(service.EndRent - service.StartRent).Value.TotalHours;
+                if (service.Hall != null)
+                    cost += service.Hall.Cost * (decimal)(service.EndRent - service.StartRent).Value.TotalHours;
+                if (service.PhotoLocation != null)
+                    cost += service.Service.Cost *
+                            ((decimal)(service.EndRent - service.StartRent).Value.TotalHours - 1);
+            }
+
+            return cost;
+        }
+    }
 
     public string TextStatus
     {
@@ -96,7 +107,7 @@ public class Order
     public Order()
     {
         Services = new List<ServiceProvided>();
-        Status = OrderStatus.INPROGRESS;
+        Status = OrderStatus.PREWORK;
     }
 
     public Order(Contract Contract, Client Client, DateTime DateTime, List<ServiceProvided> Services)
@@ -104,7 +115,7 @@ public class Order
         this.Contract = Contract;
         this.Client = Client;
         this.DateTime = DateTime;
-        Status = OrderStatus.INPROGRESS;
+        Status = OrderStatus.PREWORK;
         this.Services = Services;
         foreach (var service in Services) ServiceProvided.Add(service);
     }

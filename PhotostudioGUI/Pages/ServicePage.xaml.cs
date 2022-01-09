@@ -1,32 +1,22 @@
 ﻿using System;
-using System.Windows;
+using System.Collections.Generic;
 using System.Windows.Controls;
-using PhotostudioDLL;
 using PhotostudioDLL.Entities;
-
 
 namespace PhotostudioGUI.Pages;
 
-/// <summary>
-/// Логика взаимодействия для ServicePage.xaml
-/// </summary>
-public partial class ServicePage : Page
+public partial class ServicePage
 {
+    private readonly List<Service> _services;
+
     public ServicePage()
     {
+        _services = Service.Get();
         InitializeComponent();
-        ServiceData.ItemsSource = Service.Get();
     }
 
-    private void AddServiceClick(object sender, RoutedEventArgs e)
+    private void ServiceData_OnInitialized(object? sender, EventArgs e)
     {
-        Service service = new Service
-        {
-            Title = TitleBox.Text,
-            Description = DescriptionBox.Text,
-            Price = Convert.ToDecimal(PriceBox.Text)
-        };
-        Service.Add(service);
-        ServiceData.ItemsSource = Service.Get();
+        (sender as ListView)!.ItemsSource = _services;
     }
 }

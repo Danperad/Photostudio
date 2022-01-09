@@ -1,20 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using PhotostudioDLL.Entities.Interfaces;
+﻿namespace PhotostudioDLL.Entities;
 
-namespace PhotostudioDLL.Entities;
-
-public class RentedItem : ICostable
+public class RentedItem : Costable
 {
-    public string GetTitle()
-    {
-        return Title;
-    }
-
-    public decimal GetCost()
-    {
-        return UnitPrice;
-    }
+    #region Methods
 
     public static void Add(RentedItem rentedItem)
     {
@@ -26,22 +14,25 @@ public class RentedItem : ICostable
         return ContextDB.GetRentedItems();
     }
 
+    public static RentedItem? GetByID(int ID)
+    {
+        return ContextDB.GetRentedItems().FirstOrDefault(r => r.ID == ID);
+    }
+
     public static void Update()
     {
         ContextDB.Save();
     }
 
+    #endregion
+
     #region Properties
 
     public int ID { get; set; }
+    public uint Number { get; set; }
+    public bool IsСlothes { get; set; }
 
-    [Required] public string Title { get; set; }
-    [Required] public string Description { get; set; }
-    [Required] public uint Number { get; set; }
-
-    [Required]
-    [Column(TypeName = "money")]
-    public decimal UnitPrice { get; set; }
+    public virtual List<ServiceProvided> Services { get; set; }
 
     #endregion
 
@@ -49,14 +40,15 @@ public class RentedItem : ICostable
 
     public RentedItem()
     {
+        Services = new List<ServiceProvided>();
     }
 
-    public RentedItem(string Title, string Description, uint Number, decimal UnitPrice)
+    public RentedItem(string Title, string Description, uint Number, decimal Cost, bool IsСlothes) : base(Title,
+        Description, Cost)
     {
-        this.Title = Title;
-        this.Description = Description;
         this.Number = Number;
-        this.UnitPrice = UnitPrice;
+        this.IsСlothes = IsСlothes;
+        Services = new List<ServiceProvided>();
     }
 
     #endregion

@@ -2,13 +2,12 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:fw="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
         mc:Ignorable=""
         Title="Sunrise"
         Initialized="MainWindow_OnInitialized"
         fw:AcrylicWindow.Enabled="True"
-        MinWidth="1050" MinHeight="600" Icon="/sunrise.png">
+        MinWidth="1050" MinHeight="600" Icon="/sunrise.png" Closed="MainWindow_OnClosed">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="160" />
@@ -25,6 +24,6 @@
             <TextBlock Grid.Row="1" Text="help" Name="userName" FontWeight="Medium" FontSize="15" Margin=" 8 5 7 10"
                        HorizontalAlignment="Right" fw:PointerTracker.Enabled="False" />
         </Grid>
-        <Frame Name="mainFrame" Grid.Column="1" NavigationUIVisibility="Hidden" Background="White"/>
+        <Frame Name="mainFrame" Grid.Column="1" NavigationUIVisibility="Hidden" Background="White" />
     </Grid>
 </Window>

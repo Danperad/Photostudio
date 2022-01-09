@@ -13,7 +13,7 @@
                     Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <Style TargetType="Button" BasedOn="{StaticResource ButtonRevealStyle}">
-                <Setter Property="fw:PointerTracker.Enabled" Value="True"></Setter>
+                <Setter Property="fw:PointerTracker.Enabled" Value="True" />
             </Style>
         </ResourceDictionary>
     </Application.Resources>

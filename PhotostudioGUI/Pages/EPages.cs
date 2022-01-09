@@ -2,5 +2,9 @@
 
 public enum EPages
 {
-    CLIENT, EMPLOYEE, ORDER, ROLE, SERVICE
+    CLIENT,
+    EMPLOYEE,
+    ORDER,
+    ROLE,
+    SERVICE
 }

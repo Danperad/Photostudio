@@ -15,9 +15,10 @@ namespace PhotostudioGUI.Pages;
 /// </summary>
 public partial class EmployeePage : Page
 {
-    private List<String> country = new List<string>(new[] {"+7", "+1", "+381"});
-    private List<Employee> _employees = Employee.Get();
+    private static readonly char[] phonesymb = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
     private readonly Frame _frame;
+    private readonly List<Employee> _employees = Employee.Get();
+    private readonly List<string> country = new(new[] { "+7", "+1", "+381" });
 
     public EmployeePage(Frame frame)
     {
@@ -27,15 +28,18 @@ public partial class EmployeePage : Page
 
     private void SearchBox_OnTextChanged(object sender, TextChangedEventArgs e)
     {
-        if (SearchBox.Text.IsNullOrEmpty()) EmployeeData.ItemsSource = _employees;
+        if (SearchBox.Text.IsNullOrEmpty())
+        {
+            EmployeeData.ItemsSource = _employees;
+        }
         else
         {
             var search = SearchBox.Text.ToLower();
             EmployeeData.ItemsSource = _employees.Where(d =>
-                (d.EMail != null ? (d.EMail.ToLower().Contains(search)) : false) ||
+                (d.EMail != null ? d.EMail.ToLower().Contains(search) : false) ||
                 d.FirstName.ToLower().Contains(search) ||
                 d.LastName.ToLower().Contains(search) ||
-                (d.MiddleName != null ? (d.MiddleName.ToLower().Contains(search)) : false) ||
+                (d.MiddleName != null ? d.MiddleName.ToLower().Contains(search) : false) ||
                 d.PhoneNumber.Contains(search)).ToList();
         }
     }
@@ -47,24 +51,18 @@ public partial class EmployeePage : Page
 
     private void CountryBox_OnInitialized(object? sender, EventArgs e)
     {
-        ComboBox temp = (ComboBox) sender!;
+        var temp = (ComboBox)sender!;
         temp.ItemsSource = country;
-        temp.SelectedItem = temp.Items[0];    
+        temp.SelectedItem = temp.Items[0];
     }
-
-    private static char[] phonesymb = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 
     private void PhoneBox_OnTextChanged(object sender, TextChangedEventArgs e)
     {
-        int index = PhoneBox.CaretIndex;
-        string text = "";
-        foreach (char c in PhoneBox.Text)
-        {
+        var index = PhoneBox.CaretIndex;
+        var text = "";
+        foreach (var c in PhoneBox.Text)
             if (phonesymb.Contains(c))
-            {
                 text += c;
-            }
-        }
 
         PhoneBox.Text = text;
         PhoneBox.CaretIndex = index;
@@ -77,7 +75,7 @@ public partial class EmployeePage : Page
 
     private void ListViewItem_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-        var employee = ((ListViewItem) sender).Content as Employee;
+        var employee = ((ListViewItem)sender).Content as Employee;
         _frame.Navigate(new CurrentEmployeePage(employee, _frame));
     }
 
@@ -93,10 +91,10 @@ public partial class EmployeePage : Page
             LastNameBox.BorderBrush = new SolidColorBrush(Colors.Red);
             return;
         }
+
         if (FirstNameBox.Text.IsNullOrEmpty())
         {
             FirstNameBox.BorderBrush = new SolidColorBrush(Colors.Red);
-            return;
         }
     }
 }

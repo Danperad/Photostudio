@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using PhotostudioDLL.Entities;
 using PhotostudioGUI.Pages;
 
@@ -10,7 +9,6 @@ namespace PhotostudioGUI.Windows;
 
 public partial class MainWindow : Window
 {
-    internal Employee Employee { get; private set; }
     private Dictionary<EPages, Page> _pages;
 
     public MainWindow(Employee employee)
@@ -19,11 +17,13 @@ public partial class MainWindow : Window
         InitializeComponent();
     }
 
+    internal Employee Employee { get; }
+
     public void NavigateWindow(EPages page)
     {
         mainFrame.Navigate(_pages[page]);
     }
-    
+
     public void NavigateWindow(Page page)
     {
         mainFrame.Navigate(page);
@@ -50,5 +50,10 @@ public partial class MainWindow : Window
                 mainFrame.Navigate(_pages[EPages.CLIENT]);
                 break;
         }
+    }
+
+    private void MainWindow_OnClosed(object? sender, EventArgs e)
+    {
+        Application.Current.Shutdown();
     }
 }

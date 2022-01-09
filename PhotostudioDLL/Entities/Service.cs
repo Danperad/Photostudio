@@ -1,22 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using PhotostudioDLL.Entities.Interfaces;
+﻿namespace PhotostudioDLL.Entities;
 
-namespace PhotostudioDLL.Entities;
-
-public class Service : ICostable
+public class Service : Costable
 {
-    public string GetTitle()
-    {
-        return Title;
-    }
-
-    public decimal GetCost()
-    {
-        return Price;
-    }
-
-
+    #region Methods
     public static void Add(Service service)
     {
         ContextDB.Add(service);
@@ -31,17 +17,11 @@ public class Service : ICostable
     {
         ContextDB.Save();
     }
+    #endregion
 
     #region Properties
 
     public int ID { get; set; }
-    [Required] public string Title { get; set; }
-    [Required] public string Description { get; set; }
-
-    [Required]
-    [Column(TypeName = "money")]
-    public decimal Price { get; set; }
-
     public virtual List<Inventory> Inventories { get; set; }
     public virtual List<ServiceProvided> ServiceProvideds { get; set; }
 
@@ -55,11 +35,8 @@ public class Service : ICostable
         ServiceProvideds = new List<ServiceProvided>();
     }
 
-    public Service(string Title, string Description, decimal Price)
+    public Service(string Title, string Description, decimal Cost) : base(Title, Description, Cost)
     {
-        this.Title = Title;
-        this.Description = Description;
-        this.Price = Price;
         Inventories = new List<Inventory>();
         ServiceProvideds = new List<ServiceProvided>();
     }

@@ -1,0 +1,51 @@
+﻿<Page x:Class="PhotostudioGUI.Pages.Services.ItemRentPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:entities="clr-namespace:PhotostudioDLL.Entities;assembly=PhotostudioDLL"
+      xmlns:mD="http://materialdesigninxaml.net/winfx/xaml/themes"
+      mc:Ignorable="d"
+      Title="ItemRentPage">
+    <Page.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontSize" Value="15" />
+        </Style>
+    </Page.Resources>
+    <StackPanel>
+        <DockPanel Margin="5">
+            <DatePicker Initialized="DatePicker_OnInitialized" Name="DatePicker" FontSize="15"
+                        mD:HintAssist.Hint="Дата начала" SelectedDateChanged="DatePicker_OnSelectedDateChanged" />
+            <mD:TimePicker Name="StartTimePicker" mD:HintAssist.Hint="Начало" Width="80" Is24Hours="True" FontSize="15"
+                           Margin="2 0 0 0" SelectedTimeChanged="TimePicker_OnSelectedTimeChanged" />
+            <mD:TimePicker Name="EndTimePicker" mD:HintAssist.Hint="Конец" Width="80" Is24Hours="True" FontSize="15"
+                           Margin="2 0 0 0" SelectedTimeChanged="TimePicker_OnSelectedTimeChanged" />
+        </DockPanel>
+        <ComboBox Name="ItemComboBox" DisplayMemberPath="Title" Margin="5" FontSize="14"
+                  SelectionChanged="Selector_OnSelectionChanged" IsEnabled="False">
+            <ComboBox.DataContext>
+                <entities:RentedItem />
+            </ComboBox.DataContext>
+        </ComboBox>
+        <DockPanel Margin="5">
+            <TextBlock Text="Описание: " />
+            <TextBlock Name="DescriptionBlock" TextWrapping="Wrap" />
+        </DockPanel>
+        <DockPanel Margin="5">
+            <TextBlock Text="Цена за штуку: " />
+            <TextBlock Name="PricePerUnit" />
+        </DockPanel>
+        <DockPanel Margin="5">
+            <TextBlock Text="Всего доступно: " />
+            <TextBlock Name="TotalUnits" />
+        </DockPanel>
+        <DockPanel Margin="5">
+            <TextBlock Text="Нужно: " />
+            <TextBox Name="Counts" FontSize="15" IsEnabled="False" TextChanged="Counts_OnTextInput" />
+        </DockPanel>
+        <DockPanel Margin="5">
+            <TextBlock Text="Итоговая цена: " />
+            <TextBlock Name="PriceTotal" />
+        </DockPanel>
+    </StackPanel>
+</Page>

@@ -37,11 +37,17 @@ public sealed class ApplicationContext : DbContext
         modelBuilder.Entity<Client>(EntityConfigure.ClientConfigure);
         modelBuilder.Entity<Order>(EntityConfigure.OrderConfigure);
         modelBuilder.Entity<EmployeeProfile>(EntityConfigure.EmployeeProfileConfigure);
+        modelBuilder.Entity<RentedItem>(EntityConfigure.RentedItemConfigure);
+        modelBuilder.Entity<Hall>(EntityConfigure.HallConfigure);
+        modelBuilder.Entity<Service>(EntityConfigure.ServiceConfigure);
 
+        modelBuilder.Entity<RentedItem>(EntityConfigure.RentedItemDataConfigure);
         modelBuilder.Entity<Role>(EntityConfigure.RoleDataConfigure);
         modelBuilder.Entity<Employee>(EntityConfigure.EmployeeDataConfigure);
         modelBuilder.Entity<EmployeeProfile>(EntityConfigure.EmployeeProfileDataConfigure);
         modelBuilder.Entity<Client>(EntityConfigure.ClientDataConfigure);
+        modelBuilder.Entity<Service>(EntityConfigure.ServiceDataConfigure);
+        modelBuilder.Entity<Hall>(EntityConfigure.HallDataConfigure);
     }
 
     public static void LoadDb()

@@ -11,10 +11,10 @@ namespace PhotostudioGUI.Pages;
 
 public partial class OrderPage
 {
-    private List<Order> _orders;
-    private readonly Employee _employee;
     private readonly Client _client;
+    private readonly Employee _employee;
     private readonly List<ServiceProvided> _serviceProvideds;
+    private List<Order> _orders;
 
     public OrderPage(Employee employee)
     {
@@ -46,19 +46,12 @@ public partial class OrderPage
 
     private void AddOrderClick(object sender, RoutedEventArgs e)
     {
-        if (_serviceProvideds.Count == 0)
-        {
-            return;
-        }
-        var order = new Order(new Contract(_client, _employee, DateOnly.FromDateTime(StartDatePicker.SelectedDate.Value),
+        if (_serviceProvideds.Count == 0) return;
+        var order = new Order(new Contract(_client, _employee,
+            DateOnly.FromDateTime(StartDatePicker.SelectedDate.Value),
             DateOnly.FromDateTime(EndDatePicker.SelectedDate.Value)), _client, DateTime.Now, _serviceProvideds);
         Order.Add(order);
         _orders = Order.Get();
-    }
-
-    private void FrameworkElement_OnInitialized(object? sender, EventArgs e)
-    {
-        (sender as ComboBox)!.ItemsSource = Employee.Get();
     }
 
     private void DatePicker_OnInitialized(object? sender, EventArgs e)
@@ -68,7 +61,21 @@ public partial class OrderPage
 
     private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
     {
-        var window = new ProvidedServiceWindow(_serviceProvideds);
+        if (!StartDatePicker.SelectedDate.HasValue || !EndDatePicker.SelectedDate.HasValue ||
+            StartDatePicker.SelectedDate.Value > EndDatePicker.SelectedDate.Value)
+        {
+            ErrorBlock.Text = "Выберите корректные даты";
+            return;
+        }
+
+        var window = new ProvidedServiceWindow(_serviceProvideds, StartDatePicker.SelectedDate.Value,
+            EndDatePicker.SelectedDate.Value, _employee);
         window.Show();
+        ErrorBlock.Text = string.Empty;
+    }
+
+    private void StartDatePicker_OnSelectedDateChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        EndDatePicker.DisplayDateStart = StartDatePicker.SelectedDate;
     }
 }

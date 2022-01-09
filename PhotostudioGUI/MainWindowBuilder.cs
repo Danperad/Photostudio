@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using MaterialDesignThemes.Wpf;
@@ -12,7 +11,7 @@ public static class MainWindowBuilder
 {
     public static void AdminBuild(MainWindow window, out Dictionary<EPages, Page> pages)
     {
-        List<string> titles = new List<string>(new[] {"Сотрудники", "Должности", "Услуги", "Заявки"});
+        var titles = new List<string>(new[] { "Сотрудники", "Должности", "Услуги", "Заявки" });
         pages = new Dictionary<EPages, Page>();
         pages.Add(EPages.EMPLOYEE, new EmployeePage(window.mainFrame));
         pages.Add(EPages.ROLE, new RolePage());
@@ -45,7 +44,7 @@ public static class MainWindowBuilder
 
     public static void PhotographBuild(MainWindow window, out Dictionary<EPages, Page> pages)
     {
-        List<string> titles = new List<string>(new[] {"Сотрудники", "Должности", "Услуги"});
+        var titles = new List<string>(new[] { "Сотрудники", "Должности", "Услуги" });
         pages = new Dictionary<EPages, Page>();
         pages.Add(EPages.EMPLOYEE, new EmployeePage(window.mainFrame));
         pages.Add(EPages.ROLE, new RolePage());
@@ -70,10 +69,10 @@ public static class MainWindowBuilder
             }
         }
     }
-    
+
     public static void ManagerBuild(MainWindow window, out Dictionary<EPages, Page> pages)
     {
-        List<string> titles = new List<string>(new[] {"Клиенты", "Услуги", "Заявки"});
+        var titles = new List<string>(new[] { "Клиенты", "Услуги", "Заявки" });
         pages = new Dictionary<EPages, Page>();
         pages.Add(EPages.CLIENT, new ClientPage(window.mainFrame));
         pages.Add(EPages.SERVICE, new ServicePage());
@@ -98,7 +97,7 @@ public static class MainWindowBuilder
             }
         }
     }
-    
+
     /// <summary>
     ///     Создание эллементов боковой панели
     /// </summary>
@@ -109,11 +108,11 @@ public static class MainWindowBuilder
     /// <returns></returns>
     public static ListViewItem AddItem(string title, Frame frame, PackIconKind icon, Page page)
     {
-        ListViewItem listViewItem = new ListViewItem();
+        var listViewItem = new ListViewItem();
         listViewItem.PreviewMouseLeftButtonDown += (sender, args) => { frame.Navigate(page); };
-        PackIcon tempIcon = new PackIcon {Margin = new Thickness(0, 2, 7, 0), Kind = icon};
-        StackPanel tempStack = new StackPanel {Orientation = Orientation.Horizontal};
-        TextBlock textBlock = new TextBlock {VerticalAlignment = VerticalAlignment.Center, Text = title};
+        var tempIcon = new PackIcon { Margin = new Thickness(0, 2, 7, 0), Kind = icon };
+        var tempStack = new StackPanel { Orientation = Orientation.Horizontal };
+        var textBlock = new TextBlock { VerticalAlignment = VerticalAlignment.Center, Text = title };
         tempStack.Children.Add(tempIcon);
         tempStack.Children.Add(textBlock);
         listViewItem.Content = tempStack;

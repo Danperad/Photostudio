@@ -3,11 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:local="clr-namespace:PhotostudioGUI.Windows"
         xmlns:mD="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:entities="clr-namespace:PhotostudioDLL.Entities;assembly=PhotostudioDLL"
+        xmlns:fw="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
         mc:Ignorable="d"
-        Title="ProvidedServiceWindow" Height="450" Width="800">
+        fw:AcrylicWindow.Enabled="True"
+        fw:AcrylicWindow.AcrylicWindowStyle="NoIcon"
+        Title="Предоставляемые услуги" Height="520" MinWidth="500" MaxWidth="500" Icon="/sunrise.png">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200" />
@@ -15,25 +17,32 @@
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="0">
             <TextBlock Text="Услуги" FontSize="15" FontFamily="Bold" TextAlignment="Center" />
-            <ListView DisplayMemberPath="{Binding Service.Title}" ItemsSource="{Binding}"
+            <ListView Name="ProvidedListView"
                       Initialized="FrameworkElement_OnInitialized">
                 <ListView.DataContext>
                     <entities:ServiceProvided />
                 </ListView.DataContext>
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <DockPanel>
-                            <ListViewItem MouseDoubleClick="Control_OnMouseDoubleClick"
-                                          Content="{Binding Service.Title}">
-                            </ListViewItem>
-                            <Button Click="RemoveButton_OnClick" Height="30" Width="30">
-                                <mD:PackIcon Kind="Minus" />
-                            </Button>
-                        </DockPanel>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Type ListViewItem}}">
+                        <EventSetter Event="MouseDoubleClick" Handler="OpenServiceProvided" />
+                        <Setter Property="Content" Value="{Binding Path=Service.Title}" />
+                        <Setter Property="Tag" Value="{Binding}" />
+                    </Style>
+                </ListView.ItemContainerStyle>
             </ListView>
-            <Button Click="AddButton_OnClick" Content="Добавить услугу" FontSize="13" Height="25" Margin="5"></Button>
+            <ComboBox Name="ServiceComboBox" SelectionChanged="ServiceComboBox_OnSelectionChanged" Text="Добавить услугу" mD:HintAssist.Hint="Добавить услугу" FontSize="13" Margin="5" Initialized="ServiceComboBoxInit">
+                <ComboBox.DataContext>
+                    <entities:Hall/>
+                </ComboBox.DataContext>
+                <ComboBox.ItemContainerStyle>
+                    <Style TargetType="ComboBoxItem">
+                        <EventSetter Event="Selected" Handler="EventSetter_OnHandler"></EventSetter>
+                        <Setter Property="Content" Value="{Binding Path=Title}"/>
+                        <Setter Property="Tag" Value="{Binding}"></Setter>
+                    </Style>
+                </ComboBox.ItemContainerStyle>
+            </ComboBox>
         </StackPanel>
+        <Frame Name="ServiceFrame" Grid.Column="1" NavigationUIVisibility="Hidden" Background="White" />
     </Grid>
 </Window>

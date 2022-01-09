@@ -12,14 +12,14 @@
         Title="Login" Height="460" Width="350" ResizeMode="NoResize" Icon="/sunrise.png">
     <Window.Resources>
         <componentModel:BackgroundWorker
-            x:Key="backgroundWoker"
+            x:Key="BackgroundWoker"
             WorkerReportsProgress="True"
             WorkerSupportsCancellation="True"
             DoWork="BackgroundWorker_DoWork"
             RunWorkerCompleted="BackgroundWorker_RunWorkerCompleted">
         </componentModel:BackgroundWorker>
     </Window.Resources>
-    <Grid x:Name="mainGrid">
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition />
@@ -53,7 +53,7 @@
         <TextBox Name="LoginBox" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="5" FontSize="18" BorderThickness="2"
                  Cursor="IBeam" materialDesign:HintAssist.Hint="Login" Padding="5 0 0 0 " />
         <PasswordBox Name="PasswordBox" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="5" FontSize="18"
-                                           BorderThickness="2" materialDesign:HintAssist.Hint="Password" Padding="5 0 0 0 " />
+                     BorderThickness="2" materialDesign:HintAssist.Hint="Password" Padding="5 0 0 0 " />
         <Button Name="LoginButton" Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="8" Grid.RowSpan="2" Cursor="Hand"
                 Click="SignInButton_OnClick">
             <TextBlock Name="ButtonText" FontSize="15" Text="Войти" />

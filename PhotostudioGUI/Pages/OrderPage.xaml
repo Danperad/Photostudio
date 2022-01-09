@@ -9,8 +9,8 @@
       Title="OrderPage" Name="Page">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="250"/>
+            <ColumnDefinition />
+            <ColumnDefinition Width="250" />
         </Grid.ColumnDefinitions>
         <Grid Name="MainOrderGrid" Margin="3 10 0 0">
             <Grid.RowDefinitions>
@@ -20,7 +20,7 @@
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" FontWeight="Light" FontSize="20" Margin="4">Список заявок</TextBlock>
             <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0 10 0 0 ">
-                <TextBox Name="SearchBox" mD:HintAssist.Hint="Поиск" FontSize="15" Width="200"></TextBox>
+                <TextBox Name="SearchBox" mD:HintAssist.Hint="Поиск" FontSize="15" Width="200" />
             </StackPanel>
             <ListView Name="OrderData" Grid.Row="2" Margin="0 10 0 0" ItemsSource="{Binding}"
                       Initialized="OrderData_OnInitialized">
@@ -46,16 +46,13 @@
         </Grid>
         <StackPanel Name="AddPanel" Grid.Column="1" Margin="3">
             <TextBlock FontWeight="Light" FontSize="20" Margin="0 14 4 4">Новая Заявка</TextBlock>
-            <ComboBox ItemsSource="{Binding}" FontSize="15" DisplayMemberPath="FullName" mD:HintAssist.Hint="Выберите сотрудника" Initialized="FrameworkElement_OnInitialized">
-                <ComboBox.DataContext>
-                    <entities:Employee/>
-                </ComboBox.DataContext>
-            </ComboBox>
-            <DatePicker Initialized="DatePicker_OnInitialized" Name="StartDatePicker" FontSize="15" mD:HintAssist.Hint="Дата начала"/>
-            <DatePicker Initialized="DatePicker_OnInitialized" Name="EndDatePicker" FontSize="15" mD:HintAssist.Hint="Дата Окончания"/>
-            <Button Content="Услуги" Margin="15" Click="ButtonBase_OnClick"></Button>
+            <DatePicker Initialized="DatePicker_OnInitialized" Name="StartDatePicker" FontSize="15"
+                        mD:HintAssist.Hint="Дата начала" SelectedDateChanged="StartDatePicker_OnSelectedDateChanged"/>
+            <DatePicker Initialized="DatePicker_OnInitialized" Name="EndDatePicker" FontSize="15"
+                        mD:HintAssist.Hint="Дата Окончания" />
+            <Button Content="Услуги" Margin="15" Height="35" Click="ButtonBase_OnClick" />
             <Button Content="Добавить" Click="AddOrderClick" Margin="0 15 0 0" Height="50" Width="125" />
-            <TextBlock Name="ErrorBlock" TextAlignment="Center" Foreground="DarkRed" FontSize="13" Margin="15"></TextBlock>
+            <TextBlock Name="ErrorBlock" TextAlignment="Center" Foreground="DarkRed" FontSize="13" Margin="15" />
         </StackPanel>
     </Grid>
 </Page>

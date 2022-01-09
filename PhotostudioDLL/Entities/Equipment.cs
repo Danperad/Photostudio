@@ -1,9 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace PhotostudioDLL.Entities;
+﻿namespace PhotostudioDLL.Entities;
 
 public class Equipment
 {
+    #region Methods
+
     public static void Add(Equipment equipment)
     {
         ContextDB.Add(equipment);
@@ -19,11 +19,13 @@ public class Equipment
         ContextDB.Save();
     }
 
+    #endregion
+
     #region Properties
 
     public int ID { get; set; }
-    [Required] public string Title { get; set; }
-    [Required] public string Description { get; set; }
+    public string Title { get; set; }
+    public string Description { get; set; }
 
     public virtual List<Inventory> Inventories { get; set; }
 
