@@ -3,6 +3,7 @@
 public class Contract
 {
     #region Methods
+
     public static void Add(Contract contract)
     {
         Check(contract);
@@ -24,6 +25,7 @@ public class Contract
     {
         ContextDB.Save();
     }
+
     #endregion
 
     #region Properties
@@ -40,7 +42,6 @@ public class Contract
     public int OrderID { get; set; }
 
     #endregion
-
 
     #region Constructors
 

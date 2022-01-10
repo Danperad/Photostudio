@@ -3,7 +3,17 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:entities="clr-namespace:PhotostudioDLL.Entities;assembly=PhotostudioDLL"
+      xmlns:mD="http://materialdesigninxaml.net/winfx/xaml/themes"
       mc:Ignorable="d"
-      Title="VoidPage" Height="450" Width="800">
-    <Grid />
+      Title="VoidPage">
+    <StackPanel>
+        <ComboBox Name="EmployeeComboBox" mD:HintAssist.Hint="Выберите сотрудника" DisplayMemberPath="FullName" Margin="5" FontSize="14"
+                  SelectionChanged="Selector_OnSelectionChanged">
+            <ComboBox.DataContext>
+                <entities:Employee />
+            </ComboBox.DataContext>
+        </ComboBox>
+        <TextBlock Name="MessageTextBox" FontSize="15"/>
+    </StackPanel>
 </Page>

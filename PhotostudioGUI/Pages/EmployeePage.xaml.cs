@@ -16,8 +16,8 @@ namespace PhotostudioGUI.Pages;
 public partial class EmployeePage : Page
 {
     private static readonly char[] phonesymb = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
-    private readonly Frame _frame;
     private readonly List<Employee> _employees = Employee.Get();
+    private readonly Frame _frame;
     private readonly List<string> country = new(new[] { "+7", "+1", "+381" });
 
     public EmployeePage(Frame frame)
@@ -92,9 +92,6 @@ public partial class EmployeePage : Page
             return;
         }
 
-        if (FirstNameBox.Text.IsNullOrEmpty())
-        {
-            FirstNameBox.BorderBrush = new SolidColorBrush(Colors.Red);
-        }
+        if (FirstNameBox.Text.IsNullOrEmpty()) FirstNameBox.BorderBrush = new SolidColorBrush(Colors.Red);
     }
 }

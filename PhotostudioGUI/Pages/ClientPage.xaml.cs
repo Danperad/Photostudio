@@ -12,17 +12,18 @@ namespace PhotostudioGUI.Pages;
 /// <summary>
 ///     Логика взаимодействия для Client.xaml
 /// </summary>
-public partial class ClientPage : Page
+public partial class ClientPage
 {
     private readonly Employee _employee;
     private readonly Frame _frame;
+    private readonly List<string> _country = new(new[] { "+7", "+1", "+38" });
+
+    private readonly char[] _phonesymb = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
     private List<Client> _clients;
-    private readonly List<string> country = new(new[] { "+7", "+1", "+38" });
 
-    private readonly char[] phonesymb = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
-
-    public ClientPage(Frame frame)
+    public ClientPage(Frame frame, Employee employee)
     {
+        _employee = employee;
         _frame = frame;
         _clients = Client.Get();
         InitializeComponent();
@@ -63,7 +64,7 @@ public partial class ClientPage : Page
         var index = PhoneBox.CaretIndex;
         var text = "";
         foreach (var c in PhoneBox.Text)
-            if (phonesymb.Contains(c))
+            if (_phonesymb.Contains(c))
                 text += c;
 
         PhoneBox.Text = text;
@@ -91,7 +92,7 @@ public partial class ClientPage : Page
     private void CountryBox_OnInitialized(object? sender, EventArgs e)
     {
         var temp = (ComboBox)sender;
-        temp.ItemsSource = country;
+        temp.ItemsSource = _country;
         temp.SelectedItem = temp.Items[0];
     }
 

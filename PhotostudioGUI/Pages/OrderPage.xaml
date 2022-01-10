@@ -33,7 +33,7 @@
                         <GridViewColumn Header="Сотрудник"
                                         DisplayMemberBinding="{Binding Path=Contract.Employee.FullName}" />
                         <GridViewColumn Header="Дата" DisplayMemberBinding="{Binding Path=DateTime}" />
-                        <GridViewColumn Header="Статус" DisplayMemberBinding="{Binding Path=Status}" />
+                        <GridViewColumn Header="Статус" DisplayMemberBinding="{Binding Path=TextStatus}" />
                         <GridViewColumn Header="Услуги" DisplayMemberBinding="{Binding Path=ListServices}" />
                     </GridView>
                 </ListView.View>
@@ -47,7 +47,7 @@
         <StackPanel Name="AddPanel" Grid.Column="1" Margin="3">
             <TextBlock FontWeight="Light" FontSize="20" Margin="0 14 4 4">Новая Заявка</TextBlock>
             <DatePicker Initialized="DatePicker_OnInitialized" Name="StartDatePicker" FontSize="15"
-                        mD:HintAssist.Hint="Дата начала" SelectedDateChanged="StartDatePicker_OnSelectedDateChanged"/>
+                        mD:HintAssist.Hint="Дата начала" SelectedDateChanged="StartDatePicker_OnSelectedDateChanged" />
             <DatePicker Initialized="DatePicker_OnInitialized" Name="EndDatePicker" FontSize="15"
                         mD:HintAssist.Hint="Дата Окончания" />
             <Button Content="Услуги" Margin="15" Height="35" Click="ButtonBase_OnClick" />

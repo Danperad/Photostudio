@@ -21,7 +21,7 @@
             <mD:TimePicker Name="EndTimePicker" mD:HintAssist.Hint="Конец" Width="80" Is24Hours="True" FontSize="15"
                            Margin="2 0 0 0" SelectedTimeChanged="TimePicker_OnSelectedTimeChanged" />
         </DockPanel>
-        <ComboBox Name="ItemComboBox" DisplayMemberPath="Title" Margin="5" FontSize="14"
+        <ComboBox Name="ItemComboBox" DisplayMemberPath="Title" mD:HintAssist.Hint="Выберите вещь" Margin="5" FontSize="14"
                   SelectionChanged="Selector_OnSelectionChanged" IsEnabled="False">
             <ComboBox.DataContext>
                 <entities:RentedItem />

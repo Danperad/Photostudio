@@ -13,7 +13,7 @@ public class Order
         [StringValue("Создание Видео")] INVIDEO,
         [StringValue("На ретушировании")] INRETUSH,
         [StringValue("Отменён")] CLOSED,
-        [StringValue("Печать")] PRINT,
+        [StringValue("Печать")] PRINT
     }
 
     #region Methods
@@ -27,7 +27,7 @@ public class Order
     private static void Check(Order order)
     {
         Contract.Check(order.Contract);
-        if (DateOnly.FromDateTime(order.DateTime) < order.Contract.StartDate)
+        if (DateOnly.FromDateTime(order.DateTime) > order.Contract.StartDate)
             throw new OrderDateException("OrderDateError", order);
     }
 
@@ -53,7 +53,10 @@ public class Order
     public DateTime DateTime { get; set; }
     public OrderStatus Status { get; set; }
     public virtual List<ServiceProvided> Services { get; set; }
-
+    
+    /// <summary>
+    /// Своство расчитываемое общую стоимость заявки
+    /// </summary>
     public decimal AllGetCost
     {
         get
@@ -76,6 +79,9 @@ public class Order
         }
     }
 
+    /// <summary>
+    /// Свойство находящее описание статуса используя рефлексию
+    /// </summary>
     public string TextStatus
     {
         get
@@ -113,11 +119,11 @@ public class Order
     public Order(Contract Contract, Client Client, DateTime DateTime, List<ServiceProvided> Services)
     {
         this.Contract = Contract;
+        ContractID = Contract.ID;
         this.Client = Client;
         this.DateTime = DateTime;
         Status = OrderStatus.PREWORK;
         this.Services = Services;
-        foreach (var service in Services) ServiceProvided.Add(service);
     }
 
     #endregion

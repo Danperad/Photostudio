@@ -195,7 +195,7 @@ namespace PhotostudioDLL.Migrations
                         new
                         {
                             ID = 1,
-                            EmploymentDate = new DateOnly(2022, 1, 9),
+                            EmploymentDate = new DateOnly(2022, 1, 10),
                             FirstName = "Вячеслав",
                             LastName = "Берёзов",
                             PassData = "6024978234",
@@ -381,7 +381,7 @@ namespace PhotostudioDLL.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("DateTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("Status")
                         .HasColumnType("integer");
@@ -408,6 +408,11 @@ namespace PhotostudioDLL.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<bool>("IsKids")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
                     b.Property<bool>("IsСlothes")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
@@ -431,6 +436,7 @@ namespace PhotostudioDLL.Migrations
                             ID = 1,
                             Cost = 1000m,
                             Description = "55 размер",
+                            IsKids = true,
                             IsСlothes = true,
                             Number = 1L,
                             Title = "Платье"
@@ -440,6 +446,7 @@ namespace PhotostudioDLL.Migrations
                             ID = 2,
                             Cost = 1300m,
                             Description = "45 размер",
+                            IsKids = false,
                             IsСlothes = true,
                             Number = 1L,
                             Title = "Костюм"
@@ -449,6 +456,7 @@ namespace PhotostudioDLL.Migrations
                             ID = 3,
                             Cost = 800m,
                             Description = "Копия изместного пистолета",
+                            IsKids = false,
                             IsСlothes = false,
                             Number = 8L,
                             Title = "Пистолет ММГ"
@@ -458,6 +466,7 @@ namespace PhotostudioDLL.Migrations
                             ID = 4,
                             Cost = 10000m,
                             Description = "Белый, серый, чёрный",
+                            IsKids = false,
                             IsСlothes = false,
                             Number = 16L,
                             Title = "Голубь"
@@ -467,6 +476,7 @@ namespace PhotostudioDLL.Migrations
                             ID = 5,
                             Cost = 200m,
                             Description = "В асортименте",
+                            IsKids = false,
                             IsСlothes = false,
                             Number = 100L,
                             Title = "Пластмассовые фрукты"
@@ -687,13 +697,13 @@ namespace PhotostudioDLL.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("PhotoEndDateTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("PhotoLocation")
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("PhotoStartDateTime")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateOnly?>("RentDate")
                         .HasColumnType("date");

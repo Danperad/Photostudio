@@ -27,6 +27,29 @@ public class Employee : People
     {
         return ContextDB.GetEmployees();
     }
+    
+    public static List<Employee> GetByRoleID(int ID)
+    {
+        return ContextDB.GetEmployees().Where(e => e.Role.ID == ID).ToList();
+    }
+
+    public static List<Employee> GetPhotoWithTime(DateTime start, DateTime end)
+    {
+        return ContextDB.GetEmployees().Where(e => e.RoleID == 2 && !e.Services
+            .Any(s => (s.PhotoStartDateTime <= start ||
+                       s.PhotoEndDateTime >= end ||
+                       s.PhotoStartDateTime >= start && s.PhotoEndDateTime <= end)))
+            .ToList();
+    }
+    
+    public static List<Employee> GetVideoWithTime(DateTime start, DateTime end)
+    {
+        return ContextDB.GetEmployees().Where(e => e.RoleID == 4 && !e.Services
+                .Any(s => (s.PhotoStartDateTime <= start ||
+                           s.PhotoEndDateTime >= end ||
+                           s.PhotoStartDateTime >= start && s.PhotoEndDateTime <= end)))
+            .ToList();
+    }
 
     public static Employee? GetAuth(string login, string pass)
     {

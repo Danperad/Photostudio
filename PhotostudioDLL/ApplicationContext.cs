@@ -9,10 +9,15 @@ public sealed class ApplicationContext : DbContext
 {
     internal ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
     {
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         Database.Migrate();
         ContextDB.AddDB(this);
     }
 
+    /// <summary>
+    /// Получение данных для подключения к БД. Если файл не найден, создаётся новый, не заполненный
+    /// </summary>
+    /// <returns></returns>
     internal static DbContextOptions<ApplicationContext> GetDb()
     {
         var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory());
@@ -55,6 +60,9 @@ public sealed class ApplicationContext : DbContext
         new ApplicationContext(GetDb());
     }
 
+    /// <summary>
+    /// Класс для генерации файла конфигурации
+    /// </summary>
     private class AppConfig
     {
         public AppConfig()

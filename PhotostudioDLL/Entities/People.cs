@@ -33,14 +33,14 @@ public abstract class People
     }
 
     #endregion
-    
+
     #region Constructors
 
-    public People()
+    protected People()
     {
     }
 
-    public People(string LastName, string FirstName, string PhoneNumber)
+    protected People(string LastName, string FirstName, string PhoneNumber)
     {
         this.LastName = LastName;
         this.FirstName = FirstName;

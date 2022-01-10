@@ -3,6 +3,7 @@
 public class Service : Costable
 {
     #region Methods
+
     public static void Add(Service service)
     {
         ContextDB.Add(service);
@@ -17,6 +18,7 @@ public class Service : Costable
     {
         ContextDB.Save();
     }
+
     #endregion
 
     #region Properties

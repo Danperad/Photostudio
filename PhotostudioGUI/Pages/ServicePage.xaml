@@ -12,11 +12,10 @@
         <Grid Margin="3 10 0 0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
                 <RowDefinition />
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" FontWeight="Light" FontSize="20" Margin="4">Список Услуг</TextBlock>
-            <ListView Name="ServiceData" Grid.Row="2" Margin="0 10 0 0" Initialized="ServiceData_OnInitialized">
+            <ListView Grid.Row="1" Margin="0 10 0 0" Initialized="ServiceData_OnInitialized">
                 <ListView.DataContext>
                     <entities:Service />
                 </ListView.DataContext>
@@ -24,7 +23,7 @@
                     <GridView>
                         <GridViewColumn Header="Название" DisplayMemberBinding="{Binding Path=Title}" />
                         <GridViewColumn Header="Описание" DisplayMemberBinding="{Binding Path=Description}" />
-                        <GridViewColumn Header="Цена р." DisplayMemberBinding="{Binding Price}" />
+                        <GridViewColumn Header="Цена р." DisplayMemberBinding="{Binding Cost}" />
                     </GridView>
                 </ListView.View>
             </ListView>

@@ -30,15 +30,17 @@
                     </Style>
                 </ListView.ItemContainerStyle>
             </ListView>
-            <ComboBox Name="ServiceComboBox" SelectionChanged="ServiceComboBox_OnSelectionChanged" Text="Добавить услугу" mD:HintAssist.Hint="Добавить услугу" FontSize="13" Margin="5" Initialized="ServiceComboBoxInit">
+            <ComboBox Name="ServiceComboBox" SelectionChanged="ServiceComboBox_OnSelectionChanged"
+                      Text="Добавить услугу" mD:HintAssist.Hint="Добавить услугу" FontSize="13" Margin="5"
+                      Initialized="ServiceComboBoxInit">
                 <ComboBox.DataContext>
-                    <entities:Hall/>
+                    <entities:Hall />
                 </ComboBox.DataContext>
                 <ComboBox.ItemContainerStyle>
                     <Style TargetType="ComboBoxItem">
-                        <EventSetter Event="Selected" Handler="EventSetter_OnHandler"></EventSetter>
-                        <Setter Property="Content" Value="{Binding Path=Title}"/>
-                        <Setter Property="Tag" Value="{Binding}"></Setter>
+                        <EventSetter Event="Selected" Handler="EventSetter_OnHandler" />
+                        <Setter Property="Content" Value="{Binding Path=Title}" />
+                        <Setter Property="Tag" Value="{Binding}" />
                     </Style>
                 </ComboBox.ItemContainerStyle>
             </ComboBox>

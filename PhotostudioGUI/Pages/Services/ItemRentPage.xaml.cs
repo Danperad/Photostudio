@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using Castle.Core.Internal;
 using PhotostudioDLL.Entities;
 using PhotostudioGUI.Windows;
@@ -26,29 +25,17 @@ public partial class ItemRentPage
     private void FillElements()
     {
         if (_service.RentDate is not null)
-        {
             DatePicker.SelectedDate = DateTime.Parse(_service.RentDate!.Value.ToString());
-        }
 
         if (_service.StartRent is not null)
-        {
             StartTimePicker.SelectedTime = DateTime.MinValue + _service.StartRent.Value.ToTimeSpan();
-        }
 
         if (_service.EndRent is not null)
-        {
             EndTimePicker.SelectedTime = DateTime.MinValue + _service.EndRent.Value.ToTimeSpan();
-        }
 
-        if (_service.RentedItem is not null)
-        {
-            ItemComboBox.SelectedItem = _service.RentedItem;
-        }
+        if (_service.RentedItem is not null) ItemComboBox.SelectedItem = _service.RentedItem;
 
-        if (_service.Number is not null)
-        {
-            Counts.Text = _service.Number.ToString();
-        }
+        if (_service.Number is not null) Counts.Text = _service.Number.ToString();
         CheckEndFill();
     }
 
@@ -71,29 +58,33 @@ public partial class ItemRentPage
 
     private void CheckEndFill()
     {
-        if (DatePicker.SelectedDate is not null)
-        {
+        if (DatePicker.SelectedDate.HasValue)
             _service.RentDate = DateOnly.FromDateTime(DatePicker.SelectedDate.Value);
-        }
 
-        if (StartTimePicker.SelectedTime is not null)
-        {
+        if (StartTimePicker.SelectedTime.HasValue)
             _service.StartRent = TimeOnly.FromDateTime(StartTimePicker.SelectedTime.Value);
-        }
 
-        if (EndTimePicker.SelectedTime is not null)
+        if (EndTimePicker.SelectedTime.HasValue)
         {
+            if (StartTimePicker.SelectedTime.HasValue &&
+                EndTimePicker.SelectedTime.Value < StartTimePicker.SelectedTime.Value)
+                return;
             _service.EndRent = TimeOnly.FromDateTime(EndTimePicker.SelectedTime.Value);
         }
+
         if (_service.StartRent is null) return;
         if (_service.EndRent is null) return;
         ItemComboBox.IsEnabled = true;
-        ItemComboBox.ItemsSource = RentedItem.Get().Where(h =>
-                h.Number - h.Services.Where(s =>
-                    (s.StartRent <= _service.StartRent) ||
-                    (s.EndRent >= _service.EndRent) ||
-                    (s.StartRent >= _service.StartRent && s.EndRent <= _service.EndRent)).Sum(s => s.Number)!.Value > 0)
-            .ToList();
+        ItemComboBox.ItemsSource = _service.Service.ID switch
+        {
+            5 => RentedItem.GetСlothes(_service.RentDate!.Value, _service.StartRent!.Value, _service.EndRent!.Value)
+                .Where(r => !r.IsKids)
+                .ToList(),
+            6 => RentedItem.GetNoDress(_service.RentDate!.Value, _service.StartRent!.Value, _service.EndRent!.Value),
+            10 => RentedItem.GetKidsСlothes(_service.RentDate!.Value, _service.StartRent!.Value,
+                _service.EndRent!.Value),
+            _ => ItemComboBox.ItemsSource
+        };
     }
 
     private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -106,9 +97,9 @@ public partial class ItemRentPage
             Counts.IsEnabled = true;
             _service.RentedItem = item;
             TotalUnits.Text = (item.Number - RentedItem.GetByID(item.ID)!.Services.Where(s =>
-                    (s.StartRent <= _service.StartRent) ||
-                    (s.EndRent >= _service.EndRent) ||
-                    (s.StartRent >= _service.StartRent && s.EndRent <= _service.EndRent)).Sum(s => s.Number)!.Value)
+                    s.StartRent <= _service.StartRent ||
+                    s.EndRent >= _service.EndRent ||
+                    s.StartRent >= _service.StartRent && s.EndRent <= _service.EndRent).Sum(s => s.Number)!.Value)
                 .ToString();
             Counts.Text = "1";
             return;
@@ -130,14 +121,9 @@ public partial class ItemRentPage
         var index = countTextBox!.CaretIndex;
         var text = countTextBox.Text.Where(c => numbers.Contains(c)).Aggregate("", (current, c) => current + c);
         if (text.IsNullOrEmpty()) text = "1";
-        if (Int32.Parse(text) > int.Parse(TotalUnits.Text))
-        {
+        if (int.Parse(text) > int.Parse(TotalUnits.Text))
             text = TotalUnits.Text;
-        }
-        else if (int.Parse(text) < 1)
-        {
-            text = "1";
-        }
+        else if (int.Parse(text) < 1) text = "1";
 
         countTextBox.Text = text;
         countTextBox.CaretIndex = index;

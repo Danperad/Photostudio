@@ -7,28 +7,16 @@ using PhotostudioGUI.Pages;
 
 namespace PhotostudioGUI.Windows;
 
-public partial class MainWindow : Window
+public partial class MainWindow
 {
     private Dictionary<EPages, Page> _pages;
+    internal Employee Employee { get; }
 
     public MainWindow(Employee employee)
     {
         Employee = employee;
         InitializeComponent();
     }
-
-    internal Employee Employee { get; }
-
-    public void NavigateWindow(EPages page)
-    {
-        mainFrame.Navigate(_pages[page]);
-    }
-
-    public void NavigateWindow(Page page)
-    {
-        mainFrame.Navigate(page);
-    }
-
     public void BackWindow()
     {
         mainFrame.GoBack();

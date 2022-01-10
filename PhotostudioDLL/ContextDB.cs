@@ -4,6 +4,9 @@ using PhotostudioDLL.Exceptions;
 
 namespace PhotostudioDLL;
 
+/// <summary>
+/// Класс для работы с самой базой данных
+/// </summary>
 internal static class ContextDB
 {
     private static ApplicationContext db { get; set; }

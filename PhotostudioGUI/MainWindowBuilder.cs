@@ -7,6 +7,9 @@ using PhotostudioGUI.Windows;
 
 namespace PhotostudioGUI;
 
+/// <summary>
+/// Класс для конфигурации главного окна, в зависимости от должности
+/// </summary>
 public static class MainWindowBuilder
 {
     public static void AdminBuild(MainWindow window, out Dictionary<EPages, Page> pages)
@@ -74,7 +77,7 @@ public static class MainWindowBuilder
     {
         var titles = new List<string>(new[] { "Клиенты", "Услуги", "Заявки" });
         pages = new Dictionary<EPages, Page>();
-        pages.Add(EPages.CLIENT, new ClientPage(window.mainFrame));
+        pages.Add(EPages.CLIENT, new ClientPage(window.mainFrame, window.Employee));
         pages.Add(EPages.SERVICE, new ServicePage());
         pages.Add(EPages.ORDER, new OrderPage(window.Employee));
         foreach (var title in titles)

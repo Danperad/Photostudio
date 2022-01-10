@@ -27,7 +27,7 @@ public class Client : People
     public int ID { get; set; }
     public virtual List<Order> Orders { get; set; }
     public virtual List<Contract> Contracts { get; set; }
-    
+
     public string? Company { get; set; }
 
     #endregion

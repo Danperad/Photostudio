@@ -48,8 +48,8 @@ public partial class OrderPage
     {
         if (_serviceProvideds.Count == 0) return;
         var order = new Order(new Contract(_client, _employee,
-            DateOnly.FromDateTime(StartDatePicker.SelectedDate.Value),
-            DateOnly.FromDateTime(EndDatePicker.SelectedDate.Value)), _client, DateTime.Now, _serviceProvideds);
+            DateOnly.FromDateTime(StartDatePicker.SelectedDate!.Value),
+            DateOnly.FromDateTime(EndDatePicker.SelectedDate!.Value)), _client, DateTime.Now, _serviceProvideds);
         Order.Add(order);
         _orders = Order.Get();
     }

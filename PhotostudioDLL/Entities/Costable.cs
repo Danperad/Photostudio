@@ -12,11 +12,11 @@ public abstract class Costable
 
     #region Constructors
 
-    public Costable()
+    protected Costable()
     {
     }
 
-    public Costable(string Title, string Description, decimal Cost)
+    protected Costable(string Title, string Description, decimal Cost)
     {
         this.Title = Title;
         this.Cost = Cost;

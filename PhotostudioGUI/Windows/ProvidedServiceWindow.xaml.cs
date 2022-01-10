@@ -13,9 +13,6 @@ public partial class ProvidedServiceWindow
 {
     private readonly List<Service> _allServices;
     private readonly List<ServiceProvided> _services;
-    internal DateTime StartDate { get; private set; }
-    internal DateTime EndDate { get; private set; }
-    internal Employee Employee { get; private set; }
 
     public ProvidedServiceWindow(List<ServiceProvided> services, DateTime startDate, DateTime endDate,
         Employee employee)
@@ -28,6 +25,10 @@ public partial class ProvidedServiceWindow
         InitializeComponent();
     }
 
+    internal DateTime StartDate { get; }
+    internal DateTime EndDate { get; }
+    internal Employee Employee { get; }
+
     private void OpenServiceProvided(object sender, MouseButtonEventArgs e)
     {
         var service = ((ListViewItem)sender).Tag as ServiceProvided;
@@ -36,30 +37,28 @@ public partial class ProvidedServiceWindow
 
     private void Navigate(ServiceProvided service)
     {
-        int[] s = { 1, 2, 9, 11, 12 };
-        if (s.Contains(service.Service.ID))
+        switch (service.Service.ID)
         {
-            ServiceFrame.Navigate(new PhotoVideoPage(service, this));
-            return;
-        }
-
-        s = new[] { 5, 6, 10 };
-        if (s.Contains(service.Service.ID))
-        {
-            service.Employee = Employee;
-            ServiceFrame.Navigate(new ItemRentPage(service, this));
-            return;
-        }
-
-        s = new[] { 7 };
-        if (s.Contains(service.Service.ID))
-        {
-            service.Employee = Employee;
-            ServiceFrame.Navigate(new HallRentPage(service, this));
-        }
-        else
-        {
-            ServiceFrame.Navigate(new VoidPage(service, this));
+            case 1:
+            case 2:
+            case 9:
+            case 11:
+            case 12:
+                ServiceFrame.Navigate(new PhotoVideoPage(service, this));
+                break;
+            case 5:
+            case 6:
+            case 10:
+                service.Employee = Employee;
+                ServiceFrame.Navigate(new ItemRentPage(service, this));
+                break;
+            case 7:
+                service.Employee = Employee;
+                ServiceFrame.Navigate(new HallRentPage(service, this));
+                break;
+            default:
+                ServiceFrame.Navigate(new VoidPage(service, this));
+                break;
         }
     }
 

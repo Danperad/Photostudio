@@ -3,6 +3,7 @@
 public class Role
 {
     #region Methods
+
     public static void Add(Role role)
     {
         ContextDB.Add(role);
@@ -17,6 +18,7 @@ public class Role
     {
         ContextDB.Save();
     }
+
     #endregion
 
     #region Constructors
