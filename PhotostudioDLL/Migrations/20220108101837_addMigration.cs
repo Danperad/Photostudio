@@ -225,7 +225,7 @@ namespace PhotostudioDLL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ServiceProvided",
+                name: "ExecuteableService",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "integer", nullable: false)
@@ -245,31 +245,31 @@ namespace PhotostudioDLL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ServiceProvided", x => x.ID);
+                    table.PrimaryKey("PK_ExecuteableService", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_ServiceProvided_Employee_EmployeeID",
+                        name: "FK_ExecuteableService_Employee_EmployeeID",
                         column: x => x.EmployeeID,
                         principalTable: "Employee",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ServiceProvided_Hall_HallID",
+                        name: "FK_ExecuteableService_Hall_HallID",
                         column: x => x.HallID,
                         principalTable: "Hall",
                         principalColumn: "ID");
                     table.ForeignKey(
-                        name: "FK_ServiceProvided_Order_OrderID",
+                        name: "FK_ExecuteableService_Order_OrderID",
                         column: x => x.OrderID,
                         principalTable: "Order",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ServiceProvided_RentedItem_RentedItemID",
+                        name: "FK_ExecuteableService_RentedItem_RentedItemID",
                         column: x => x.RentedItemID,
                         principalTable: "RentedItem",
                         principalColumn: "ID");
                     table.ForeignKey(
-                        name: "FK_ServiceProvided_Service_ServiceID",
+                        name: "FK_ExecuteableService_Service_ServiceID",
                         column: x => x.ServiceID,
                         principalTable: "Service",
                         principalColumn: "ID",
@@ -405,28 +405,28 @@ namespace PhotostudioDLL.Migrations
                 column: "ClientID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ServiceProvided_EmployeeID",
-                table: "ServiceProvided",
+                name: "IX_ExecuteableService_EmployeeID",
+                table: "ExecuteableService",
                 column: "EmployeeID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ServiceProvided_HallID",
-                table: "ServiceProvided",
+                name: "IX_ExecuteableService_HallID",
+                table: "ExecuteableService",
                 column: "HallID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ServiceProvided_OrderID",
-                table: "ServiceProvided",
+                name: "IX_ExecuteableService_OrderID",
+                table: "ExecuteableService",
                 column: "OrderID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ServiceProvided_RentedItemID",
-                table: "ServiceProvided",
+                name: "IX_ExecuteableService_RentedItemID",
+                table: "ExecuteableService",
                 column: "RentedItemID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ServiceProvided_ServiceID",
-                table: "ServiceProvided",
+                name: "IX_ExecuteableService_ServiceID",
+                table: "ExecuteableService",
                 column: "ServiceID");
         }
 
@@ -442,7 +442,7 @@ namespace PhotostudioDLL.Migrations
                 name: "EquipmentInventory");
 
             migrationBuilder.DropTable(
-                name: "ServiceProvided");
+                name: "ExecuteableService");
 
             migrationBuilder.DropTable(
                 name: "Equipment");

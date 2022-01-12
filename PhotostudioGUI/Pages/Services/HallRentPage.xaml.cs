@@ -9,12 +9,12 @@ namespace PhotostudioGUI.Pages.Services;
 
 public partial class HallRentPage
 {
-    private readonly ServiceProvided _service;
+    private readonly ExecuteableService _executeableService;
     private readonly ProvidedServiceWindow _window;
 
-    public HallRentPage(ServiceProvided service, ProvidedServiceWindow window)
+    public HallRentPage(ExecuteableService executeableService, ProvidedServiceWindow window)
     {
-        _service = service;
+        _executeableService = executeableService;
         _window = window;
         InitializeComponent();
         FillElements();
@@ -33,13 +33,13 @@ public partial class HallRentPage
         {
             DescriptionBlock.Text = hall.Description;
             PricePerHour.Text = hall.Cost.ToString("F");
-            PriceTotal.Text = (hall.Cost * (decimal)(_service.EndRent!.Value - _service.StartRent!.Value).TotalHours)
+            PriceTotal.Text = (hall.Cost * (decimal)(_executeableService.EndRent!.Value - _executeableService.StartRent!.Value).TotalHours)
                 .ToString("F");
-            _service.Hall = hall;
+            _executeableService.Hall = hall;
             return;
         }
 
-        _service.Hall = hall;
+        _executeableService.Hall = hall;
         DescriptionBlock.Text = string.Empty;
         PricePerHour.Text = string.Empty;
         PriceTotal.Text = string.Empty;
@@ -57,39 +57,39 @@ public partial class HallRentPage
 
     private void FillElements()
     {
-        if (_service.RentDate is not null)
-            DatePicker.SelectedDate = DateTime.Parse(_service.RentDate!.Value.ToString());
+        if (_executeableService.RentDate is not null)
+            DatePicker.SelectedDate = DateTime.Parse(_executeableService.RentDate!.Value.ToString());
 
-        if (_service.StartRent is not null)
-            StartTimePicker.SelectedTime = DateTime.MinValue + _service.StartRent.Value.ToTimeSpan();
+        if (_executeableService.StartRent is not null)
+            StartTimePicker.SelectedTime = DateTime.MinValue + _executeableService.StartRent.Value.ToTimeSpan();
 
-        if (_service.EndRent is not null)
-            EndTimePicker.SelectedTime = DateTime.MinValue + _service.EndRent.Value.ToTimeSpan();
+        if (_executeableService.EndRent is not null)
+            EndTimePicker.SelectedTime = DateTime.MinValue + _executeableService.EndRent.Value.ToTimeSpan();
 
-        if (_service.Hall is not null) HallComboBox.SelectedItem = _service.Hall;
+        if (_executeableService.Hall is not null) HallComboBox.SelectedItem = _executeableService.Hall;
         CheckEndFill();
     }
 
     private void CheckEndFill()
     {
         if (DatePicker.SelectedDate is not null)
-            _service.RentDate = DateOnly.FromDateTime(DatePicker.SelectedDate.Value);
+            _executeableService.RentDate = DateOnly.FromDateTime(DatePicker.SelectedDate.Value);
 
         if (StartTimePicker.SelectedTime is not null)
-            _service.StartRent = TimeOnly.FromDateTime(StartTimePicker.SelectedTime.Value);
+            _executeableService.StartRent = TimeOnly.FromDateTime(StartTimePicker.SelectedTime.Value);
 
         if (EndTimePicker.SelectedTime is not null)
-            _service.EndRent = TimeOnly.FromDateTime(EndTimePicker.SelectedTime.Value);
+            _executeableService.EndRent = TimeOnly.FromDateTime(EndTimePicker.SelectedTime.Value);
 
         HallComboBox.SelectedIndex = -1;
-        if (_service.StartRent is null) return;
-        if (_service.EndRent is null) return;
+        if (_executeableService.StartRent is null) return;
+        if (_executeableService.EndRent is null) return;
         HallComboBox.IsEnabled = true;
         HallComboBox.ItemsSource = Hall.Get().Where(h =>
             !h.Services.Any(s =>
-                s.StartRent <= _service.StartRent ||
-                s.EndRent >= _service.EndRent ||
-                s.StartRent >= _service.StartRent && s.EndRent <= _service.EndRent
+                s.StartRent <= _executeableService.StartRent ||
+                s.EndRent >= _executeableService.EndRent ||
+                s.StartRent >= _executeableService.StartRent && s.EndRent <= _executeableService.EndRent
             )).ToList();
     }
 }

@@ -6,17 +6,17 @@ public class Inventory
 
     public static void Add(Inventory inventory)
     {
-        ContextDB.Add(inventory);
+        ContextDb.Add(inventory);
     }
 
     public static List<Inventory> Get()
     {
-        return ContextDB.GetInventories();
+        return ContextDb.GetInventories();
     }
 
     public static void Update()
     {
-        ContextDB.Save();
+        ContextDb.Save();
     }
 
     #endregion
@@ -28,11 +28,10 @@ public class Inventory
         Equipment = new List<Equipment>();
     }
 
-    public Inventory(Service Service, string Appointment)
+    public Inventory(Service service, string appointment) : this()
     {
-        Equipment = new List<Equipment>();
-        this.Service = Service;
-        this.Appointment = Appointment;
+        Service = service;
+        Appointment = appointment;
     }
 
     #endregion

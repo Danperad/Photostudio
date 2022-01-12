@@ -6,59 +6,53 @@ public class Employee : People
 {
     #region Methods
 
-    public static void Add(Employee employee)
+    public static bool Add(Employee employee)
     {
-        Check(employee);
-        ContextDB.Add(employee);
+        if (!Check(employee)) return false;
+        ContextDb.Add(employee);
+        return true;
     }
 
-    private static void Check(Employee employee)
+    private static bool Check(Employee employee)
     {
-        People.Check(employee);
-        if (employee.PassData.IsNullOrEmpty())
-            throw new Exception("PassDataError");
-        if (employee.EmploymentDate > DateOnly.FromDateTime(DateTime.Today))
-            throw new Exception("EmploymentDateError");
-        if (employee.Role == null)
-            throw new Exception("RoleError");
+        return People.Check(employee) && !employee.PassData.IsNullOrEmpty() &&
+               employee.EmploymentDate > DateOnly.FromDateTime(DateTime.Today);
     }
 
     public static List<Employee> Get()
     {
-        return ContextDB.GetEmployees();
-    }
-    
-    public static List<Employee> GetByRoleID(int ID)
-    {
-        return ContextDB.GetEmployees().Where(e => e.Role.ID == ID).ToList();
+        return ContextDb.GetEmployees();
     }
 
-    public static List<Employee> GetPhotoWithTime(DateTime start, DateTime end)
+    public static List<Employee> GetByRoleId(int id)
     {
-        return ContextDB.GetEmployees().Where(e => e.RoleID == 2 && !e.Services
-            .Any(s => (s.PhotoStartDateTime <= start ||
-                       s.PhotoEndDateTime >= end ||
-                       s.PhotoStartDateTime >= start && s.PhotoEndDateTime <= end)))
-            .ToList();
+        return ContextDb.GetEmployees().Where(e => e.Role.ID == id).ToList();
     }
-    
-    public static List<Employee> GetVideoWithTime(DateTime start, DateTime end)
+
+    public static IEnumerable<Employee> GetPhotoWithTime(DateTime start, DateTime end)
     {
-        return ContextDB.GetEmployees().Where(e => e.RoleID == 4 && !e.Services
-                .Any(s => (s.PhotoStartDateTime <= start ||
-                           s.PhotoEndDateTime >= end ||
-                           s.PhotoStartDateTime >= start && s.PhotoEndDateTime <= end)))
-            .ToList();
+        return ContextDb.GetEmployees().Where(e => e.RoleID == 2 && !e.Services
+            .Any(s => s.PhotoStartDateTime <= start ||
+                       s.PhotoEndDateTime >= end ||
+                       s.PhotoStartDateTime >= start && s.PhotoEndDateTime <= end));
+    }
+
+    public static IEnumerable<Employee> GetVideoWithTime(DateTime start, DateTime end)
+    {
+        return ContextDb.GetEmployees().Where(e => e.RoleID == 4 && !e.Services
+            .Any(s => s.PhotoStartDateTime <= start ||
+                       s.PhotoEndDateTime >= end ||
+                       s.PhotoStartDateTime >= start && s.PhotoEndDateTime <= end));
     }
 
     public static Employee? GetAuth(string login, string pass)
     {
-        return ContextDB.GetAuth(login, pass);
+        return ContextDb.GetAuth(login, pass);
     }
 
     public static void Update()
     {
-        ContextDB.Save();
+        ContextDb.Save();
     }
 
     #endregion
@@ -73,7 +67,7 @@ public class Employee : People
     public virtual Role Role { get; set; }
 
     public virtual List<Contract> Contracts { get; set; }
-    public virtual List<ServiceProvided> Services { get; set; }
+    public virtual List<ExecuteableService> Services { get; set; }
 
     #endregion
 
@@ -82,16 +76,16 @@ public class Employee : People
     public Employee()
     {
         Contracts = new List<Contract>();
-        Services = new List<ServiceProvided>();
+        Services = new List<ExecuteableService>();
     }
 
-    public Employee(int RoleID, string LastName, string FirstName, string PhoneNumber,
-        string PassData, DateOnly EmploymentDate) : base(LastName, FirstName, PhoneNumber)
+    public Employee(int roleID, string lastName, string firstName, string phoneNumber,
+        string passData, DateOnly employmentDate) : base(lastName, firstName, phoneNumber)
     {
-        (this.RoleID, this.PassData, this.EmploymentDate) =
-            (RoleID, PassData, EmploymentDate);
+        (RoleID, PassData, EmploymentDate) =
+            (roleID, passData, employmentDate);
         Contracts = new List<Contract>();
-        Services = new List<ServiceProvided>();
+        Services = new List<ExecuteableService>();
     }
 
     #endregion

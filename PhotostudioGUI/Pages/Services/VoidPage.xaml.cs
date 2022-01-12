@@ -7,12 +7,12 @@ namespace PhotostudioGUI.Pages.Services;
 
 public partial class VoidPage
 {
-    private readonly ServiceProvided _service;
+    private readonly ExecuteableService _executeableService;
     private readonly ProvidedServiceWindow _window;
 
-    public VoidPage(ServiceProvided service, ProvidedServiceWindow window)
+    public VoidPage(ExecuteableService executeableService, ProvidedServiceWindow window)
     {
-        _service = service;
+        _executeableService = executeableService;
         _window = window;
         InitializeComponent();
         FillItems();
@@ -22,22 +22,20 @@ public partial class VoidPage
     {
         if ((sender as ComboBox)!.SelectedItem is Employee employee)
         {
-            _service.Employee = employee;
+            _executeableService.Employee = employee;
         }
     }
 
     private void FillItems()
     {
-        EmployeeComboBox.ItemsSource = _service.Service.ID switch
+        EmployeeComboBox.ItemsSource = _executeableService.Service.ID switch
         {
-            3 => Employee.GetByRoleID(3),
-            4 => Employee.GetByRoleID(5),
-            _ => Employee.GetByRoleID(7)
+            3 => Employee.GetByRoleId(3),
+            4 => Employee.GetByRoleId(5),
+            _ => Employee.GetByRoleId(7)
         };
-        if (EmployeeComboBox.Items.Count == 0)
-        {
-            MessageTextBox.Text = "Сотрудники отсутствуют";
-            EmployeeComboBox.IsEnabled = false;
-        }
+        if (EmployeeComboBox.Items.Count != 0) return;
+        MessageTextBox.Text = "Сотрудники отсутствуют";
+        EmployeeComboBox.IsEnabled = false;
     }
 }

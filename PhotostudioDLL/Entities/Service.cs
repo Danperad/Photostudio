@@ -4,19 +4,14 @@ public class Service : Costable
 {
     #region Methods
 
-    public static void Add(Service service)
-    {
-        ContextDB.Add(service);
-    }
-
     public static List<Service> Get()
     {
-        return ContextDB.GetServices();
+        return ContextDb.GetServices();
     }
 
     public static void Save()
     {
-        ContextDB.Save();
+        ContextDb.Save();
     }
 
     #endregion
@@ -25,7 +20,7 @@ public class Service : Costable
 
     public int ID { get; set; }
     public virtual List<Inventory> Inventories { get; set; }
-    public virtual List<ServiceProvided> ServiceProvideds { get; set; }
+    public virtual List<ExecuteableService> ExecuteableServices { get; set; }
 
     #endregion
 
@@ -34,13 +29,13 @@ public class Service : Costable
     public Service()
     {
         Inventories = new List<Inventory>();
-        ServiceProvideds = new List<ServiceProvided>();
+        ExecuteableServices = new List<ExecuteableService>();
     }
 
-    public Service(string Title, string Description, decimal Cost) : base(Title, Description, Cost)
+    public Service(string title, string description, decimal cost) : base(title, description, cost)
     {
         Inventories = new List<Inventory>();
-        ServiceProvideds = new List<ServiceProvided>();
+        ExecuteableServices = new List<ExecuteableService>();
     }
 
     #endregion

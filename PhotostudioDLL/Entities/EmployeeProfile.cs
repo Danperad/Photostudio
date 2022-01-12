@@ -19,10 +19,10 @@ public class EmployeeProfile
     {
     }
 
-    public EmployeeProfile(string Login, string Password)
+    public EmployeeProfile(string login, string password)
     {
-        this.Login = Login;
-        this.Password = Password;
+        Login = login;
+        Password = password;
     }
 
     #endregion

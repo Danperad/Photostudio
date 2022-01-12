@@ -9,27 +9,15 @@
         mc:Ignorable="d"
         fw:AcrylicWindow.Enabled="True"
         fw:AcrylicWindow.AcrylicWindowStyle="NoIcon"
+        Closing="Window_Closing"
         Title="Предоставляемые услуги" Height="520" MinWidth="500" MaxWidth="500" Icon="/sunrise.png">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="0">
+        <StackPanel Grid.Column="0" CanVerticallyScroll="True">
             <TextBlock Text="Услуги" FontSize="15" FontFamily="Bold" TextAlignment="Center" />
-            <ListView Name="ProvidedListView"
-                      Initialized="FrameworkElement_OnInitialized">
-                <ListView.DataContext>
-                    <entities:ServiceProvided />
-                </ListView.DataContext>
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Type ListViewItem}}">
-                        <EventSetter Event="MouseDoubleClick" Handler="OpenServiceProvided" />
-                        <Setter Property="Content" Value="{Binding Path=Service.Title}" />
-                        <Setter Property="Tag" Value="{Binding}" />
-                    </Style>
-                </ListView.ItemContainerStyle>
-            </ListView>
             <ComboBox Name="ServiceComboBox" SelectionChanged="ServiceComboBox_OnSelectionChanged"
                       Text="Добавить услугу" mD:HintAssist.Hint="Добавить услугу" FontSize="13" Margin="5"
                       Initialized="ServiceComboBoxInit">
@@ -44,7 +32,21 @@
                     </Style>
                 </ComboBox.ItemContainerStyle>
             </ComboBox>
+            <ListView Name="ProvidedListView"
+                      Initialized="FrameworkElement_OnInitialized">
+                <ListView.DataContext>
+                    <entities:ExecuteableService />
+                </ListView.DataContext>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Type ListViewItem}}">
+                        <EventSetter Event="MouseDoubleClick" Handler="OpenExecuteableService" />
+                        <Setter Property="Content" Value="{Binding Path=Service.Title}" />
+                        <Setter Property="Tag" Value="{Binding}" />
+                    </Style>
+                </ListView.ItemContainerStyle>
+            </ListView>
         </StackPanel>
+        <Button Name="CompleteButton" Click="CompleteButton_Click" Grid.Column="0" VerticalAlignment="Bottom" Margin="3 5 3 10" Content="Готово" FontSize="14" FontWeight="Medium"/>
         <Frame Name="ServiceFrame" Grid.Column="1" NavigationUIVisibility="Hidden" Background="White" />
     </Grid>
 </Window>

@@ -10,17 +10,22 @@ public abstract class Costable
 
     #endregion
 
+    protected static bool Check(Costable costable)
+    {
+        return costable.Cost > 0;
+    }
+    
     #region Constructors
 
     protected Costable()
     {
     }
 
-    protected Costable(string Title, string Description, decimal Cost)
+    protected Costable(string title, string description, decimal cost)
     {
-        this.Title = Title;
-        this.Cost = Cost;
-        this.Description = Description;
+        Title = title;
+        Cost = cost;
+        Description = description;
     }
 
     #endregion

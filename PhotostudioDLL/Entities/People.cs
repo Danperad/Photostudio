@@ -4,14 +4,10 @@ namespace PhotostudioDLL.Entities;
 
 public abstract class People
 {
-    protected static void Check(People people)
+    protected static bool Check(People people)
     {
-        if (people.FirstName.IsNullOrEmpty())
-            throw new Exception("FirstNameError");
-        if (people.LastName.IsNullOrEmpty())
-            throw new Exception("LastNameError");
-        if (people.PhoneNumber.IsNullOrEmpty())
-            throw new Exception("PhoneNumberError");
+        return !(people.FirstName.IsNullOrEmpty() && people.LastName.IsNullOrEmpty() &&
+                 people.PhoneNumber.IsNullOrEmpty());
     }
 
     #region Properties
@@ -40,28 +36,23 @@ public abstract class People
     {
     }
 
-    protected People(string LastName, string FirstName, string PhoneNumber)
+    protected People(string lastName, string firstName, string phoneNumber)
     {
-        this.LastName = LastName;
-        this.FirstName = FirstName;
-        this.PhoneNumber = PhoneNumber;
+        LastName = lastName;
+        FirstName = firstName;
+        PhoneNumber = phoneNumber;
     }
 
-    public People(string LastName, string FirstName, string MiddleName, string PhoneNumber)
+    public People(string lastName, string firstName, string middleName, string phoneNumber) : this(lastName, firstName,
+        phoneNumber)
     {
-        this.LastName = LastName;
-        this.FirstName = FirstName;
-        this.MiddleName = MiddleName;
-        this.PhoneNumber = PhoneNumber;
+        this.MiddleName = middleName;
     }
 
-    public People(string LastName, string FirstName, string MiddleName, string PhoneNumber, string EMail)
+    public People(string lastName, string firstName, string middleName, string phoneNumber, string eMail) : this(
+        lastName, firstName, middleName, phoneNumber)
     {
-        this.LastName = LastName;
-        this.FirstName = FirstName;
-        this.MiddleName = MiddleName;
-        this.PhoneNumber = PhoneNumber;
-        this.EMail = EMail;
+        this.EMail = eMail;
     }
 
     #endregion

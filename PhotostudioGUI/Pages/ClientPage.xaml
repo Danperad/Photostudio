@@ -37,8 +37,6 @@
                         <GridViewColumn Header="Отчество" DisplayMemberBinding="{Binding Path=MiddleName}" />
                         <GridViewColumn Header="EMail" DisplayMemberBinding="{Binding Path=EMail}" />
                         <GridViewColumn Header="Телефон" DisplayMemberBinding="{Binding Path=PhoneNumber}" />
-                        <GridViewColumn Header="Компания" DisplayMemberBinding="{Binding Path=Company}" />
-
                     </GridView>
                 </ListView.View>
                 <ListView.ItemContainerStyle>

@@ -11,7 +11,7 @@ public sealed class ApplicationContext : DbContext
     {
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         Database.Migrate();
-        ContextDB.AddDB(this);
+        ContextDb.AddDb(this);
     }
 
     /// <summary>
@@ -32,7 +32,8 @@ public sealed class ApplicationContext : DbContext
 
         var connectionString = config.GetConnectionString("DefaultConnection");
         var optionsBuilder = new DbContextOptionsBuilder<ApplicationContext>();
-        return optionsBuilder.UseLazyLoadingProxies().UseNpgsql(connectionString).Options;
+        // return optionsBuilder.UseLazyLoadingProxies().UseNpgsql(connectionString).Options;
+        return optionsBuilder.UseNpgsql(connectionString).Options;
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -63,23 +64,23 @@ public sealed class ApplicationContext : DbContext
     /// <summary>
     /// Класс для генерации файла конфигурации
     /// </summary>
-    private class AppConfig
+    public class AppConfig
     {
         public AppConfig()
         {
             ConnectionStrings = new Conn();
         }
 
-        private Conn ConnectionStrings { get; }
+        public Conn ConnectionStrings { get; }
 
-        private class Conn
+        public class Conn
         {
             public Conn()
             {
                 DefaultConnection = "Host=;Port=;Database=;Username=;Password=";
             }
 
-            private string DefaultConnection { get; }
+            public string DefaultConnection { get; }
         }
     }
 
@@ -94,7 +95,7 @@ public sealed class ApplicationContext : DbContext
     public DbSet<Service> Service { get; set; } = null!;
     public DbSet<Hall> Hall { get; set; } = null!;
     public DbSet<RentedItem> RentedItem { get; set; } = null!;
-    public DbSet<ServiceProvided> ServiceProvided { get; set; } = null!;
+    public DbSet<ExecuteableService> ExecuteableService { get; set; } = null!;
     public DbSet<Order> Order { get; set; } = null!;
 
     #endregion

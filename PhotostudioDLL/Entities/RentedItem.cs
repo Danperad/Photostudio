@@ -4,19 +4,21 @@ public class RentedItem : Costable
 {
     #region Methods
 
-    public static void Add(RentedItem rentedItem)
+    public static bool Add(RentedItem rentedItem)
     {
-        ContextDB.Add(rentedItem);
+        if (!Check(rentedItem)) return false;
+        ContextDb.Add(rentedItem);
+        return true;
     }
 
     public static List<RentedItem> Get()
     {
-        return ContextDB.GetRentedItems();
+        return ContextDb.GetRentedItems();
     }
 
     private static List<RentedItem> GetWithTime(DateOnly date, TimeOnly startTime, TimeOnly endTime)
     {
-        return ContextDB.GetRentedItems()
+        return ContextDb.GetRentedItems()
             .Where(r => r.Number - r.Services
                 .Where(s => s.RentDate == date && (s.StartRent <= startTime ||
                                                    s.EndRent >= endTime ||
@@ -41,12 +43,12 @@ public class RentedItem : Costable
 
     public static RentedItem? GetByID(int ID)
     {
-        return ContextDB.GetRentedItems().FirstOrDefault(r => r.ID == ID);
+        return ContextDb.GetRentedItems().FirstOrDefault(r => r.ID == ID);
     }
 
     public static void Update()
     {
-        ContextDB.Save();
+        ContextDb.Save();
     }
 
     #endregion
@@ -58,7 +60,7 @@ public class RentedItem : Costable
     public bool IsСlothes { get; set; }
     public bool IsKids { get; set; }
 
-    public virtual List<ServiceProvided> Services { get; set; }
+    public virtual List<ExecuteableService> Services { get; set; }
 
     #endregion
 
@@ -66,17 +68,17 @@ public class RentedItem : Costable
 
     public RentedItem()
     {
-        Services = new List<ServiceProvided>();
+        Services = new List<ExecuteableService>();
     }
 
-    public RentedItem(string Title, string Description, uint Number, decimal Cost, bool IsСlothes, bool IsKids) : base(
-        Title,
-        Description, Cost)
+    public RentedItem(string title, string description, uint number, decimal cost, bool isСlothes, bool isKids) : base(
+        title,
+        description, cost)
     {
-        this.Number = Number;
-        this.IsСlothes = IsСlothes;
-        this.IsKids = IsKids;
-        Services = new List<ServiceProvided>();
+        Number = number;
+        IsСlothes = isСlothes;
+        IsKids = isKids;
+        Services = new List<ExecuteableService>();
     }
 
     #endregion

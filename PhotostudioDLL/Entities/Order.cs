@@ -18,27 +18,30 @@ public class Order
 
     #region Methods
 
-    public static void Add(Order order)
+    public static bool Add(Order order)
     {
-        Check(order);
-        ContextDB.Add(order);
+        if (!Check(order)) return false;
+        if (order.Services.Any(service => !ExecuteableService.Check(service)))
+        {
+            return false;
+        }
+        ContextDb.Add(order);
+        return true;
     }
 
-    private static void Check(Order order)
+    private static bool Check(Order order)
     {
-        Contract.Check(order.Contract);
-        if (DateOnly.FromDateTime(order.DateTime) > order.Contract.StartDate)
-            throw new OrderDateException("OrderDateError", order);
+        return Contract.Check(order.Contract) && DateOnly.FromDateTime(order.DateTime) <= order.Contract.StartDate;
     }
 
     public static List<Order> Get()
     {
-        return ContextDB.GetOrders();
+        return ContextDb.GetOrders();
     }
 
     public static void Update()
     {
-        ContextDB.Save();
+        ContextDb.Save();
     }
 
     #endregion
@@ -47,12 +50,11 @@ public class Order
 
     public int ID { get; set; }
     public virtual Contract Contract { get; set; }
-    public int ContractID { get; set; }
     public virtual Client Client { get; set; }
     public int ClientID { get; set; }
     public DateTime DateTime { get; set; }
     public OrderStatus Status { get; set; }
-    public virtual List<ServiceProvided> Services { get; set; }
+    public virtual List<ExecuteableService> Services { get; set; }
     
     /// <summary>
     /// Своство расчитываемое общую стоимость заявки
@@ -66,13 +68,13 @@ public class Order
             {
                 cost += service.Service.Cost;
                 if (service.RentedItem != null)
-                    cost += service.RentedItem.Cost * service.Number.Value *
-                            (decimal)(service.EndRent - service.StartRent).Value.TotalHours;
+                    cost += service.RentedItem.Cost * service.Number!.Value *
+                            (decimal)(service.EndRent - service.StartRent)!.Value.TotalHours;
                 if (service.Hall != null)
-                    cost += service.Hall.Cost * (decimal)(service.EndRent - service.StartRent).Value.TotalHours;
+                    cost += service.Hall.Cost * (decimal)(service.EndRent - service.StartRent)!.Value.TotalHours;
                 if (service.PhotoLocation != null)
                     cost += service.Service.Cost *
-                            ((decimal)(service.EndRent - service.StartRent).Value.TotalHours - 1);
+                            ((decimal)(service.EndRent - service.StartRent)!.Value.TotalHours - 1);
             }
 
             return cost;
@@ -82,15 +84,15 @@ public class Order
     /// <summary>
     /// Свойство находящее описание статуса используя рефлексию
     /// </summary>
-    public string TextStatus
+    public string? TextStatus
     {
         get
         {
             var type = Status.GetType();
             var fieldInfo = type.GetField(Status.ToString());
-            var attribs = fieldInfo.GetCustomAttributes(
+            var attribs = fieldInfo!.GetCustomAttributes(
                 typeof(StringValueAttribute), false) as StringValueAttribute[];
-            return attribs.Length > 0 ? attribs[0].StringValue : null;
+            return attribs!.Length > 0 ? attribs[0].StringValue : null;
         }
     }
 
@@ -99,9 +101,7 @@ public class Order
         get
         {
             if (Services.Count == 0) return "";
-            var temp = string.Empty;
-            foreach (var service in Services) temp += $"{service.Service.Title}, ";
-
+            var temp = Services.Aggregate(string.Empty, (current, service) => current + $"{service.Service.Title}, ");
             return temp.Remove(temp.Length - 2, 2);
         }
     }
@@ -112,18 +112,17 @@ public class Order
 
     public Order()
     {
-        Services = new List<ServiceProvided>();
+        Services = new List<ExecuteableService>();
         Status = OrderStatus.PREWORK;
     }
 
-    public Order(Contract Contract, Client Client, DateTime DateTime, List<ServiceProvided> Services)
+    public Order(Contract contract, Client client, DateTime dateTime, List<ExecuteableService> services)
     {
-        this.Contract = Contract;
-        ContractID = Contract.ID;
-        this.Client = Client;
-        this.DateTime = DateTime;
         Status = OrderStatus.PREWORK;
-        this.Services = Services;
+        Contract = contract;
+        Client = client;
+        DateTime = dateTime;
+        Services = services;
     }
 
     #endregion

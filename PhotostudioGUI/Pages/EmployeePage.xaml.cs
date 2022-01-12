@@ -13,7 +13,7 @@ namespace PhotostudioGUI.Pages;
 /// <summary>
 ///     Логика взаимодействия для Employee.xaml
 /// </summary>
-public partial class EmployeePage : Page
+public partial class EmployeePage
 {
     private static readonly char[] phonesymb = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
     private readonly List<Employee> _employees = Employee.Get();

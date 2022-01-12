@@ -45,9 +45,6 @@ namespace PhotostudioDLL.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
 
-                    b.Property<string>("Company")
-                        .HasColumnType("text");
-
                     b.Property<string>("EMail")
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
@@ -118,9 +115,6 @@ namespace PhotostudioDLL.Migrations
 
                     b.Property<DateOnly>("EndDate")
                         .HasColumnType("date");
-
-                    b.Property<int>("OrderID")
-                        .HasColumnType("integer");
 
                     b.Property<DateOnly>("StartDate")
                         .HasColumnType("date");
@@ -195,7 +189,7 @@ namespace PhotostudioDLL.Migrations
                         new
                         {
                             ID = 1,
-                            EmploymentDate = new DateOnly(2022, 1, 10),
+                            EmploymentDate = new DateOnly(2022, 1, 12),
                             FirstName = "Вячеслав",
                             LastName = "Берёзов",
                             PassData = "6024978234",
@@ -289,6 +283,68 @@ namespace PhotostudioDLL.Migrations
                     b.ToTable("Equipment");
                 });
 
+            modelBuilder.Entity("PhotostudioDLL.Entities.ExecuteableService", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<int>("EmployeeID")
+                        .HasColumnType("integer");
+
+                    b.Property<TimeOnly?>("EndRent")
+                        .HasColumnType("time without time zone");
+
+                    b.Property<int?>("HallID")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("Number")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("OrderID")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("PhotoEndDateTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("PhotoLocation")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("PhotoStartDateTime")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateOnly?>("RentDate")
+                        .HasColumnType("date");
+
+                    b.Property<int?>("RentedItemID")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ServiceID")
+                        .HasColumnType("integer");
+
+                    b.Property<TimeOnly?>("StartRent")
+                        .HasColumnType("time without time zone");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("EmployeeID");
+
+                    b.HasIndex("HallID");
+
+                    b.HasIndex("OrderID");
+
+                    b.HasIndex("RentedItemID");
+
+                    b.HasIndex("ServiceID");
+
+                    b.ToTable("ExecuteableService");
+                });
+
             modelBuilder.Entity("PhotostudioDLL.Entities.Hall", b =>
                 {
                     b.Property<int>("ID")
@@ -375,9 +431,6 @@ namespace PhotostudioDLL.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
 
                     b.Property<int>("ClientID")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ContractID")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("DateTime")
@@ -670,68 +723,6 @@ namespace PhotostudioDLL.Migrations
                         });
                 });
 
-            modelBuilder.Entity("PhotostudioDLL.Entities.ServiceProvided", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ID"));
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
-                    b.Property<int>("EmployeeID")
-                        .HasColumnType("integer");
-
-                    b.Property<TimeOnly?>("EndRent")
-                        .HasColumnType("time without time zone");
-
-                    b.Property<int?>("HallID")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("Number")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("OrderID")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime?>("PhotoEndDateTime")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("PhotoLocation")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("PhotoStartDateTime")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateOnly?>("RentDate")
-                        .HasColumnType("date");
-
-                    b.Property<int?>("RentedItemID")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ServiceID")
-                        .HasColumnType("integer");
-
-                    b.Property<TimeOnly?>("StartRent")
-                        .HasColumnType("time without time zone");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("EmployeeID");
-
-                    b.HasIndex("HallID");
-
-                    b.HasIndex("OrderID");
-
-                    b.HasIndex("RentedItemID");
-
-                    b.HasIndex("ServiceID");
-
-                    b.ToTable("ServiceProvided");
-                });
-
             modelBuilder.Entity("EquipmentInventory", b =>
                 {
                     b.HasOne("PhotostudioDLL.Entities.Equipment", null)
@@ -796,29 +787,7 @@ namespace PhotostudioDLL.Migrations
                     b.Navigation("Employee");
                 });
 
-            modelBuilder.Entity("PhotostudioDLL.Entities.Inventory", b =>
-                {
-                    b.HasOne("PhotostudioDLL.Entities.Service", "Service")
-                        .WithMany("Inventories")
-                        .HasForeignKey("ServiceID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Service");
-                });
-
-            modelBuilder.Entity("PhotostudioDLL.Entities.Order", b =>
-                {
-                    b.HasOne("PhotostudioDLL.Entities.Client", "Client")
-                        .WithMany("Orders")
-                        .HasForeignKey("ClientID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Client");
-                });
-
-            modelBuilder.Entity("PhotostudioDLL.Entities.ServiceProvided", b =>
+            modelBuilder.Entity("PhotostudioDLL.Entities.ExecuteableService", b =>
                 {
                     b.HasOne("PhotostudioDLL.Entities.Employee", "Employee")
                         .WithMany("Services")
@@ -841,7 +810,7 @@ namespace PhotostudioDLL.Migrations
                         .HasForeignKey("RentedItemID");
 
                     b.HasOne("PhotostudioDLL.Entities.Service", "Service")
-                        .WithMany("ServiceProvideds")
+                        .WithMany("ExecuteableServices")
                         .HasForeignKey("ServiceID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -855,6 +824,28 @@ namespace PhotostudioDLL.Migrations
                     b.Navigation("RentedItem");
 
                     b.Navigation("Service");
+                });
+
+            modelBuilder.Entity("PhotostudioDLL.Entities.Inventory", b =>
+                {
+                    b.HasOne("PhotostudioDLL.Entities.Service", "Service")
+                        .WithMany("Inventories")
+                        .HasForeignKey("ServiceID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Service");
+                });
+
+            modelBuilder.Entity("PhotostudioDLL.Entities.Order", b =>
+                {
+                    b.HasOne("PhotostudioDLL.Entities.Client", "Client")
+                        .WithMany("Orders")
+                        .HasForeignKey("ClientID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("PhotostudioDLL.Entities.Client", b =>
@@ -899,9 +890,9 @@ namespace PhotostudioDLL.Migrations
 
             modelBuilder.Entity("PhotostudioDLL.Entities.Service", b =>
                 {
-                    b.Navigation("Inventories");
+                    b.Navigation("ExecuteableServices");
 
-                    b.Navigation("ServiceProvideds");
+                    b.Navigation("Inventories");
                 });
 #pragma warning restore 612, 618
         }

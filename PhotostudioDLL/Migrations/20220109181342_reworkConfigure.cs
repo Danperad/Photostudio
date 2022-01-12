@@ -26,7 +26,7 @@ namespace PhotostudioDLL.Migrations
 
             migrationBuilder.AlterColumn<TimeOnly>(
                 name: "StartRent",
-                table: "ServiceProvided",
+                table: "ExecuteableService",
                 type: "time without time zone",
                 nullable: true,
                 oldClrType: typeof(DateTime),
@@ -35,7 +35,7 @@ namespace PhotostudioDLL.Migrations
 
             migrationBuilder.AlterColumn<TimeOnly>(
                 name: "EndRent",
-                table: "ServiceProvided",
+                table: "ExecuteableService",
                 type: "time without time zone",
                 nullable: true,
                 oldClrType: typeof(DateTime),
@@ -44,7 +44,7 @@ namespace PhotostudioDLL.Migrations
 
             migrationBuilder.AddColumn<DateOnly>(
                 name: "RentDate",
-                table: "ServiceProvided",
+                table: "ExecuteableService",
                 type: "date",
                 nullable: true);
 
@@ -86,7 +86,7 @@ namespace PhotostudioDLL.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "RentDate",
-                table: "ServiceProvided");
+                table: "ExecuteableService");
 
             migrationBuilder.DropColumn(
                 name: "Company",
@@ -109,7 +109,7 @@ namespace PhotostudioDLL.Migrations
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "StartRent",
-                table: "ServiceProvided",
+                table: "ExecuteableService",
                 type: "timestamp with time zone",
                 nullable: true,
                 oldClrType: typeof(TimeOnly),
@@ -118,7 +118,7 @@ namespace PhotostudioDLL.Migrations
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "EndRent",
-                table: "ServiceProvided",
+                table: "ExecuteableService",
                 type: "timestamp with time zone",
                 nullable: true,
                 oldClrType: typeof(TimeOnly),

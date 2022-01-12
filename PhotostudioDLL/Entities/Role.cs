@@ -6,17 +6,17 @@ public class Role
 
     public static void Add(Role role)
     {
-        ContextDB.Add(role);
+        ContextDb.Add(role);
     }
 
     public static List<Role> Get()
     {
-        return ContextDB.GetRoles();
+        return ContextDb.GetRoles();
     }
 
     public static void Update()
     {
-        ContextDB.Save();
+        ContextDb.Save();
     }
 
     #endregion
@@ -28,12 +28,11 @@ public class Role
         Employees = new List<Employee>();
     }
 
-    public Role(string Title, string Rights, string Responsibilities)
+    public Role(string title, string rights, string responsibilities) : this()
     {
-        this.Title = Title;
-        this.Rights = Rights;
-        this.Responsibilities = Responsibilities;
-        Employees = new List<Employee>();
+        Title = title;
+        Rights = rights;
+        Responsibilities = responsibilities;
     }
 
     #endregion

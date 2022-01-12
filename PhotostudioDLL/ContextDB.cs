@@ -5,48 +5,42 @@ using PhotostudioDLL.Exceptions;
 namespace PhotostudioDLL;
 
 /// <summary>
-/// Класс для работы с самой базой данных
+/// Класс для работы с базой данных
 /// </summary>
-internal static class ContextDB
+internal static class ContextDb
 {
-    private static ApplicationContext db { get; set; }
+    private static ApplicationContext Db { get; set; }
 
-    internal static void AddDB(ApplicationContext dbb)
+    internal static void AddDb(ApplicationContext context)
     {
-        db = dbb;
+        Db = context;
     }
 
     public static void Save()
     {
-        db.SaveChanges();
+        Db.SaveChanges();
     }
 
     #region Client
 
     public static void Add(Client client)
     {
-        db.Client.Add(client);
-        db.SaveChanges();
+        Db.Client.Add(client);
+        Db.SaveChanges();
     }
 
     public static List<Client> GetClients()
     {
-        return db.Client.ToList();
+        return Db.Client.ToList();
     }
 
     #endregion
 
     #region Contract
 
-    public static void Add(Contract contract)
-    {
-        db.Contract.Add(contract);
-        db.SaveChanges();
-    }
-
     public static List<Contract> GetContracts()
     {
-        return db.Contract.ToList();
+        return Db.Contract.ToList();
     }
 
     #endregion
@@ -55,23 +49,23 @@ internal static class ContextDB
 
     public static void Add(Employee employee)
     {
-        db.Employee.Add(employee);
-        db.SaveChanges();
+        Db.Employee.Add(employee);
+        Db.SaveChanges();
     }
 
     public static List<Employee> GetEmployees()
     {
-        return db.Employee.ToList();
+        return Db.Employee.ToList();
     }
 
-    public static Employee GetAuth(string login, string pass)
+    public static Employee? GetAuth(string login, string pass)
     {
-        return db.Employee.Where(d => d.Profile.Login == login && d.Profile.Password == pass).FirstOrDefault();
+        return Db.Employee.FirstOrDefault(d => d.Profile.Login == login && d.Profile.Password == pass);
     }
 
-    public static Employee GetEmployeeByID(int ID)
+    public static Employee? GetEmployeeById(int id)
     {
-        return db.Employee.Where(employee => employee.ID == ID).FirstOrDefault();
+        return Db.Employee.FirstOrDefault(employee => employee.ID == id);
     }
 
     #endregion
@@ -80,28 +74,22 @@ internal static class ContextDB
 
     public static void Add(Equipment equipment)
     {
-        db.Equipment.Add(equipment);
-        db.SaveChanges();
+        Db.Equipment.Add(equipment);
+        Db.SaveChanges();
     }
 
     public static List<Equipment> GetEquipments()
     {
-        return db.Equipment.ToList();
+        return Db.Equipment.ToList();
     }
 
     #endregion
 
     #region Hall
 
-    public static void Add(Hall hall)
-    {
-        db.Hall.Add(hall);
-        db.SaveChanges();
-    }
-
     public static List<Hall> GetHalls()
     {
-        return db.Hall.ToList();
+        return Db.Hall.ToList();
     }
 
     #endregion
@@ -110,13 +98,13 @@ internal static class ContextDB
 
     public static void Add(Inventory inventory)
     {
-        db.Inventory.Add(inventory);
-        db.SaveChanges();
+        Db.Inventory.Add(inventory);
+        Db.SaveChanges();
     }
 
     public static List<Inventory> GetInventories()
     {
-        return db.Inventory.ToList();
+        return Db.Inventory.ToList();
     }
 
     #endregion
@@ -125,13 +113,13 @@ internal static class ContextDB
 
     public static void Add(Order order)
     {
-        if (CheckOrder(order)) db.Order.Add(order);
-        db.SaveChanges();
+        if (CheckOrder(order)) Db.Order.Add(order);
+        Db.SaveChanges();
     }
 
     public static List<Order> GetOrders()
     {
-        return db.Order.ToList();
+        return Db.Order.ToList();
     }
 
     private static bool CheckOrder(Order order)
@@ -151,7 +139,7 @@ internal static class ContextDB
         public string Services { get; set; }
     }
 
-    public static string GetServiceName(List<ServiceProvided> services)
+    public static string GetServiceName(List<ExecuteableService> services)
     {
         var temp = new StringBuilder();
         foreach (var provided in services) temp.Append($"{provided.Service.Title}, ");
@@ -166,13 +154,13 @@ internal static class ContextDB
 
     public static void Add(RentedItem rentedItem)
     {
-        db.RentedItem.Add(rentedItem);
-        db.SaveChanges();
+        Db.RentedItem.Add(rentedItem);
+        Db.SaveChanges();
     }
 
     public static List<RentedItem> GetRentedItems()
     {
-        return db.RentedItem.ToList();
+        return Db.RentedItem.ToList();
     }
 
     #endregion
@@ -181,49 +169,37 @@ internal static class ContextDB
 
     public static void Add(Role role)
     {
-        db.Role.Add(role);
-        db.SaveChanges();
+        Db.Role.Add(role);
+        Db.SaveChanges();
     }
 
     public static List<Role> GetRoles()
     {
-        return db.Role.ToList();
+        return Db.Role.ToList();
     }
 
     public static Role GetRoleByID(int id)
     {
-        return db.Role.Where(d => d.ID == id).FirstOrDefault();
+        return Db.Role.Where(d => d.ID == id).FirstOrDefault();
     }
 
     #endregion
 
     #region Services
 
-    public static void Add(Service service)
-    {
-        db.Service.Add(service);
-        db.SaveChanges();
-    }
-
     public static List<Service> GetServices()
     {
-        Console.WriteLine(db.Service.GetType().Name);
-        return db.Service.ToList();
+        Console.WriteLine(Db.Service.GetType().Name);
+        return Db.Service.ToList();
     }
 
     #endregion
 
-    #region ServiceProvided
+    #region ExecuteableService
 
-    public static void Add(ServiceProvided serviceProvided)
+    public static List<ExecuteableService> GetExecuteableService()
     {
-        db.ServiceProvided.Add(serviceProvided);
-        db.SaveChanges();
-    }
-
-    public static List<ServiceProvided> GetServiceProvideds()
-    {
-        return db.ServiceProvided.ToList();
+        return Db.ExecuteableService.ToList();
     }
 
     #endregion

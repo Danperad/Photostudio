@@ -10,13 +10,13 @@ namespace PhotostudioGUI.Pages.Services;
 
 public partial class ItemRentPage
 {
-    private readonly ServiceProvided _service;
+    private readonly ExecuteableService _executeableService;
     private readonly ProvidedServiceWindow _window;
     private readonly char[] numbers = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 
-    public ItemRentPage(ServiceProvided service, ProvidedServiceWindow window)
+    public ItemRentPage(ExecuteableService executeableService, ProvidedServiceWindow window)
     {
-        _service = service;
+        _executeableService = executeableService;
         _window = window;
         InitializeComponent();
         FillElements();
@@ -24,18 +24,18 @@ public partial class ItemRentPage
 
     private void FillElements()
     {
-        if (_service.RentDate is not null)
-            DatePicker.SelectedDate = DateTime.Parse(_service.RentDate!.Value.ToString());
+        if (_executeableService.RentDate is not null)
+            DatePicker.SelectedDate = DateTime.Parse(_executeableService.RentDate!.Value.ToString());
 
-        if (_service.StartRent is not null)
-            StartTimePicker.SelectedTime = DateTime.MinValue + _service.StartRent.Value.ToTimeSpan();
+        if (_executeableService.StartRent is not null)
+            StartTimePicker.SelectedTime = DateTime.MinValue + _executeableService.StartRent.Value.ToTimeSpan();
 
-        if (_service.EndRent is not null)
-            EndTimePicker.SelectedTime = DateTime.MinValue + _service.EndRent.Value.ToTimeSpan();
+        if (_executeableService.EndRent is not null)
+            EndTimePicker.SelectedTime = DateTime.MinValue + _executeableService.EndRent.Value.ToTimeSpan();
 
-        if (_service.RentedItem is not null) ItemComboBox.SelectedItem = _service.RentedItem;
+        if (_executeableService.RentedItem is not null) ItemComboBox.SelectedItem = _executeableService.RentedItem;
 
-        if (_service.Number is not null) Counts.Text = _service.Number.ToString();
+        if (_executeableService.Number is not null) Counts.Text = _executeableService.Number.ToString();
         CheckEndFill();
     }
 
@@ -59,30 +59,30 @@ public partial class ItemRentPage
     private void CheckEndFill()
     {
         if (DatePicker.SelectedDate.HasValue)
-            _service.RentDate = DateOnly.FromDateTime(DatePicker.SelectedDate.Value);
+            _executeableService.RentDate = DateOnly.FromDateTime(DatePicker.SelectedDate.Value);
 
         if (StartTimePicker.SelectedTime.HasValue)
-            _service.StartRent = TimeOnly.FromDateTime(StartTimePicker.SelectedTime.Value);
+            _executeableService.StartRent = TimeOnly.FromDateTime(StartTimePicker.SelectedTime.Value);
 
         if (EndTimePicker.SelectedTime.HasValue)
         {
             if (StartTimePicker.SelectedTime.HasValue &&
                 EndTimePicker.SelectedTime.Value < StartTimePicker.SelectedTime.Value)
                 return;
-            _service.EndRent = TimeOnly.FromDateTime(EndTimePicker.SelectedTime.Value);
+            _executeableService.EndRent = TimeOnly.FromDateTime(EndTimePicker.SelectedTime.Value);
         }
 
-        if (_service.StartRent is null) return;
-        if (_service.EndRent is null) return;
+        if (_executeableService.StartRent is null) return;
+        if (_executeableService.EndRent is null) return;
         ItemComboBox.IsEnabled = true;
-        ItemComboBox.ItemsSource = _service.Service.ID switch
+        ItemComboBox.ItemsSource = _executeableService.Service.ID switch
         {
-            5 => RentedItem.GetСlothes(_service.RentDate!.Value, _service.StartRent!.Value, _service.EndRent!.Value)
+            5 => RentedItem.GetСlothes(_executeableService.RentDate!.Value, _executeableService.StartRent!.Value, _executeableService.EndRent!.Value)
                 .Where(r => !r.IsKids)
                 .ToList(),
-            6 => RentedItem.GetNoDress(_service.RentDate!.Value, _service.StartRent!.Value, _service.EndRent!.Value),
-            10 => RentedItem.GetKidsСlothes(_service.RentDate!.Value, _service.StartRent!.Value,
-                _service.EndRent!.Value),
+            6 => RentedItem.GetNoDress(_executeableService.RentDate!.Value, _executeableService.StartRent!.Value, _executeableService.EndRent!.Value),
+            10 => RentedItem.GetKidsСlothes(_executeableService.RentDate!.Value, _executeableService.StartRent!.Value,
+                _executeableService.EndRent!.Value),
             _ => ItemComboBox.ItemsSource
         };
     }
@@ -95,11 +95,11 @@ public partial class ItemRentPage
             DescriptionBlock.Text = item.Description;
             PricePerUnit.Text = item.Cost.ToString("F");
             Counts.IsEnabled = true;
-            _service.RentedItem = item;
+            _executeableService.RentedItem = item;
             TotalUnits.Text = (item.Number - RentedItem.GetByID(item.ID)!.Services.Where(s =>
-                    s.StartRent <= _service.StartRent ||
-                    s.EndRent >= _service.EndRent ||
-                    s.StartRent >= _service.StartRent && s.EndRent <= _service.EndRent).Sum(s => s.Number)!.Value)
+                    s.StartRent <= _executeableService.StartRent ||
+                    s.EndRent >= _executeableService.EndRent ||
+                    s.StartRent >= _executeableService.StartRent && s.EndRent <= _executeableService.EndRent).Sum(s => s.Number)!.Value)
                 .ToString();
             Counts.Text = "1";
             return;
@@ -107,8 +107,8 @@ public partial class ItemRentPage
 
         Counts.IsEnabled = false;
         Counts.Text = "";
-        _service.RentedItem = item;
-        _service.Number = null;
+        _executeableService.RentedItem = item;
+        _executeableService.Number = null;
         DescriptionBlock.Text = string.Empty;
         PricePerUnit.Text = string.Empty;
         TotalUnits.Text = string.Empty;

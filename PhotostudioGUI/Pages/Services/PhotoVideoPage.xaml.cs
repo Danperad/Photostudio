@@ -8,33 +8,34 @@ namespace PhotostudioGUI.Pages.Services;
 
 public partial class PhotoVideoPage
 {
-    private readonly ServiceProvided _service;
+    private readonly ExecuteableService _executeableService;
     private readonly ProvidedServiceWindow _window;
 
-    public PhotoVideoPage(ServiceProvided service, ProvidedServiceWindow window)
+    public PhotoVideoPage(ExecuteableService executeableService, ProvidedServiceWindow window)
     {
-        _service = service;
+        _executeableService = executeableService;
         _window = window;
         InitializeComponent();
+        FillElements();
     }
 
     private void FillElements()
     {
-        if (_service.PhotoStartDateTime is not null)
+        if (_executeableService.PhotoStartDateTime is not null)
         {
-            StartDatePicker.SelectedDate = DateTime.Parse(_service.PhotoStartDateTime!.Value.ToString("d"));
-            StartTimePicker.SelectedTime = DateTime.MinValue + _service.PhotoStartDateTime!.Value.TimeOfDay;
+            StartDatePicker.SelectedDate = DateTime.Parse(_executeableService.PhotoStartDateTime!.Value.ToString("d"));
+            StartTimePicker.SelectedTime = DateTime.MinValue + _executeableService.PhotoStartDateTime!.Value.TimeOfDay;
         }
 
-        if (_service.PhotoEndDateTime is not null)
+        if (_executeableService.PhotoEndDateTime is not null)
         {
-            EndDatePicker.SelectedDate = DateTime.Parse(_service.PhotoEndDateTime!.Value.ToString("d"));
-            EndTimePicker.SelectedTime = DateTime.MinValue + _service.PhotoEndDateTime!.Value.TimeOfDay;
+            EndDatePicker.SelectedDate = DateTime.Parse(_executeableService.PhotoEndDateTime!.Value.ToString("d"));
+            EndTimePicker.SelectedTime = DateTime.MinValue + _executeableService.PhotoEndDateTime!.Value.TimeOfDay;
         }
 
-        if (_service.PhotoLocation is not null) LocationTextBox.Text = _service.PhotoLocation;
+        if (_executeableService.PhotoLocation is not null) LocationTextBox.Text = _executeableService.PhotoLocation;
 
-        if (_service.Employee != null) EmployeeComboBox.SelectedValue = _service.Employee;
+        if (_executeableService.Employee != null) EmployeeComboBox.SelectedValue = _executeableService.Employee;
         
 
         CheckEndFill();
@@ -67,23 +68,23 @@ public partial class PhotoVideoPage
     {
         EmployeeComboBox.IsEnabled = false;
         if (StartDatePicker.SelectedDate is not null && StartTimePicker.SelectedTime is not null)
-            _service.PhotoStartDateTime = StartDatePicker.SelectedDate.Value + StartTimePicker.SelectedTime.Value.TimeOfDay;
+            _executeableService.PhotoStartDateTime = StartDatePicker.SelectedDate.Value + StartTimePicker.SelectedTime.Value.TimeOfDay;
 
         if (EndDatePicker.SelectedDate is not null && EndTimePicker.SelectedTime is not null)
-            _service.PhotoEndDateTime = EndDatePicker.SelectedDate.Value + EndTimePicker.SelectedTime.Value.TimeOfDay;
-        if (!_service.PhotoStartDateTime.HasValue) return;
-        if (!_service.PhotoEndDateTime.HasValue) return;
-        switch (_service.Service.ID)
+            _executeableService.PhotoEndDateTime = EndDatePicker.SelectedDate.Value + EndTimePicker.SelectedTime.Value.TimeOfDay;
+        if (!_executeableService.PhotoStartDateTime.HasValue) return;
+        if (!_executeableService.PhotoEndDateTime.HasValue) return;
+        switch (_executeableService.Service.ID)
         {
             case 1:
             case 9:
             case 11:
                 EmployeeComboBox.ItemsSource =
-                    Employee.GetPhotoWithTime(_service.PhotoStartDateTime!.Value, _service.PhotoEndDateTime!.Value);
+                    Employee.GetPhotoWithTime(_executeableService.PhotoStartDateTime!.Value, _executeableService.PhotoEndDateTime!.Value);
                 break;
             default:
                 EmployeeComboBox.ItemsSource =
-                    Employee.GetVideoWithTime(_service.PhotoStartDateTime!.Value, _service.PhotoEndDateTime!.Value);
+                    Employee.GetVideoWithTime(_executeableService.PhotoStartDateTime!.Value, _executeableService.PhotoEndDateTime!.Value);
                 break;
         }
 
@@ -99,7 +100,7 @@ public partial class PhotoVideoPage
     {
         if ((sender as ComboBox)!.SelectedItem is Employee employee)
         {
-            _service.Employee = employee;
+            _executeableService.Employee = employee;
         }
     }
 }

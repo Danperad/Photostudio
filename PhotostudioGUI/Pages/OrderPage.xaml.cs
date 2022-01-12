@@ -11,10 +11,12 @@ namespace PhotostudioGUI.Pages;
 
 public partial class OrderPage
 {
-    private readonly Client _client;
+    private readonly Client? _client;
     private readonly Employee _employee;
-    private readonly List<ServiceProvided> _serviceProvideds;
+    private Order _order;
     private List<Order> _orders;
+    public delegate void ServicesWindowHandler();
+    private event ServicesWindowHandler? ServicesWindow;
 
     public OrderPage(Employee employee)
     {
@@ -29,9 +31,10 @@ public partial class OrderPage
     {
         _client = client;
         _employee = employee;
-        _serviceProvideds = new List<ServiceProvided>();
+        _order = new Order();
         _orders = Order.Get().Where(o => o.Client == client).ToList();
         InitializeComponent();
+        ServicesWindow += DisplayServices;
     }
 
     private void OrderData_OnInitialized(object? sender, EventArgs e)
@@ -46,11 +49,13 @@ public partial class OrderPage
 
     private void AddOrderClick(object sender, RoutedEventArgs e)
     {
-        if (_serviceProvideds.Count == 0) return;
-        var order = new Order(new Contract(_client, _employee,
+        _order.Contract = new Contract(_client!, _employee,
             DateOnly.FromDateTime(StartDatePicker.SelectedDate!.Value),
-            DateOnly.FromDateTime(EndDatePicker.SelectedDate!.Value)), _client, DateTime.Now, _serviceProvideds);
-        Order.Add(order);
+            DateOnly.FromDateTime(EndDatePicker.SelectedDate!.Value));
+        _order.Client = _client!;
+        _order.DateTime = DateTime.Now;
+        if (_order.Services.Count == 0) return;
+        Order.Add(_order);
         _orders = Order.Get();
     }
 
@@ -68,8 +73,8 @@ public partial class OrderPage
             return;
         }
 
-        var window = new ProvidedServiceWindow(_serviceProvideds, StartDatePicker.SelectedDate.Value,
-            EndDatePicker.SelectedDate.Value, _employee);
+        var window = new ProvidedServiceWindow(_order.Services, StartDatePicker.SelectedDate.Value,
+            EndDatePicker.SelectedDate.Value, _employee, ServicesWindow!);
         window.Show();
         ErrorBlock.Text = string.Empty;
     }
@@ -77,5 +82,11 @@ public partial class OrderPage
     private void StartDatePicker_OnSelectedDateChanged(object? sender, SelectionChangedEventArgs e)
     {
         EndDatePicker.DisplayDateStart = StartDatePicker.SelectedDate;
+    }
+
+    private void DisplayServices()
+    {
+        ServicesBlock.Text = $"Предоставляеме услуги: {_order.ListServices}";
+        TotalPriceBlock.Text = $"Итого: {_order.AllGetCost.ToString("F")} Р.";
     }
 }

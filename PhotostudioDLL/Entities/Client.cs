@@ -4,20 +4,21 @@ public class Client : People
 {
     #region Methods
 
-    public static void Add(Client client)
+    public static bool Add(Client client)
     {
-        Check(client);
-        ContextDB.Add(client);
+        if (!Check(client)) return false;
+        ContextDb.Add(client);
+        return true;
     }
 
     public static List<Client> Get()
     {
-        return ContextDB.GetClients();
+        return ContextDb.GetClients();
     }
 
     public static void Update()
     {
-        ContextDB.Save();
+        ContextDb.Save();
     }
 
     #endregion
@@ -27,9 +28,7 @@ public class Client : People
     public int ID { get; set; }
     public virtual List<Order> Orders { get; set; }
     public virtual List<Contract> Contracts { get; set; }
-
-    public string? Company { get; set; }
-
+    
     #endregion
 
     #region Constructors
@@ -40,21 +39,21 @@ public class Client : People
         Contracts = new List<Contract>();
     }
 
-    public Client(string LastName, string FirstName, string PhoneNumber) : base(LastName, FirstName, PhoneNumber)
+    public Client(string lastName, string firstName, string phoneNumber) : base(lastName, firstName, phoneNumber)
     {
         Orders = new List<Order>();
         Contracts = new List<Contract>();
     }
 
-    public Client(string LastName, string FirstName, string PhoneNumber, string MiddleName) : base(LastName, FirstName,
-        MiddleName, PhoneNumber)
+    public Client(string LastName, string firstName, string phoneNumber, string middleName) : base(LastName, firstName,
+        middleName, phoneNumber)
     {
         Orders = new List<Order>();
         Contracts = new List<Contract>();
     }
 
-    public Client(string LastName, string FirstName, string PhoneNumber, string MiddleName, string EMail) : base(
-        LastName, FirstName, MiddleName, PhoneNumber, EMail)
+    public Client(string LastName, string firstName, string phoneNumber, string middleName, string EMail) : base(
+        LastName, firstName, middleName, phoneNumber, EMail)
     {
         Orders = new List<Order>();
         Contracts = new List<Contract>();

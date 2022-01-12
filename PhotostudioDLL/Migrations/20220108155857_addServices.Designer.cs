@@ -582,7 +582,7 @@ namespace PhotostudioDLL.Migrations
                         });
                 });
 
-            modelBuilder.Entity("PhotostudioDLL.Entities.ServiceProvided", b =>
+            modelBuilder.Entity("PhotostudioDLL.Entities.ExecuteableService", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -638,7 +638,7 @@ namespace PhotostudioDLL.Migrations
 
                     b.HasIndex("ServiceID");
 
-                    b.ToTable("ServiceProvided");
+                    b.ToTable("ExecuteableService");
                 });
 
             modelBuilder.Entity("EquipmentInventory", b =>
@@ -727,7 +727,7 @@ namespace PhotostudioDLL.Migrations
                     b.Navigation("Client");
                 });
 
-            modelBuilder.Entity("PhotostudioDLL.Entities.ServiceProvided", b =>
+            modelBuilder.Entity("PhotostudioDLL.Entities.ExecuteableService", b =>
                 {
                     b.HasOne("PhotostudioDLL.Entities.Employee", "Employee")
                         .WithMany("Services")
@@ -750,7 +750,7 @@ namespace PhotostudioDLL.Migrations
                         .HasForeignKey("RentedItemID");
 
                     b.HasOne("PhotostudioDLL.Entities.Service", "Service")
-                        .WithMany("ServiceProvideds")
+                        .WithMany("ExecuteableServices")
                         .HasForeignKey("ServiceID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -805,7 +805,7 @@ namespace PhotostudioDLL.Migrations
                 {
                     b.Navigation("Inventories");
 
-                    b.Navigation("ServiceProvideds");
+                    b.Navigation("ExecuteableServices");
                 });
 #pragma warning restore 612, 618
         }
