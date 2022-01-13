@@ -1,52 +1,49 @@
-﻿using System;
-using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
-using Castle.Core.Internal;
-using PhotostudioDLL.Entities;
+﻿using Castle.Core.Internal;
 using PhotostudioGUI.Windows;
 
 namespace PhotostudioGUI.Pages.Services;
 
+/// <summary>
+///     Страница для заполнения услуги Аренды вещей
+/// </summary>
 public partial class ItemRentPage
 {
-    private readonly ExecuteableService _executeableService;
+    private readonly OrderService _orderService;
     private readonly ProvidedServiceWindow _window;
     private readonly char[] numbers = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 
-    public ItemRentPage(ExecuteableService executeableService, ProvidedServiceWindow window)
+    /// <summary>
+    ///     После инициализации страницы заполняет имеющими значениями
+    /// </summary>
+    /// <param name="orderService"></param>
+    /// <param name="window"></param>
+    public ItemRentPage(OrderService orderService, ProvidedServiceWindow window)
     {
-        _executeableService = executeableService;
+        _orderService = orderService;
         _window = window;
         InitializeComponent();
-        FillElements();
-    }
-
-    private void FillElements()
-    {
-        if (_executeableService.RentDate is not null)
-            DatePicker.SelectedDate = DateTime.Parse(_executeableService.RentDate!.Value.ToString());
-
-        if (_executeableService.StartRent is not null)
-            StartTimePicker.SelectedTime = DateTime.MinValue + _executeableService.StartRent.Value.ToTimeSpan();
-
-        if (_executeableService.EndRent is not null)
-            EndTimePicker.SelectedTime = DateTime.MinValue + _executeableService.EndRent.Value.ToTimeSpan();
-
-        if (_executeableService.RentedItem is not null) ItemComboBox.SelectedItem = _executeableService.RentedItem;
-
-        if (_executeableService.Number is not null) Counts.Text = _executeableService.Number.ToString();
+        FillElements.FillElement(_orderService, this);
         CheckEndFill();
     }
 
+    /// <summary>
+    ///     Ограничения на минимальный и максимальный день
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void DatePicker_OnInitialized(object? sender, EventArgs e)
     {
-        var datePicker = sender as DatePicker;
-        datePicker!.DisplayDateStart = _window.StartDate;
-        datePicker.DisplayDateEnd = _window.EndDate;
+        (sender as DatePicker)!.DisplayDateStart = _window.StartDate;
+        (sender as DatePicker)!.DisplayDateEnd = _window.EndDate;
     }
 
-    private void DatePicker_OnSelectedDateChanged(object? sender, SelectionChangedEventArgs e)
+    private void StartDatePicker_OnSelectedDateChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        EndDatePicker.DisplayDateStart = StartDatePicker.SelectedDate;
+        CheckEndFill();
+    }
+
+    private void EndDatePicker_OnSelectedDateChanged(object? sender, SelectionChangedEventArgs e)
     {
         CheckEndFill();
     }
@@ -56,65 +53,69 @@ public partial class ItemRentPage
         CheckEndFill();
     }
 
+    /// <summary>
+    ///     Проверка на верность введенного времени и заполнение списка вещей на их основе
+    /// </summary>
     private void CheckEndFill()
     {
-        if (DatePicker.SelectedDate.HasValue)
-            _executeableService.RentDate = DateOnly.FromDateTime(DatePicker.SelectedDate.Value);
+        ItemComboBox.IsEnabled = false;
+        ItemComboBox.SelectedIndex = -1;
 
-        if (StartTimePicker.SelectedTime.HasValue)
-            _executeableService.StartRent = TimeOnly.FromDateTime(StartTimePicker.SelectedTime.Value);
+        if (!FillElements.CheckDateTime(StartDatePicker, EndDatePicker, StartTimePicker, EndTimePicker)) return;
 
-        if (EndTimePicker.SelectedTime.HasValue)
-        {
-            if (StartTimePicker.SelectedTime.HasValue &&
-                EndTimePicker.SelectedTime.Value < StartTimePicker.SelectedTime.Value)
-                return;
-            _executeableService.EndRent = TimeOnly.FromDateTime(EndTimePicker.SelectedTime.Value);
-        }
+        _orderService.StartTime =
+            StartDatePicker.SelectedDate!.Value + StartTimePicker.SelectedTime!.Value.TimeOfDay;
+        _orderService.EndTime =
+            EndDatePicker.SelectedDate!.Value + EndTimePicker.SelectedTime!.Value.TimeOfDay;
 
-        if (_executeableService.StartRent is null) return;
-        if (_executeableService.EndRent is null) return;
         ItemComboBox.IsEnabled = true;
-        ItemComboBox.ItemsSource = _executeableService.Service.ID switch
+        ItemComboBox.ItemsSource = _orderService.Service.ID switch
         {
-            5 => RentedItem.GetСlothes(_executeableService.RentDate!.Value, _executeableService.StartRent!.Value, _executeableService.EndRent!.Value)
-                .Where(r => !r.IsKids)
-                .ToList(),
-            6 => RentedItem.GetNoDress(_executeableService.RentDate!.Value, _executeableService.StartRent!.Value, _executeableService.EndRent!.Value),
-            10 => RentedItem.GetKidsСlothes(_executeableService.RentDate!.Value, _executeableService.StartRent!.Value,
-                _executeableService.EndRent!.Value),
+            5 => RentedItem.GetСlothes(_orderService.StartTime!.Value, _orderService.EndTime!.Value),
+            6 => RentedItem.GetNoDress(_orderService.StartTime!.Value, _orderService.EndTime!.Value),
+            10 => RentedItem.GetKidsСlothes(_orderService.StartTime!.Value,
+                _orderService.EndTime!.Value),
             _ => ItemComboBox.ItemsSource
         };
     }
 
+    /// <summary>
+    ///     Заполнение данных о выбранном помещении
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         var item = (sender as ComboBox)!.SelectedItem as RentedItem;
         if (item is not null)
         {
             DescriptionBlock.Text = item.Description;
-            PricePerUnit.Text = item.Cost.ToString("F");
+            PricePerUnit.Text = item.Cost!.Value.ToString("F");
             Counts.IsEnabled = true;
-            _executeableService.RentedItem = item;
-            TotalUnits.Text = (item.Number - RentedItem.GetByID(item.ID)!.Services.Where(s =>
-                    s.StartRent <= _executeableService.StartRent ||
-                    s.EndRent >= _executeableService.EndRent ||
-                    s.StartRent >= _executeableService.StartRent && s.EndRent <= _executeableService.EndRent).Sum(s => s.Number)!.Value)
-                .ToString();
+            _orderService.RentedItem = item;
+            TotalUnits.Text =
+                item.GetAvailable(_orderService.StartTime!.Value, _orderService.EndTime!.Value)
+                    .ToString();
+            _orderService.Number = 1;
             Counts.Text = "1";
             return;
         }
 
         Counts.IsEnabled = false;
         Counts.Text = "";
-        _executeableService.RentedItem = item;
-        _executeableService.Number = null;
+        _orderService.RentedItem = item;
+        _orderService.Number = null;
         DescriptionBlock.Text = string.Empty;
         PricePerUnit.Text = string.Empty;
         TotalUnits.Text = string.Empty;
         PriceTotal.Text = string.Empty;
     }
 
+    /// <summary>
+    ///     Преобразование введенного количества в число, с проверкой на максимальное значение
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void Counts_OnTextInput(object sender, TextChangedEventArgs e)
     {
         var countTextBox = sender as TextBox;
@@ -125,8 +126,14 @@ public partial class ItemRentPage
             text = TotalUnits.Text;
         else if (int.Parse(text) < 1) text = "1";
 
-        countTextBox.Text = text;
+        countTextBox.Text = int.Parse(text).ToString();
         countTextBox.CaretIndex = index;
+        _orderService.Number = int.Parse(text);
         PriceTotal.Text = (Convert.ToInt32(text) * Convert.ToDecimal(PricePerUnit.Text)).ToString("F");
+    }
+
+    private void DeleteButton_Click(object sender, RoutedEventArgs e)
+    {
+        _window.Remove(_orderService);
     }
 }

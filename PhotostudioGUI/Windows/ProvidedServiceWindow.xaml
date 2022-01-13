@@ -26,7 +26,7 @@
                 </ComboBox.DataContext>
                 <ComboBox.ItemContainerStyle>
                     <Style TargetType="ComboBoxItem">
-                        <EventSetter Event="Selected" Handler="EventSetter_OnHandler" />
+                        <EventSetter Event="Selected" Handler="AddService_Click" />
                         <Setter Property="Content" Value="{Binding Path=Title}" />
                         <Setter Property="Tag" Value="{Binding}" />
                     </Style>
@@ -35,7 +35,7 @@
             <ListView Name="ProvidedListView"
                       Initialized="FrameworkElement_OnInitialized">
                 <ListView.DataContext>
-                    <entities:ExecuteableService />
+                    <entities:OrderService />
                 </ListView.DataContext>
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Type ListViewItem}}">
@@ -46,7 +46,8 @@
                 </ListView.ItemContainerStyle>
             </ListView>
         </StackPanel>
-        <Button Name="CompleteButton" Click="CompleteButton_Click" Grid.Column="0" VerticalAlignment="Bottom" Margin="3 5 3 10" Content="Готово" FontSize="14" FontWeight="Medium"/>
-        <Frame Name="ServiceFrame" Grid.Column="1" NavigationUIVisibility="Hidden" Background="White" />
+        <Button Name="CompleteButton" Click="CompleteButton_Click" Grid.Column="0" VerticalAlignment="Bottom"
+                Margin="3 5 3 10" Content="Готово" FontSize="14" FontWeight="Medium" />
+        <Frame Name="ServiceFrame" Grid.Column="1" />
     </Grid>
 </Window>

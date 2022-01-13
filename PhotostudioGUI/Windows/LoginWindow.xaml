@@ -12,7 +12,7 @@
         Title="Login" Height="460" Width="350" ResizeMode="NoResize" Icon="/sunrise.png">
     <Window.Resources>
         <componentModel:BackgroundWorker
-            x:Key="BackgroundWoker"
+            x:Key="BackgroundWorker"
             WorkerReportsProgress="True"
             WorkerSupportsCancellation="True"
             DoWork="BackgroundWorker_DoWork"

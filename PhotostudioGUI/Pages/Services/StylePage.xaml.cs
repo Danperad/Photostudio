@@ -3,9 +3,9 @@
 namespace PhotostudioGUI.Pages.Services;
 
 /// <summary>
-///     Страница для заполнения услуги Аренды помещения
+///     Страница для заполнения услуги Стилиста/Визажиста
 /// </summary>
-public partial class HallRentPage
+public partial class StylePage
 {
     private readonly OrderService _orderService;
     private readonly ProvidedServiceWindow _window;
@@ -15,7 +15,7 @@ public partial class HallRentPage
     /// </summary>
     /// <param name="orderService"></param>
     /// <param name="window"></param>
-    public HallRentPage(OrderService orderService, ProvidedServiceWindow window)
+    public StylePage(OrderService orderService, ProvidedServiceWindow window)
     {
         _orderService = orderService;
         _window = window;
@@ -41,66 +41,63 @@ public partial class HallRentPage
         CheckEndFill();
     }
 
-    private void EndDatePicker_OnSelectedDateChanged(object? sender, SelectionChangedEventArgs e)
-    {
-        CheckEndFill();
-    }
-
-    private void TimePicker_OnSelectedTimeChanged(object sender, RoutedPropertyChangedEventArgs<DateTime?> e)
+    private void TimePicker_OnSelectedTimeChanged(object sender, RoutedEventArgs e)
     {
         CheckEndFill();
     }
 
     /// <summary>
-    ///     Проверка времени и заполнение на основе его списка доступных помещений
+    ///     Проверка времени и заполнение на основе его списка доступных сотрудников
     /// </summary>
     private void CheckEndFill()
     {
-        HallComboBox.IsEnabled = false;
-        HallComboBox.SelectedIndex = -1;
+        EmployeeComboBox.IsEnabled = false;
+        EmployeeComboBox.SelectedIndex = -1;
+        // Заполнение выбранной услуги временем 
         if (!FillElements.CheckDateTime(StartDatePicker, EndDatePicker, StartTimePicker, EndTimePicker)) return;
 
         _orderService.StartTime =
             StartDatePicker.SelectedDate!.Value + StartTimePicker.SelectedTime!.Value.TimeOfDay;
         _orderService.EndTime =
             EndDatePicker.SelectedDate!.Value + EndTimePicker.SelectedTime!.Value.TimeOfDay;
-        HallComboBox.IsEnabled = true;
-        HallComboBox.ItemsSource =
-            Hall.GetWithTime(_orderService.StartTime.Value, _orderService.EndTime.Value);
+
+        var hours = (_orderService.EndTime - _orderService.StartTime)!.Value.TotalHours;
+        // Заполнение списка сотрудников
+        MessageTextBlock.Text = "";
+        FillEmployees(hours);
     }
 
     /// <summary>
-    ///     Заполнение данных о выбранном помещении
+    ///     Заполнение списка сотрудников
+    /// </summary>
+    private void FillEmployees(double hours)
+    {
+        EmployeeComboBox.ItemsSource =
+            Employee.GetStyleWithTime(_orderService.StartTime!.Value, _orderService.EndTime!.Value);
+        // Проверка на количество доступных сотрудников
+        if (EmployeeComboBox.Items.Count != 0)
+        {
+            if (_orderService.Employee != null) EmployeeComboBox.SelectedValue = _orderService.Employee;
+            EmployeeComboBox.IsEnabled = true;
+            MessageTextBlock.Text = "";
+            PriceTotal.Text = (_orderService.Service.Cost!.Value * (decimal) hours).ToString("F");
+        }
+        else
+        {
+            MessageTextBlock.Text = "Доступных сотрудников нет";
+        }
+    }
+
+    /// <summary>
+    ///     Выбор сотрудника
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
     private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        var hall = (sender as ComboBox)!.SelectedItem as Hall;
-        if (hall is not null)
-        {
-            DescriptionBlock.Text = hall.Description;
-            var price = hall.Cost!.Value;
-            PricePerHour.Text = price.ToString("F");
-            PriceTotal.Text = (price *
-                               (decimal) (_orderService.EndTime!.Value - _orderService.StartTime!.Value)
-                               .TotalHours)
-                .ToString("F");
-            _orderService.Hall = hall;
-            return;
-        }
-
-        _orderService.Hall = hall;
-        DescriptionBlock.Text = string.Empty;
-        PricePerHour.Text = string.Empty;
-        PriceTotal.Text = string.Empty;
+        if ((sender as ComboBox)!.SelectedItem is Employee employee) _orderService.Employee = employee;
     }
 
-    /// <summary>
-    ///     Удаление Услуги
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
     private void DeleteButton_Click(object sender, RoutedEventArgs e)
     {
         _window.Remove(_orderService);

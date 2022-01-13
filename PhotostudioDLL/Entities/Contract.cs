@@ -4,19 +4,14 @@ public class Contract
 {
     #region Methods
 
+    /// <summary>
+    ///     Проверка корректности контракта
+    /// </summary>
+    /// <param name="contract"></param>
+    /// <returns></returns>
     internal static bool Check(Contract contract)
     {
-        return contract.StartDate <= contract.EndDate ;
-    }
-
-    public static List<Contract> Get()
-    {
-        return ContextDb.GetContracts();
-    }
-
-    public static void Update()
-    {
-        ContextDb.Save();
+        return contract.StartDate <= contract.EndDate;
     }
 
     #endregion

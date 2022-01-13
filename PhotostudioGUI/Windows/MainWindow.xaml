@@ -7,23 +7,26 @@
         Title="Sunrise"
         Initialized="MainWindow_OnInitialized"
         fw:AcrylicWindow.Enabled="True"
-        MinWidth="1050" MinHeight="600" Icon="/sunrise.png" Closed="MainWindow_OnClosed">
+        MinWidth="1050" MinHeight="600" Icon="/sunrise.png">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="160" />
             <ColumnDefinition Width="5*" />
         </Grid.ColumnDefinitions>
-        <Grid Grid.Column="0" fw:PointerTracker.Enabled="True">
-            <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
+        <Grid Name="TabGrid" Grid.Column="0" fw:PointerTracker.Enabled="True">
             <StackPanel Grid.Row="0">
-                <ListView FontSize="15" Name="mainListView" />
+                <ListView FontSize="15" Name="MainListView" />
             </StackPanel>
-            <TextBlock Grid.Row="1" Text="help" Name="userName" FontWeight="Medium" FontSize="15" Margin=" 8 5 7 10"
-                       HorizontalAlignment="Right" fw:PointerTracker.Enabled="False" />
+
+            <DockPanel HorizontalAlignment="Left" VerticalAlignment="Bottom">
+                <TextBlock Name="UserNameBlock" FontWeight="Medium" FontSize="15" Margin="8 5 7 36"
+                           fw:PointerTracker.Enabled="False" />
+            </DockPanel>
+            <DockPanel HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                <Button Name="LogOutButton" Content="Выйти" FontSize="14" Width="75" Margin="5" Click="LogOut_OnClick" />
+            </DockPanel>
+
         </Grid>
-        <Frame Name="mainFrame" Grid.Column="1" NavigationUIVisibility="Hidden" Background="White" />
+        <Frame Name="MainFrame" Grid.Column="1" />
     </Grid>
 </Window>

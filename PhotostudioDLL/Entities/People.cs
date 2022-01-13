@@ -4,6 +4,11 @@ namespace PhotostudioDLL.Entities;
 
 public abstract class People
 {
+    /// <summary>
+    ///     Проверка на корректность Человека
+    /// </summary>
+    /// <param name="people"></param>
+    /// <returns></returns>
     protected static bool Check(People people)
     {
         return !(people.FirstName.IsNullOrEmpty() && people.LastName.IsNullOrEmpty() &&
@@ -46,13 +51,13 @@ public abstract class People
     public People(string lastName, string firstName, string middleName, string phoneNumber) : this(lastName, firstName,
         phoneNumber)
     {
-        this.MiddleName = middleName;
+        MiddleName = middleName;
     }
 
     public People(string lastName, string firstName, string middleName, string phoneNumber, string eMail) : this(
         lastName, firstName, middleName, phoneNumber)
     {
-        this.EMail = eMail;
+        EMail = eMail;
     }
 
     #endregion

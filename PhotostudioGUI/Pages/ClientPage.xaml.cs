@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using Castle.Core.Internal;
-using PhotostudioDLL.Entities;
 
 namespace PhotostudioGUI.Pages;
 
@@ -14,11 +8,11 @@ namespace PhotostudioGUI.Pages;
 /// </summary>
 public partial class ClientPage
 {
+    private readonly List<string> _country = new(new[] {"+7", "+1", "+38"});
     private readonly Employee _employee;
     private readonly Frame _frame;
-    private readonly List<string> _country = new(new[] { "+7", "+1", "+38" });
 
-    private readonly char[] _phonesymb = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+    private readonly char[] _phonesymb = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
     private List<Client> _clients;
 
     public ClientPage(Frame frame, Employee employee)
@@ -29,11 +23,16 @@ public partial class ClientPage
         InitializeComponent();
     }
 
+    /// <summary>
+    ///     Добавление клиента
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void AddClientClick(object sender, RoutedEventArgs e)
     {
         if (PhoneBox.Text.Length != 10)
         {
-            ErrorBlock.Text = "Ведён не коректный номер телефона";
+            ErrorBlock.Text = "Введен некорректный номер телефона";
             return;
         }
 
@@ -59,18 +58,25 @@ public partial class ClientPage
         ClientData.ItemsSource = _clients;
     }
 
+    /// <summary>
+    ///     Заполнение номера телефона только числами
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void PhoneBox_OnTextChanged(object sender, TextChangedEventArgs e)
     {
         var index = PhoneBox.CaretIndex;
-        var text = "";
-        foreach (var c in PhoneBox.Text)
-            if (_phonesymb.Contains(c))
-                text += c;
+        var text = PhoneBox.Text.Where(c => _phonesymb.Contains(c)).Aggregate("", (current, c) => current + c);
 
         PhoneBox.Text = text;
         PhoneBox.CaretIndex = index;
     }
 
+    /// <summary>
+    ///     Поиск клиентов (только по одному столбцу)
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void SearchBox_OnTextChanged(object sender, TextChangedEventArgs e)
     {
         if (SearchBox.Text.IsNullOrEmpty())
@@ -89,21 +95,36 @@ public partial class ClientPage
         }
     }
 
+    /// <summary>
+    ///     Добавление телефонных кодов страны
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void CountryBox_OnInitialized(object? sender, EventArgs e)
     {
-        var temp = (ComboBox)sender;
-        temp.ItemsSource = _country;
+        var temp = sender as ComboBox;
+        temp!.ItemsSource = _country;
         temp.SelectedItem = temp.Items[0];
     }
 
+    /// <summary>
+    ///     Загрузка клиентов
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void ClientData_OnInitialized(object? sender, EventArgs e)
     {
         ClientData.ItemsSource = _clients;
     }
 
+    /// <summary>
+    ///     Открытие заявок клиента по двойному клику
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void OpenOrderClient(object sender, MouseButtonEventArgs e)
     {
-        var client = ((ListViewItem)sender).Content as Client;
-        _frame.Navigate(new OrderPage(_employee, client));
+        var client = ((ListViewItem) sender).Content as Client;
+        _frame.Navigate(new OrderPage(_employee, client!));
     }
 }

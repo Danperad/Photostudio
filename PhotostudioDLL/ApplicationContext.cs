@@ -15,7 +15,7 @@ public sealed class ApplicationContext : DbContext
     }
 
     /// <summary>
-    /// Получение данных для подключения к БД. Если файл не найден, создаётся новый, не заполненный
+    ///     Получение данных для подключения к БД. Если файл не найден, создается новый, не заполненный
     /// </summary>
     /// <returns></returns>
     internal static DbContextOptions<ApplicationContext> GetDb()
@@ -32,10 +32,16 @@ public sealed class ApplicationContext : DbContext
 
         var connectionString = config.GetConnectionString("DefaultConnection");
         var optionsBuilder = new DbContextOptionsBuilder<ApplicationContext>();
-        // return optionsBuilder.UseLazyLoadingProxies().UseNpgsql(connectionString).Options;
-        return optionsBuilder.UseNpgsql(connectionString).Options;
+#if DEBUG
+        optionsBuilder.LogTo(Console.WriteLine);
+#endif
+        return optionsBuilder.UseLazyLoadingProxies().UseNpgsql(connectionString).Options;
     }
 
+    /// <summary>
+    ///     Применение новых ограничений целостности или заполнение данными
+    /// </summary>
+    /// <param name="modelBuilder"></param>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Ignore<People>();
@@ -56,13 +62,16 @@ public sealed class ApplicationContext : DbContext
         modelBuilder.Entity<Hall>(EntityConfigure.HallDataConfigure);
     }
 
+    /// <summary>
+    ///     Загрузка базы данных
+    /// </summary>
     public static void LoadDb()
     {
         new ApplicationContext(GetDb());
     }
 
     /// <summary>
-    /// Класс для генерации файла конфигурации
+    ///     Класс для генерации файла конфигурации
     /// </summary>
     public class AppConfig
     {
@@ -95,7 +104,7 @@ public sealed class ApplicationContext : DbContext
     public DbSet<Service> Service { get; set; } = null!;
     public DbSet<Hall> Hall { get; set; } = null!;
     public DbSet<RentedItem> RentedItem { get; set; } = null!;
-    public DbSet<ExecuteableService> ExecuteableService { get; set; } = null!;
+    public DbSet<OrderService> ExecuteableService { get; set; } = null!;
     public DbSet<Order> Order { get; set; } = null!;
 
     #endregion

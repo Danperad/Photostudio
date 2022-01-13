@@ -1,58 +1,79 @@
-﻿using Castle.Core.Internal;
-
-namespace PhotostudioDLL.Entities;
+﻿namespace PhotostudioDLL.Entities;
 
 public class Employee : People
 {
+    // Время между двумя новыми заявками
+    private const int HoursWait = 3;
+
     #region Methods
 
-    public static bool Add(Employee employee)
-    {
-        if (!Check(employee)) return false;
-        ContextDb.Add(employee);
-        return true;
-    }
-
-    private static bool Check(Employee employee)
-    {
-        return People.Check(employee) && !employee.PassData.IsNullOrEmpty() &&
-               employee.EmploymentDate > DateOnly.FromDateTime(DateTime.Today);
-    }
-
+    /// <summary>
+    ///     Получение всех сотрудников
+    /// </summary>
+    /// <returns></returns>
     public static List<Employee> Get()
     {
         return ContextDb.GetEmployees();
     }
 
+    /// <summary>
+    ///     Получение всех сотрудников с определенной ролью
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     public static List<Employee> GetByRoleId(int id)
     {
         return ContextDb.GetEmployees().Where(e => e.Role.ID == id).ToList();
     }
 
+    /// <summary>
+    ///     Получение всех доступных фотографов
+    /// </summary>
+    /// <param name="start"></param>
+    /// <param name="end"></param>
+    /// <returns></returns>
     public static IEnumerable<Employee> GetPhotoWithTime(DateTime start, DateTime end)
     {
-        return ContextDb.GetEmployees().Where(e => e.RoleID == 2 && !e.Services
-            .Any(s => s.PhotoStartDateTime <= start ||
-                       s.PhotoEndDateTime >= end ||
-                       s.PhotoStartDateTime >= start && s.PhotoEndDateTime <= end));
+        return GetByRoleId(2)
+            .Where(e => !e.Services.Any(s => ContextDb.FindDateTime(start, end.AddHours(HoursWait),
+                s.StartTime!.Value, s.EndTime!.Value.AddHours(HoursWait))));
     }
 
+    /// <summary>
+    ///     Получение всех доступных операторов
+    /// </summary>
+    /// <param name="start"></param>
+    /// <param name="end"></param>
+    /// <returns></returns>
     public static IEnumerable<Employee> GetVideoWithTime(DateTime start, DateTime end)
     {
-        return ContextDb.GetEmployees().Where(e => e.RoleID == 4 && !e.Services
-            .Any(s => s.PhotoStartDateTime <= start ||
-                       s.PhotoEndDateTime >= end ||
-                       s.PhotoStartDateTime >= start && s.PhotoEndDateTime <= end));
+        return GetByRoleId(4).Where(e => !e.Services.Any(s => ContextDb.FindDateTime(start,
+            end.AddHours(HoursWait),
+            s.StartTime!.Value, s.EndTime!.Value.AddHours(HoursWait))));
     }
 
+    /// <summary>
+    ///     Получение всех доступных стилистов
+    /// </summary>
+    /// <param name="start"></param>
+    /// <param name="end"></param>
+    /// <returns></returns>
+    public static IEnumerable<Employee> GetStyleWithTime(DateTime start, DateTime end)
+    {
+        return GetByRoleId(6).Where(e => !e.Services.Any(s => ContextDb.FindDateTime(start,
+            end.AddHours(1),
+            s.StartTime!.Value, s.EndTime!.Value.AddHours(1))));
+    }
+
+    /// <summary>
+    ///     Получение пользователя для авторизации
+    /// </summary>
+    /// <param name="login"></param>
+    /// <param name="pass"></param>
+    /// <returns></returns>
     public static Employee? GetAuth(string login, string pass)
     {
         return ContextDb.GetAuth(login, pass);
-    }
-
-    public static void Update()
-    {
-        ContextDb.Save();
     }
 
     #endregion
@@ -67,7 +88,7 @@ public class Employee : People
     public virtual Role Role { get; set; }
 
     public virtual List<Contract> Contracts { get; set; }
-    public virtual List<ExecuteableService> Services { get; set; }
+    public virtual List<OrderService> Services { get; set; }
 
     #endregion
 
@@ -76,7 +97,7 @@ public class Employee : People
     public Employee()
     {
         Contracts = new List<Contract>();
-        Services = new List<ExecuteableService>();
+        Services = new List<OrderService>();
     }
 
     public Employee(int roleID, string lastName, string firstName, string phoneNumber,
@@ -85,7 +106,7 @@ public class Employee : People
         (RoleID, PassData, EmploymentDate) =
             (roleID, passData, employmentDate);
         Contracts = new List<Contract>();
-        Services = new List<ExecuteableService>();
+        Services = new List<OrderService>();
     }
 
     #endregion

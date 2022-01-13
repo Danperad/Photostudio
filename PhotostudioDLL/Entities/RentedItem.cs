@@ -2,8 +2,16 @@
 
 public class RentedItem : Costable
 {
+    // Время между двумя новыми заявками
+    private const int HoursWait = 3;
+
     #region Methods
 
+    /// <summary>
+    ///     Добавление арендуемой вещи
+    /// </summary>
+    /// <param name="rentedItem"></param>
+    /// <returns></returns>
     public static bool Add(RentedItem rentedItem)
     {
         if (!Check(rentedItem)) return false;
@@ -11,44 +19,88 @@ public class RentedItem : Costable
         return true;
     }
 
+    /// <summary>
+    ///     Получение всех арендуемых вещей
+    /// </summary>
+    /// <returns></returns>
     public static List<RentedItem> Get()
     {
         return ContextDb.GetRentedItems();
     }
 
-    private static List<RentedItem> GetWithTime(DateOnly date, TimeOnly startTime, TimeOnly endTime)
+    /// <summary>
+    ///     Получение доступных арендуемых вещей
+    /// </summary>
+    /// <param name="start"></param>
+    /// <param name="end"></param>
+    /// <returns></returns>
+    private static IEnumerable<RentedItem> GetWithTime(DateTime start, DateTime end)
     {
         return ContextDb.GetRentedItems()
             .Where(r => r.Number - r.Services
-                .Where(s => s.RentDate == date && (s.StartRent <= startTime ||
-                                                   s.EndRent >= endTime ||
-                                                   s.StartRent >= startTime && s.EndRent <= endTime))
-                .Sum(s => s.Number) > 0).ToList();
+                .Where(s => ContextDb.FindDateTime(start, end.AddHours(HoursWait),
+                    s.StartTime!.Value, s.EndTime!.Value.AddHours(HoursWait)))
+                .Sum(s => s.Number) > 0);
     }
 
-    public static List<RentedItem> GetNoDress(DateOnly date, TimeOnly startTime, TimeOnly endTime)
+    /// <summary>
+    ///     Получение доступного реквизита
+    /// </summary>
+    /// <param name="start"></param>
+    /// <param name="end"></param>
+    /// <returns></returns>
+    public static IEnumerable<RentedItem> GetNoDress(DateTime start, DateTime end)
     {
-        return GetWithTime(date, startTime, endTime).Where(r => !r.IsСlothes).ToList();
+        return GetWithTime(start, end).Where(r => !r.IsСlothes);
     }
 
-    public static List<RentedItem> GetСlothes(DateOnly date, TimeOnly startTime, TimeOnly endTime)
+    /// <summary>
+    ///     Получение доступной одежды
+    /// </summary>
+    /// <param name="start"></param>
+    /// <param name="end"></param>
+    /// <returns></returns>
+    public static IEnumerable<RentedItem> GetСlothes(DateTime start, DateTime end)
     {
-        return GetWithTime(date, startTime, endTime).Where(r => r.IsСlothes).ToList();
+        return GetWithTime(start, end).Where(r => r.IsСlothes && !r.IsKids);
     }
 
-    public static List<RentedItem> GetKidsСlothes(DateOnly date, TimeOnly startTime, TimeOnly endTime)
+    /// <summary>
+    ///     Получение доступной детской одежды
+    /// </summary>
+    /// <param name="start"></param>
+    /// <param name="end"></param>
+    /// <returns></returns>
+    public static IEnumerable<RentedItem> GetKidsСlothes(DateTime start, DateTime end)
     {
-        return GetСlothes(date, startTime, endTime).Where(r => r.IsKids).ToList();
+        return GetWithTime(start, end).Where(r => r.IsСlothes && r.IsKids);
     }
 
-    public static RentedItem? GetByID(int ID)
+    /// <summary>
+    ///     Получение арендуемой вещи по id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    public static RentedItem? GetById(int id)
     {
-        return ContextDb.GetRentedItems().FirstOrDefault(r => r.ID == ID);
+        return ContextDb.GetRentedItems().FirstOrDefault(r => r.ID == id);
     }
 
     public static void Update()
     {
         ContextDb.Save();
+    }
+
+    /// <summary>
+    ///     Получение числа доступных экземпляров
+    /// </summary>
+    /// <param name="start"></param>
+    /// <param name="end"></param>
+    /// <returns></returns>
+    public int GetAvailable(DateTime start, DateTime end)
+    {
+        return (int) (Number - Services.Where(s => ContextDb.FindDateTime(start, end.AddHours(HoursWait),
+            s.StartTime!.Value, s.EndTime!.Value.AddHours(HoursWait))).Sum(s => s.Number!.Value));
     }
 
     #endregion
@@ -60,7 +112,7 @@ public class RentedItem : Costable
     public bool IsСlothes { get; set; }
     public bool IsKids { get; set; }
 
-    public virtual List<ExecuteableService> Services { get; set; }
+    public virtual List<OrderService> Services { get; set; }
 
     #endregion
 
@@ -68,7 +120,7 @@ public class RentedItem : Costable
 
     public RentedItem()
     {
-        Services = new List<ExecuteableService>();
+        Services = new List<OrderService>();
     }
 
     public RentedItem(string title, string description, uint number, decimal cost, bool isСlothes, bool isKids) : base(
@@ -78,7 +130,7 @@ public class RentedItem : Costable
         Number = number;
         IsСlothes = isСlothes;
         IsKids = isKids;
-        Services = new List<ExecuteableService>();
+        Services = new List<OrderService>();
     }
 
     #endregion

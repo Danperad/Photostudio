@@ -1,5 +1,4 @@
 ﻿using PhotostudioDLL.Attributes;
-using PhotostudioDLL.Exceptions;
 
 namespace PhotostudioDLL.Entities;
 
@@ -9,36 +8,72 @@ public class Order
     {
         [StringValue("Завершена")] COMPLETE,
         [StringValue("Подготовка")] PREWORK,
-        [StringValue("Фотографирование")] INPHOTO,
-        [StringValue("Создание Видео")] INVIDEO,
-        [StringValue("На ретушировании")] INRETUSH,
-        [StringValue("Отменён")] CLOSED,
-        [StringValue("Печать")] PRINT
+        [StringValue("В работе")] INWORK,
+        [StringValue("Отменен")] CLOSED
     }
 
     #region Methods
 
+    /// <summary>
+    ///     Проверка и изменения статуса заявок
+    /// </summary>
+    public static void CheckStatusTime()
+    {
+        var orders = Get();
+        foreach (var order in orders)
+        {
+            foreach (var service in order.Services)
+                if (service.Status == OrderService.ServiceStatus.INPROGRESS && service.EndTime.HasValue &&
+                    service.EndTime.Value < DateTime.Now)
+                    service.Status = OrderService.ServiceStatus.COMPLETE;
+
+            if (order.Services.All(s => s.Status == OrderService.ServiceStatus.COMPLETE))
+                order.Status = OrderStatus.COMPLETE;
+            if (order.Status != OrderStatus.COMPLETE &&
+                order.Contract.EndDate < DateOnly.FromDateTime(DateTime.Today))
+            {
+                order.Status = OrderStatus.CLOSED;
+                foreach (var service in order.Services) service.Status = OrderService.ServiceStatus.CANCЕLED;
+            }
+        }
+
+        Update();
+    }
+
+    /// <summary>
+    ///     Добавление новой заявки
+    /// </summary>
+    /// <param name="order"></param>
+    /// <returns></returns>
     public static bool Add(Order order)
     {
         if (!Check(order)) return false;
-        if (order.Services.Any(service => !ExecuteableService.Check(service)))
-        {
-            return false;
-        }
         ContextDb.Add(order);
         return true;
     }
 
+    /// <summary>
+    ///     Проверка заявки
+    /// </summary>
+    /// <param name="order"></param>
+    /// <returns></returns>
     private static bool Check(Order order)
     {
         return Contract.Check(order.Contract) && DateOnly.FromDateTime(order.DateTime) <= order.Contract.StartDate;
     }
 
+    /// <summary>
+    ///     Получение всех заявок
+    /// </summary>
+    /// <returns></returns>
     public static List<Order> Get()
     {
         return ContextDb.GetOrders();
     }
 
+    /// <summary>
+    ///     Установка новых значение в базе данных
+    /// </summary>
     public static void Update()
     {
         ContextDb.Save();
@@ -54,10 +89,10 @@ public class Order
     public int ClientID { get; set; }
     public DateTime DateTime { get; set; }
     public OrderStatus Status { get; set; }
-    public virtual List<ExecuteableService> Services { get; set; }
-    
+    public virtual List<OrderService> Services { get; set; }
+
     /// <summary>
-    /// Своство расчитываемое общую стоимость заявки
+    ///     Своство расчитываемое общую стоимость заявки
     /// </summary>
     public decimal AllGetCost
     {
@@ -66,15 +101,16 @@ public class Order
             decimal cost = 0;
             foreach (var service in Services)
             {
-                cost += service.Service.Cost;
+                cost += service.Service.Cost.GetValueOrDefault(0);
                 if (service.RentedItem != null)
-                    cost += service.RentedItem.Cost * service.Number!.Value *
-                            (decimal)(service.EndRent - service.StartRent)!.Value.TotalHours;
+                    cost += service.RentedItem.Cost!.Value * service.Number!.Value *
+                            (decimal) (service.EndTime - service.StartTime)!.Value.TotalHours;
                 if (service.Hall != null)
-                    cost += service.Hall.Cost * (decimal)(service.EndRent - service.StartRent)!.Value.TotalHours;
+                    cost += service.Hall.Cost!.Value *
+                            (decimal) (service.EndTime - service.StartTime)!.Value.TotalHours;
                 if (service.PhotoLocation != null)
-                    cost += service.Service.Cost *
-                            ((decimal)(service.EndRent - service.StartRent)!.Value.TotalHours - 1);
+                    cost += service.Service.Cost!.Value *
+                            (decimal) (service.StartTime - service.EndTime)!.Value.TotalHours;
             }
 
             return cost;
@@ -82,7 +118,7 @@ public class Order
     }
 
     /// <summary>
-    /// Свойство находящее описание статуса используя рефлексию
+    ///     Свойство находящее описание статуса используя рефлексию
     /// </summary>
     public string? TextStatus
     {
@@ -112,11 +148,11 @@ public class Order
 
     public Order()
     {
-        Services = new List<ExecuteableService>();
+        Services = new List<OrderService>();
         Status = OrderStatus.PREWORK;
     }
 
-    public Order(Contract contract, Client client, DateTime dateTime, List<ExecuteableService> services)
+    public Order(Contract contract, Client client, DateTime dateTime, List<OrderService> services)
     {
         Status = OrderStatus.PREWORK;
         Contract = contract;

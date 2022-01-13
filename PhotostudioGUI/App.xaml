@@ -15,6 +15,10 @@
             <Style TargetType="Button" BasedOn="{StaticResource ButtonRevealStyle}">
                 <Setter Property="fw:PointerTracker.Enabled" Value="True" />
             </Style>
+            <Style TargetType="Frame">
+                <Setter Property="NavigationUIVisibility" Value="Hidden" />
+                <Setter Property="Background" Value="White" />
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -12,32 +12,51 @@
             <Setter Property="FontSize" Value="15" />
         </Style>
     </Page.Resources>
-    <StackPanel>
-        <DockPanel Margin="5">
-            <DatePicker Initialized="DatePicker_OnInitialized" Name="DatePicker" FontSize="15"
-                        mD:HintAssist.Hint="Дата начала" SelectedDateChanged="DatePicker_OnSelectedDateChanged" />
-            <mD:TimePicker Name="StartTimePicker" mD:HintAssist.Hint="Начало" Width="80" Is24Hours="True" FontSize="15"
-                           Margin="2 0 0 0" SelectedTimeChanged="TimePicker_OnSelectedTimeChanged" />
-            <mD:TimePicker Name="EndTimePicker" mD:HintAssist.Hint="Конец" Width="80" Is24Hours="True" FontSize="15"
-                           Margin="2 0 0 0" SelectedTimeChanged="TimePicker_OnSelectedTimeChanged" />
-        </DockPanel>
-        <ComboBox Name="HallComboBox" DisplayMemberPath="Title" mD:HintAssist.Hint="Выберите зал" Margin="5" FontSize="14"
-                  SelectionChanged="Selector_OnSelectionChanged" IsEnabled="False">
-            <ComboBox.DataContext>
-                <entities:Hall />
-            </ComboBox.DataContext>
-        </ComboBox>
-        <DockPanel Margin="5">
-            <TextBlock Text="Описание: " />
-            <TextBlock Name="DescriptionBlock" TextWrapping="Wrap" />
-        </DockPanel>
-        <DockPanel Margin="5">
-            <TextBlock Text="Цена за час: " />
-            <TextBlock Name="PricePerHour" />
-        </DockPanel>
-        <DockPanel Margin="5">
-            <TextBlock Text="Итоговая цена: " />
-            <TextBlock Name="PriceTotal" />
-        </DockPanel>
-    </StackPanel>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <StackPanel>
+            <DockPanel Margin="5">
+                <DatePicker Name="StartDatePicker" Initialized="DatePicker_OnInitialized" FontSize="15"
+                            mD:HintAssist.Hint="Дата начала"
+                            SelectedDateChanged="StartDatePicker_OnSelectedDateChanged" />
+                <mD:TimePicker Name="StartTimePicker" mD:HintAssist.Hint="Начало" Width="80" Is24Hours="True"
+                               FontSize="15"
+                               Margin="2 0 0 0" SelectedTimeChanged="TimePicker_OnSelectedTimeChanged" />
+            </DockPanel>
+            <DockPanel Margin="5">
+                <DatePicker Name="EndDatePicker" Initialized="DatePicker_OnInitialized" FontSize="15"
+                            mD:HintAssist.Hint="Дата Окончания"
+                            SelectedDateChanged="EndDatePicker_OnSelectedDateChanged" />
+                <mD:TimePicker Name="EndTimePicker" mD:HintAssist.Hint="Конец" Width="80" Is24Hours="True"
+                               FontSize="15"
+                               Margin="2 0 0 0" SelectedTimeChanged="TimePicker_OnSelectedTimeChanged" />
+            </DockPanel>
+            <ComboBox Name="HallComboBox" DisplayMemberPath="Title" mD:HintAssist.Hint="Выберите зал" Margin="5"
+                      FontSize="14"
+                      SelectionChanged="Selector_OnSelectionChanged" IsEnabled="False">
+                <ComboBox.DataContext>
+                    <entities:Hall />
+                </ComboBox.DataContext>
+            </ComboBox>
+            <DockPanel Margin="5">
+                <TextBlock Text="Описание: " />
+                <TextBlock Name="DescriptionBlock" TextWrapping="Wrap" />
+            </DockPanel>
+            <DockPanel Margin="5">
+                <TextBlock Text="Цена за час: " />
+                <TextBlock Name="PricePerHour" />
+            </DockPanel>
+            <DockPanel Margin="5">
+                <TextBlock Text="Итоговая цена: " />
+                <TextBlock Name="PriceTotal" />
+            </DockPanel>
+        </StackPanel>
+        <Button Grid.Row="1" Name="DeleateButton" Click="DeleteButton_Click" Content="Удалить" FontSize="15"
+                Height="25" Width="100"
+                HorizontalAlignment="Right" Margin="10" />
+    </Grid>
+
 </Page>

@@ -4,6 +4,11 @@ public class Client : People
 {
     #region Methods
 
+    /// <summary>
+    ///     Добавление нового клиента в Бд
+    /// </summary>
+    /// <param name="client"></param>
+    /// <returns></returns>
     public static bool Add(Client client)
     {
         if (!Check(client)) return false;
@@ -11,6 +16,10 @@ public class Client : People
         return true;
     }
 
+    /// <summary>
+    ///     Получение списка клиентов
+    /// </summary>
+    /// <returns></returns>
     public static List<Client> Get()
     {
         return ContextDb.GetClients();
@@ -28,7 +37,7 @@ public class Client : People
     public int ID { get; set; }
     public virtual List<Order> Orders { get; set; }
     public virtual List<Contract> Contracts { get; set; }
-    
+
     #endregion
 
     #region Constructors

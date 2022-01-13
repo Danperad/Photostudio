@@ -1,7 +1,7 @@
 ﻿namespace PhotostudioDLL.Attributes;
 
 /// <summary>
-/// Аттрибут для хранения в свойстве или поле информации
+///     Атрибут для хранения в свойстве или поле информации
 /// </summary>
 public class StringValueAttribute : Attribute
 {

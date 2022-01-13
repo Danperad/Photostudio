@@ -1,47 +1,54 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Controls;
-using PhotostudioDLL.Entities;
-using PhotostudioGUI.Pages;
+﻿namespace PhotostudioGUI.Windows;
 
-namespace PhotostudioGUI.Windows;
-
+/// <summary>
+///     Основное окно
+/// </summary>
 public partial class MainWindow
 {
-    private Dictionary<EPages, Page> _pages;
-    internal Employee Employee { get; }
-
     public MainWindow(Employee employee)
     {
+        Application.Current.MainWindow = this;
         Employee = employee;
         InitializeComponent();
     }
-    public void BackWindow()
-    {
-        mainFrame.GoBack();
-    }
 
+    internal Employee Employee { get; }
+
+    /// <summary>
+    ///     Конфигурация окна на основе роли
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void MainWindow_OnInitialized(object? sender, EventArgs e)
     {
-        userName.Text = Employee.FullName;
+        UserNameBlock.Text = Employee.FullName;
         switch (Employee.RoleID)
         {
             case 1:
-                MainWindowBuilder.AdminBuild(this, out _pages);
-                mainFrame.Navigate(_pages[EPages.EMPLOYEE]);
-                break;
-            case 2:
+                MainWindowBuilder.AdminBuild(this);
                 break;
             case 7:
-                MainWindowBuilder.ManagerBuild(this, out _pages);
-                mainFrame.Navigate(_pages[EPages.CLIENT]);
+                MainWindowBuilder.ManagerBuild(this);
+                break;
+            default:
+                MainWindowBuilder.WorkerBuild(this);
                 break;
         }
     }
 
-    private void MainWindow_OnClosed(object? sender, EventArgs e)
+    private void LogOut_OnClick(object sender, RoutedEventArgs e)
     {
-        Application.Current.Shutdown();
+        LogOut();
+    }
+
+    /// <summary>
+    ///     Выход из аккаунта
+    /// </summary>
+    internal void LogOut()
+    {
+        var window = new LoginWindow();
+        Application.Current.MainWindow = window;
+        window.Show();
+        Close();
     }
 }

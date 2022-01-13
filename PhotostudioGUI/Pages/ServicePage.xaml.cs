@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows.Controls;
-using PhotostudioDLL.Entities;
+﻿namespace PhotostudioGUI.Pages;
 
-namespace PhotostudioGUI.Pages;
-
+/// <summary>
+///     Страница со списком услуг
+/// </summary>
 public partial class ServicePage
 {
     private readonly List<Service> _services;
@@ -15,6 +13,11 @@ public partial class ServicePage
         InitializeComponent();
     }
 
+    /// <summary>
+    ///     Заполнение списка услуг
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void ServiceData_OnInitialized(object? sender, EventArgs e)
     {
         (sender as ListView)!.ItemsSource = _services;

@@ -4,12 +4,20 @@ public class Role
 {
     #region Methods
 
+    /// <summary>
+    ///     Добавление новой роли
+    /// </summary>
+    /// <param name="role"></param>
     public static void Add(Role role)
     {
         ContextDb.Add(role);
     }
 
-    public static List<Role> Get()
+    /// <summary>
+    ///     Получение списка ролей
+    /// </summary>
+    /// <returns></returns>
+    public static IEnumerable<Role> Get()
     {
         return ContextDb.GetRoles();
     }
