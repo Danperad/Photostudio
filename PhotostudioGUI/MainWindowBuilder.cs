@@ -15,13 +15,19 @@ public static class MainWindowBuilder
     /// <param name="window"></param>
     public static void AdminBuild(MainWindow window)
     {
-        var titles = new List<string>(new[] {"Услуги", "Заявки", "Услуги заявок"});
+        var titles = new List<string>(new[] {"Клиенты","Услуги", "Заявки", "Услуги заявок"});
         var mainFrame = window.MainFrame;
         foreach (var title in titles)
         {
             PackIconKind icon;
             switch (title)
             {
+                case "Клиенты":
+                    icon = PackIconKind.PersonCardDetails;
+                    window.MainListView.Items.Add(AddItem(title, icon,
+                        () => { mainFrame.Navigate(new ClientPage(mainFrame, window.Employee)); }));
+                    mainFrame.Navigate(new ClientPage(mainFrame, window.Employee));
+                    break;
                 case "Услуги":
                     icon = PackIconKind.PersonCardDetails;
                     window.MainListView.Items.Add(AddItem(title, icon,

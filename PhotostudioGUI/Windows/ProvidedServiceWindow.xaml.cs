@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Windows.Input;
+using PhotostudioDLL.Entities.Services;
 using PhotostudioGUI.Pages.Services;
 
 namespace PhotostudioGUI.Windows;
@@ -9,7 +10,7 @@ namespace PhotostudioGUI.Windows;
 /// </summary>
 public partial class ProvidedServiceWindow
 {
-    private readonly List<Service> _allServices;
+    private readonly IEnumerable<Service> _allServices;
     private readonly List<OrderService> _services;
 
 
@@ -65,23 +66,23 @@ public partial class ProvidedServiceWindow
             case 9:
             case 11:
             case 12:
-                ServiceFrame.Navigate(new PhotoVideoPage(orderService, this));
+                ServiceFrame.Navigate(new PhotoVideoPage(orderService as PhotoVideoService, this));
                 break;
             case 5:
             case 6:
             case 10:
                 orderService.Employee = Employee;
-                ServiceFrame.Navigate(new ItemRentPage(orderService, this));
+                ServiceFrame.Navigate(new ItemRentPage(orderService as RentService, this));
                 break;
             case 7:
                 orderService.Employee = Employee;
-                ServiceFrame.Navigate(new HallRentPage(orderService, this));
+                ServiceFrame.Navigate(new HallRentPage(orderService as HallRentService, this));
                 break;
             case 13:
-                ServiceFrame.Navigate(new StylePage(orderService, this));
+                ServiceFrame.Navigate(new StylePage(orderService as StyleService, this));
                 break;
             default:
-                ServiceFrame.Navigate(new VoidPage(orderService, RemoveService));
+                ServiceFrame.Navigate(new SimplePage(orderService, RemoveService));
                 break;
         }
     }

@@ -1,6 +1,9 @@
-﻿namespace PhotostudioDLL.Entities;
+﻿using PhotostudioDLL.Entities.Interfaces;
+using PhotostudioDLL.Entities.Services;
 
-public class RentedItem : Costable
+namespace PhotostudioDLL.Entities;
+
+public class RentedItem : ICostable
 {
     // Время между двумя новыми заявками
     private const int HoursWait = 3;
@@ -14,7 +17,7 @@ public class RentedItem : Costable
     /// <returns></returns>
     public static bool Add(RentedItem rentedItem)
     {
-        if (!Check(rentedItem)) return false;
+        if (!ICostable.Check(rentedItem)) return false;
         ContextDb.Add(rentedItem);
         return true;
     }
@@ -23,7 +26,7 @@ public class RentedItem : Costable
     ///     Получение всех арендуемых вещей
     /// </summary>
     /// <returns></returns>
-    public static List<RentedItem> Get()
+    public static IEnumerable<RentedItem> Get()
     {
         return ContextDb.GetRentedItems();
     }
@@ -39,7 +42,7 @@ public class RentedItem : Costable
         return ContextDb.GetRentedItems()
             .Where(r => r.Number - r.Services
                 .Where(s => ContextDb.FindDateTime(start, end.AddHours(HoursWait),
-                    s.StartTime!.Value, s.EndTime!.Value.AddHours(HoursWait)))
+                    s.StartTime, s.EndTime.AddHours(HoursWait)))
                 .Sum(s => s.Number) > 0);
     }
 
@@ -100,7 +103,7 @@ public class RentedItem : Costable
     public int GetAvailable(DateTime start, DateTime end)
     {
         return (int) (Number - Services.Where(s => ContextDb.FindDateTime(start, end.AddHours(HoursWait),
-            s.StartTime!.Value, s.EndTime!.Value.AddHours(HoursWait))).Sum(s => s.Number!.Value));
+            s.StartTime, s.EndTime.AddHours(HoursWait))).Sum(s => s.Number));
     }
 
     #endregion
@@ -108,11 +111,14 @@ public class RentedItem : Costable
     #region Properties
 
     public int ID { get; set; }
+    public string Title { get; set; }
+    public decimal? Cost { get; set; }
+    public string Description { get; set; }
     public uint Number { get; set; }
     public bool IsСlothes { get; set; }
     public bool IsKids { get; set; }
 
-    public virtual List<OrderService> Services { get; set; }
+    public virtual List<RentService> Services { get; set; }
 
     #endregion
 
@@ -120,17 +126,17 @@ public class RentedItem : Costable
 
     public RentedItem()
     {
-        Services = new List<OrderService>();
+        Services = new List<RentService>();
     }
 
-    public RentedItem(string title, string description, uint number, decimal cost, bool isСlothes, bool isKids) : base(
-        title,
-        description, cost)
+    public RentedItem(string title, string description, uint number, decimal cost, bool isСlothes, bool isKids) : this()
     {
+        Title = title;
+        Description = description;
+        Cost = cost;
         Number = number;
         IsСlothes = isСlothes;
         IsKids = isKids;
-        Services = new List<OrderService>();
     }
 
     #endregion

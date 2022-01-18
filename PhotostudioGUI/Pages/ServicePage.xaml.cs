@@ -5,7 +5,7 @@
 /// </summary>
 public partial class ServicePage
 {
-    private readonly List<Service> _services;
+    private readonly IEnumerable<Service> _services;
 
     public ServicePage()
     {

@@ -1,4 +1,6 @@
-﻿namespace PhotostudioDLL.Entities;
+﻿using PhotostudioDLL.Entities.Services;
+
+namespace PhotostudioDLL.Entities;
 
 public class Employee : People
 {
@@ -11,7 +13,7 @@ public class Employee : People
     ///     Получение всех сотрудников
     /// </summary>
     /// <returns></returns>
-    public static List<Employee> Get()
+    public static IEnumerable<Employee> Get()
     {
         return ContextDb.GetEmployees();
     }
@@ -21,9 +23,9 @@ public class Employee : People
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    public static List<Employee> GetByRoleId(int id)
+    public static IEnumerable<Employee> GetByRoleId(int id)
     {
-        return ContextDb.GetEmployees().Where(e => e.Role.ID == id).ToList();
+        return Get().Where(e => e.Role.ID == id);
     }
 
     /// <summary>
@@ -34,9 +36,10 @@ public class Employee : People
     /// <returns></returns>
     public static IEnumerable<Employee> GetPhotoWithTime(DateTime start, DateTime end)
     {
-        return GetByRoleId(2)
-            .Where(e => !e.Services.Any(s => ContextDb.FindDateTime(start, end.AddHours(HoursWait),
-                s.StartTime!.Value, s.EndTime!.Value.AddHours(HoursWait))));
+        return GetByRoleId(2).Where(e => !e.Services.Any(s =>
+            ContextDb.FindDateTime(start, end.AddHours(HoursWait), (s as PhotoVideoService)!.StartTime,
+                (s as PhotoVideoService)!.EndTime.AddHours(HoursWait))));
+        
     }
 
     /// <summary>
@@ -47,9 +50,9 @@ public class Employee : People
     /// <returns></returns>
     public static IEnumerable<Employee> GetVideoWithTime(DateTime start, DateTime end)
     {
-        return GetByRoleId(4).Where(e => !e.Services.Any(s => ContextDb.FindDateTime(start,
-            end.AddHours(HoursWait),
-            s.StartTime!.Value, s.EndTime!.Value.AddHours(HoursWait))));
+        return GetByRoleId(4).Where(e => !e.Services.Any(s =>
+            ContextDb.FindDateTime(start, end.AddHours(HoursWait), (s as PhotoVideoService)!.StartTime,
+                (s as PhotoVideoService)!.EndTime.AddHours(HoursWait))));
     }
 
     /// <summary>
@@ -60,13 +63,13 @@ public class Employee : People
     /// <returns></returns>
     public static IEnumerable<Employee> GetStyleWithTime(DateTime start, DateTime end)
     {
-        return GetByRoleId(6).Where(e => !e.Services.Any(s => ContextDb.FindDateTime(start,
-            end.AddHours(1),
-            s.StartTime!.Value, s.EndTime!.Value.AddHours(1))));
+        return GetByRoleId(6).Where(e => !e.Services.Any(s =>
+            ContextDb.FindDateTime(start, end.AddHours(HoursWait), (s as StyleService)!.StartTime,
+                (s as StyleService)!.EndTime.AddHours(HoursWait))));
     }
 
     /// <summary>
-    ///     Получение пользователя для авторизации
+    /// Получение пользователя для авторизации
     /// </summary>
     /// <param name="login"></param>
     /// <param name="pass"></param>

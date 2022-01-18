@@ -1,4 +1,6 @@
-﻿namespace PhotostudioGUI.Pages;
+﻿using PhotostudioDLL.Entities.Services;
+
+namespace PhotostudioGUI.Pages;
 
 /// <summary>
 ///     Страница с предоставляемыми услугами

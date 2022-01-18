@@ -1,4 +1,5 @@
-﻿using PhotostudioGUI.Windows;
+﻿using PhotostudioDLL.Entities.Services;
+using PhotostudioGUI.Windows;
 
 namespace PhotostudioGUI.Pages.Services;
 
@@ -7,7 +8,7 @@ namespace PhotostudioGUI.Pages.Services;
 /// </summary>
 public partial class HallRentPage
 {
-    private readonly OrderService _orderService;
+    private readonly HallRentService _orderService;
     private readonly ProvidedServiceWindow _window;
 
     /// <summary>
@@ -15,7 +16,7 @@ public partial class HallRentPage
     /// </summary>
     /// <param name="orderService"></param>
     /// <param name="window"></param>
-    public HallRentPage(OrderService orderService, ProvidedServiceWindow window)
+    public HallRentPage(HallRentService orderService, ProvidedServiceWindow window)
     {
         _orderService = orderService;
         _window = window;
@@ -66,7 +67,7 @@ public partial class HallRentPage
             EndDatePicker.SelectedDate!.Value + EndTimePicker.SelectedTime!.Value.TimeOfDay;
         HallComboBox.IsEnabled = true;
         HallComboBox.ItemsSource =
-            Hall.GetWithTime(_orderService.StartTime.Value, _orderService.EndTime.Value);
+            Hall.GetWithTime(_orderService.StartTime, _orderService.EndTime);
     }
 
     /// <summary>
@@ -83,8 +84,7 @@ public partial class HallRentPage
             var price = hall.Cost!.Value;
             PricePerHour.Text = price.ToString("F");
             PriceTotal.Text = (price *
-                               (decimal) (_orderService.EndTime!.Value - _orderService.StartTime!.Value)
-                               .TotalHours)
+                               (decimal) (_orderService.EndTime - _orderService.StartTime).TotalHours)
                 .ToString("F");
             _orderService.Hall = hall;
             return;

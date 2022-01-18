@@ -1,4 +1,6 @@
 ﻿using PhotostudioDLL.Attributes;
+using PhotostudioDLL.Entities.Interfaces;
+using PhotostudioDLL.Entities.Services;
 
 namespace PhotostudioDLL.Entities;
 
@@ -23,9 +25,13 @@ public class Order
         foreach (var order in orders)
         {
             foreach (var service in order.Services)
-                if (service.Status == OrderService.ServiceStatus.INPROGRESS && service.EndTime.HasValue &&
-                    service.EndTime.Value < DateTime.Now)
+            {
+                if (service.Service.Type == Service.ServiceType.SIMPLE) continue;
+
+                if (service.Status == OrderService.ServiceStatus.INPROGRESS &&
+                    (service as ITimedService)!.EndTime < DateTime.Now)
                     service.Status = OrderService.ServiceStatus.COMPLETE;
+            }
 
             if (order.Services.All(s => s.Status == OrderService.ServiceStatus.COMPLETE))
                 order.Status = OrderStatus.COMPLETE;
@@ -102,15 +108,22 @@ public class Order
             foreach (var service in Services)
             {
                 cost += service.Service.Cost.GetValueOrDefault(0);
-                if (service.RentedItem != null)
-                    cost += service.RentedItem.Cost!.Value * service.Number!.Value *
-                            (decimal) (service.EndTime - service.StartTime)!.Value.TotalHours;
-                if (service.Hall != null)
-                    cost += service.Hall.Cost!.Value *
-                            (decimal) (service.EndTime - service.StartTime)!.Value.TotalHours;
-                if (service.PhotoLocation != null)
-                    cost += service.Service.Cost!.Value *
-                            (decimal) (service.StartTime - service.EndTime)!.Value.TotalHours;
+                switch (service.Service.Type)
+                {
+                    case Service.ServiceType.RENT:
+                        cost += (service as RentService)!.RentedItem.Cost!.Value * (service as RentService)!.Number;
+                        break;
+                    case Service.ServiceType.HALLRENT:
+                        var tmp = service as HallRentService;
+                        cost += tmp!.Hall.Cost!.Value *
+                                (decimal) (tmp.EndTime - tmp.StartTime).TotalHours;
+                        break;
+                    case Service.ServiceType.PHOTOVIDEO:
+                        var tmp1 = service as PhotoVideoService;
+                        cost += tmp1!.Service.Cost!.Value *
+                                (decimal) (tmp1.EndTime - tmp1.StartTime).TotalHours;
+                        break;
+                }
             }
 
             return cost;

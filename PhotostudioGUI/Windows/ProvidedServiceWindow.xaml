@@ -6,6 +6,7 @@
         xmlns:mD="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:entities="clr-namespace:PhotostudioDLL.Entities;assembly=PhotostudioDLL"
         xmlns:fw="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
+        xmlns:services="clr-namespace:PhotostudioDLL.Entities.Services;assembly=PhotostudioDLL"
         mc:Ignorable="d"
         fw:AcrylicWindow.Enabled="True"
         fw:AcrylicWindow.AcrylicWindowStyle="NoIcon"
@@ -35,7 +36,7 @@
             <ListView Name="ProvidedListView"
                       Initialized="FrameworkElement_OnInitialized">
                 <ListView.DataContext>
-                    <entities:OrderService />
+                    <services:OrderService />
                 </ListView.DataContext>
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem" BasedOn="{StaticResource {x:Type ListViewItem}}">

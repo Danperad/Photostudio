@@ -63,24 +63,19 @@ public static class EntityConfigure
     {
         builder.Property(r => r.IsСlothes).HasDefaultValue(false);
         builder.Property(r => r.IsKids).HasDefaultValue(false);
-        builder.Property(e => e.Title).IsRequired();
-        builder.Property(e => e.Description).IsRequired();
         builder.Property(e => e.Cost).IsRequired().HasColumnType("money");
         builder.Property(e => e.Title).HasMaxLength(50);
     }
 
     public static void HallConfigure(EntityTypeBuilder<Hall> builder)
     {
-        builder.Property(e => e.Title).IsRequired();
-        builder.Property(e => e.Description).IsRequired();
         builder.Property(e => e.Cost).IsRequired().HasColumnType("money");
         builder.Property(e => e.Title).HasMaxLength(50);
     }
 
     public static void ServiceConfigure(EntityTypeBuilder<Service> builder)
     {
-        builder.Property(e => e.Title).IsRequired().HasMaxLength(50);
-        builder.Property(e => e.Description).IsRequired();
+        builder.Property(e => e.Title).HasMaxLength(50);
         builder.Property(e => e.Cost).HasColumnType("money");
     }
 
@@ -171,24 +166,28 @@ public static class EntityConfigure
     {
         var services = new List<Service>
         {
-            new("Фотосессия", "Фотографирование от одного из фотографов", 4000) {ID = 1},
-            new("Видеосъемка", "Видеосъемка от одного из операторов", 6000) {ID = 2},
-            new("Ретуширование", "Авторская обработка фотографий", 2500) {ID = 3},
-            new("Монтаж", "Авторская обработка видеоконтента", 10000) {ID = 4},
-            new("Аренда одежды", "Временное изъятие из нашего склада платья для ваших нужд")
+            new("Фотосессия", "Фотографирование от одного из фотографов", Service.ServiceType.PHOTOVIDEO, 4000)
+                {ID = 1},
+            new("Видеосъемка", "Видеосъемка от одного из операторов", Service.ServiceType.PHOTOVIDEO, 6000) {ID = 2},
+            new("Ретуширование", "Авторская обработка фотографий", Service.ServiceType.SIMPLE,2500) {ID = 3},
+            new("Монтаж", "Авторская обработка видеоконтента", Service.ServiceType.SIMPLE, 10000) {ID = 4},
+            new("Аренда одежды", "Временное изъятие из нашего склада платья для ваших нужд", Service.ServiceType.RENT)
                 {ID = 5},
-            new("Аренда реквизита", "Временное изъятие из нашего склада реквизита для ваших нужд") {ID = 6},
-            new("Аренда помещения", "Временное изъятие из нашего склада помещения для ваших нужд",
+            new("Аренда реквизита", "Временное изъятие из нашего склада реквизита для ваших нужд", Service.ServiceType.RENT) {ID = 6},
+            new("Аренда помещения", "Временное изъятие из нашего склада помещения для ваших нужд",Service.ServiceType.HALLRENT,
                 3000) {ID = 7},
-            new("Печать фотографий", "Распечатаем ваши фотографии", 100) {ID = 8},
-            new("Детская фотосессия", "Фотографирование детей от одного из фотографов", 3000)
+            new("Печать фотографий", "Распечатаем ваши фотографии", Service.ServiceType.SIMPLE, 100) {ID = 8},
+            new("Детская фотосессия", "Фотографирование детей от одного из фотографов", Service.ServiceType.PHOTOVIDEO,
+                    3000)
                 {ID = 9},
-            new("Аренда детской одежды", "Временное изъятие из нашего склада платья для ваших нужд") {ID = 10},
-            new("Свадебная фотосессия", "Фотографирование на свадьбе от одного из фотографов", 4500)
+            new("Аренда детской одежды", "Временное изъятие из нашего склада платья для ваших нужд", Service.ServiceType.RENT) {ID = 10},
+            new("Свадебная фотосессия", "Фотографирование на свадьбе от одного из фотографов",
+                    Service.ServiceType.PHOTOVIDEO, 4500)
                 {ID = 11},
-            new("Свадебная видеосъемка", "Видеосъемка на свадьбе от одного из операторов", 10000)
+            new("Свадебная видеосъемка", "Видеосъемка на свадьбе от одного из операторов",
+                    Service.ServiceType.PHOTOVIDEO, 10000)
                 {ID = 12},
-            new("Макияж", "Создание образов с помощью средств макияжа", 5000)
+            new("Макияж", "Создание образов с помощью средств макияжа",Service.ServiceType.STYLE, 5000)
                 {ID = 13}
         };
 

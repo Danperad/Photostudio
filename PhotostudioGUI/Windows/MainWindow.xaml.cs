@@ -42,7 +42,7 @@ public partial class MainWindow
     }
 
     /// <summary>
-    ///     Выход из аккаунта
+    /// Выход из аккаунта
     /// </summary>
     internal void LogOut()
     {

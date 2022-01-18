@@ -1,4 +1,6 @@
 ﻿using System.Windows.Input;
+using PhotostudioDLL.Entities.Interfaces;
+using PhotostudioDLL.Entities.Services;
 
 namespace PhotostudioGUI.Pages;
 
@@ -47,6 +49,16 @@ public partial class OrderServicePage
     /// <param name="e"></param>
     private void ServicesListView_OnInitialized(object? sender, EventArgs e)
     {
+        if (sender is not ListView listView) return;
+        SetItemsListView(listView);
+    }
+
+    /// <summary>
+    /// Заполнение таблицы с заявками
+    /// </summary>
+    /// <param name="listView"></param>
+    private void SetItemsListView(ItemsControl listView)
+    {
         var services = new List<OrderService>();
         switch (_employee.RoleID)
         {
@@ -80,9 +92,9 @@ public partial class OrderServicePage
                 break;
         }
 
-        if (_employee.RoleID == 1) (sender as ListView)!.ItemsSource = services;
+        if (_employee.RoleID == 1) listView.ItemsSource = services;
         else
-            (sender as ListView)!.ItemsSource = services.Where(s =>
+            listView.ItemsSource = services.Where(s =>
                 s.Status != OrderService.ServiceStatus.COMPLETE && s.Status != OrderService.ServiceStatus.CANCЕLED &&
                 s.Employee == _employee);
     }
@@ -110,7 +122,7 @@ public partial class OrderServicePage
         };
         btn.Click += ChangeStatusButton_OnClick;
 
-        if (service.Status == OrderService.ServiceStatus.INPROGRESS && service.StartTime == null)
+        if (service.Status == OrderService.ServiceStatus.INPROGRESS && service is not ITimedService)
             ServiceInfoPanel.Children.Add(btn);
         else if (service.Status == OrderService.ServiceStatus.WAITING)
             ServiceInfoPanel.Children.Add(btn);
@@ -130,7 +142,7 @@ public partial class OrderServicePage
             if (service.Order.Status == Order.OrderStatus.PREWORK)
                 service.Order.Status = Order.OrderStatus.INWORK;
         }
-        else if (service.Status == OrderService.ServiceStatus.INPROGRESS && service.StartTime == null)
+        else if (service.Status == OrderService.ServiceStatus.INPROGRESS && service is not ITimedService)
         {
             service.Status = OrderService.ServiceStatus.COMPLETE;
             if (service.Order.Status == Order.OrderStatus.INWORK &&
@@ -140,5 +152,6 @@ public partial class OrderServicePage
 
         OrderService.Update();
         AddServiceInfo(service);
+        SetItemsListView(ServicesListView);
     }
 }

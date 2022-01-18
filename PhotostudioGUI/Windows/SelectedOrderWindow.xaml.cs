@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Windows.Input;
+using PhotostudioDLL.Entities.Services;
 using PhotostudioGUI.Pages;
 
 namespace PhotostudioGUI.Windows;

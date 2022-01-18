@@ -5,7 +5,7 @@ public class Client : People
     #region Methods
 
     /// <summary>
-    ///     Добавление нового клиента в Бд
+    /// Добавление нового клиента в Бд
     /// </summary>
     /// <param name="client"></param>
     /// <returns></returns>
@@ -20,7 +20,7 @@ public class Client : People
     ///     Получение списка клиентов
     /// </summary>
     /// <returns></returns>
-    public static List<Client> Get()
+    public static IEnumerable<Client> Get()
     {
         return ContextDb.GetClients();
     }

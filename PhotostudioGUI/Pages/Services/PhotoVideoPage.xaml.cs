@@ -1,14 +1,15 @@
 ﻿using Castle.Core.Internal;
+using PhotostudioDLL.Entities.Services;
 using PhotostudioGUI.Windows;
 
 namespace PhotostudioGUI.Pages.Services;
 
 public partial class PhotoVideoPage
 {
-    private readonly OrderService _orderService;
+    private readonly PhotoVideoService _orderService;
     private readonly ProvidedServiceWindow _window;
 
-    public PhotoVideoPage(OrderService orderService, ProvidedServiceWindow window)
+    public PhotoVideoPage(PhotoVideoService orderService, ProvidedServiceWindow window)
     {
         _orderService = orderService;
         _window = window;
@@ -55,7 +56,7 @@ public partial class PhotoVideoPage
         _orderService.EndTime =
             EndDatePicker.SelectedDate!.Value + EndTimePicker.SelectedTime!.Value.TimeOfDay;
 
-        var hours = (_orderService.EndTime - _orderService.StartTime)!.Value.TotalHours;
+        var hours = (_orderService.EndTime - _orderService.StartTime).TotalHours;
         // Заполнение списка сотрудников
         MessageTextBlock.Text = "";
         FillEmployees(hours);
@@ -73,11 +74,11 @@ public partial class PhotoVideoPage
             case 9:
             case 11:
                 EmployeeComboBox.ItemsSource =
-                    Employee.GetPhotoWithTime(_orderService.StartTime!.Value, _orderService.EndTime!.Value);
+                    Employee.GetPhotoWithTime(_orderService.StartTime, _orderService.EndTime);
                 break;
             default:
                 EmployeeComboBox.ItemsSource =
-                    Employee.GetVideoWithTime(_orderService.StartTime!.Value, _orderService.EndTime!.Value);
+                    Employee.GetVideoWithTime(_orderService.StartTime, _orderService.EndTime);
                 break;
         }
 

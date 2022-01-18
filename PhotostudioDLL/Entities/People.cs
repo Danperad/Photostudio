@@ -23,12 +23,12 @@ public abstract class People
     public string PhoneNumber { get; set; }
     public string? EMail { get; set; }
 
-    public string FullName
+    public virtual string FullName
     {
         get
         {
-            var temp = $"{LastName} {FirstName.Substring(0, 1)}.";
-            if (MiddleName != null) temp += $" {MiddleName.Substring(0, 1)}.";
+            var temp = $"{LastName} {FirstName[..1]}.";
+            if (MiddleName != null) temp += $" {MiddleName[..1]}.";
             return temp;
         }
     }
@@ -48,13 +48,13 @@ public abstract class People
         PhoneNumber = phoneNumber;
     }
 
-    public People(string lastName, string firstName, string middleName, string phoneNumber) : this(lastName, firstName,
+    protected People(string lastName, string firstName, string middleName, string phoneNumber) : this(lastName, firstName,
         phoneNumber)
     {
         MiddleName = middleName;
     }
 
-    public People(string lastName, string firstName, string middleName, string phoneNumber, string eMail) : this(
+    protected People(string lastName, string firstName, string middleName, string phoneNumber, string eMail) : this(
         lastName, firstName, middleName, phoneNumber)
     {
         EMail = eMail;

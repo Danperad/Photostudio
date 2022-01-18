@@ -1,4 +1,6 @@
-﻿namespace PhotostudioGUI.Pages;
+﻿using PhotostudioDLL.Entities.Services;
+
+namespace PhotostudioGUI.Pages;
 
 /// <summary>
 ///     Сборка элементов для информации про услугу
@@ -30,61 +32,55 @@ internal static class BuildPageOrderService
         listBlock.Add(title);
         listBlock.Add(employeeName);
         listBlock.Add(status);
-        switch (service.Service.ID)
+        switch (service.Service.Type)
         {
-            case 1:
-            case 2:
-            case 9:
-            case 11:
-            case 12:
+            case Service.ServiceType.PHOTOVIDEO:
                 var location = new TextBlock
                 {
-                    FontSize = 15, Text = $"Место: {service.PhotoLocation}",
+                    FontSize = 15, Text = $"Место: {(service as PhotoVideoService)!.PhotoLocation}",
                     Margin = margin
                 };
                 var startTime = new TextBlock
                 {
                     FontSize = 15,
                     Text =
-                        $"Время начала: {service.StartTime!.Value:g}",
+                        $"Время начала: {(service as PhotoVideoService)!.StartTime:g}",
                     Margin = margin
                 };
                 var endTime = new TextBlock
                 {
                     FontSize = 15,
                     Text =
-                        $"Время окончания: {service.EndTime!.Value:g}",
+                        $"Время окончания: {(service as PhotoVideoService)!.EndTime:g}",
                     Margin = margin
                 };
                 listBlock.Add(location);
                 listBlock.Add(startTime);
                 listBlock.Add(endTime);
                 break;
-            case 5:
-            case 6:
-            case 10:
+            case Service.ServiceType.RENT:
                 var item = new TextBlock
                 {
-                    FontSize = 15, Text = $"Арендуемый предмет: {service.RentedItem!.Title}",
+                    FontSize = 15, Text = $"Арендуемый предмет: {(service as RentService)!.RentedItem.Title}",
                     Margin = margin
                 };
                 var numbers = new TextBlock
                 {
-                    FontSize = 15, Text = $"Количество: {service.Number}",
+                    FontSize = 15, Text = $"Количество: {(service as RentService)!.Number}",
                     Margin = margin
                 };
                 var startRent = new TextBlock
                 {
                     FontSize = 15,
                     Text =
-                        $"Время начала: {service.StartTime!.Value:g}",
+                        $"Время начала: {(service as RentService)!.StartTime:g}",
                     Margin = margin
                 };
                 var endRent = new TextBlock
                 {
                     FontSize = 15,
                     Text =
-                        $"Время окончания: {service.EndTime!.Value:g}",
+                        $"Время окончания: {(service as RentService)!.EndTime:g}",
                     Margin = margin
                 };
                 listBlock.Add(item);
@@ -92,29 +88,47 @@ internal static class BuildPageOrderService
                 listBlock.Add(startRent);
                 listBlock.Add(endRent);
                 break;
-            case 7:
+            case Service.ServiceType.HALLRENT:
                 var hall = new TextBlock
                 {
-                    FontSize = 15, Text = $"Арендуемое помещение: {service.Hall!.Title}",
+                    FontSize = 15, Text = $"Арендуемое помещение: {(service as HallRentService)!.Hall.Title}",
                     Margin = margin
                 };
                 startRent = new TextBlock
                 {
                     FontSize = 15,
                     Text =
-                        $"Время начала: {service.StartTime!.Value:g}",
+                        $"Время начала: {(service as HallRentService)!.StartTime:g}",
                     Margin = margin
                 };
                 endRent = new TextBlock
                 {
                     FontSize = 15,
                     Text =
-                        $"Время окончания: {service.EndTime!.Value:g}",
+                        $"Время окончания: {(service as HallRentService)!.EndTime:g}",
                     Margin = margin
                 };
                 listBlock.Add(hall);
                 listBlock.Add(startRent);
                 listBlock.Add(endRent);
+                break;
+            case Service.ServiceType.STYLE:
+                startTime = new TextBlock
+                {
+                    FontSize = 15,
+                    Text =
+                        $"Время начала: {(service as HallRentService)!.StartTime:g}",
+                    Margin = margin
+                };
+                endTime = new TextBlock
+                {
+                    FontSize = 15,
+                    Text =
+                        $"Время окончания: {(service as HallRentService)!.EndTime:g}",
+                    Margin = margin
+                };
+                listBlock.Add(startTime);
+                listBlock.Add(endTime);
                 break;
         }
 

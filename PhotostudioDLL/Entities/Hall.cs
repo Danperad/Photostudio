@@ -1,6 +1,9 @@
-﻿namespace PhotostudioDLL.Entities;
+﻿using PhotostudioDLL.Entities.Interfaces;
+using PhotostudioDLL.Entities.Services;
 
-public class Hall : Costable
+namespace PhotostudioDLL.Entities;
+
+public class Hall : ICostable
 {
     // Время между двумя новыми заявками
     private const int HoursWait = 2;
@@ -26,7 +29,7 @@ public class Hall : Costable
     {
         return ContextDb.GetHalls().Where(e => !e.Services.Any(s => ContextDb.FindDateTime(start,
             end.AddHours(HoursWait),
-            s.StartTime!.Value, s.EndTime!.Value.AddHours(HoursWait))));
+            s.StartTime, s.EndTime.AddHours(HoursWait))));
     }
 
     public static void Update()
@@ -39,7 +42,10 @@ public class Hall : Costable
     #region Properties
 
     public int ID { get; set; }
-    public virtual List<OrderService> Services { get; set; }
+    public string Title { get; set; }
+    public decimal? Cost { get; set; }
+    public string Description { get; set; }
+    public virtual List<HallRentService> Services { get; set; }
 
     #endregion
 
@@ -47,12 +53,14 @@ public class Hall : Costable
 
     public Hall()
     {
-        Services = new List<OrderService>();
+        Services = new List<HallRentService>();
     }
 
-    public Hall(string title, string description, decimal cost) : base(title, description, cost)
+    public Hall(string title, string description, decimal cost) : this()
     {
-        Services = new List<OrderService>();
+        Title = title;
+        Description = description;
+        Cost = cost;
     }
 
     #endregion

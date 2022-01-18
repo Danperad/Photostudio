@@ -13,7 +13,7 @@ public partial class ClientPage
     private readonly Frame _frame;
 
     private readonly char[] _phonesymb = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
-    private List<Client> _clients;
+    private IEnumerable<Client> _clients;
 
     public ClientPage(Frame frame, Employee employee)
     {

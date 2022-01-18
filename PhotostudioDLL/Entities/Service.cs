@@ -1,14 +1,26 @@
-﻿namespace PhotostudioDLL.Entities;
+﻿using PhotostudioDLL.Entities.Interfaces;
+using PhotostudioDLL.Entities.Services;
 
-public class Service : Costable
+namespace PhotostudioDLL.Entities;
+
+public class Service : ICostable
 {
+    public enum ServiceType
+    {
+        PHOTOVIDEO,
+        STYLE,
+        RENT,
+        HALLRENT,
+        SIMPLE
+    }
+
     #region Methods
 
     /// <summary>
     ///     Получение списка услуг
     /// </summary>
     /// <returns></returns>
-    public static List<Service> Get()
+    public static IEnumerable<Service> Get()
     {
         return ContextDb.GetServices();
     }
@@ -18,6 +30,10 @@ public class Service : Costable
     #region Properties
 
     public int ID { get; set; }
+    public string Title { get; set; }
+    public decimal? Cost { get; set; }
+    public string Description { get; set; }
+    public ServiceType Type { get; set; }
     public virtual List<Inventory> Inventories { get; set; }
     public virtual List<OrderService> ExecuteableServices { get; set; }
 
@@ -31,16 +47,16 @@ public class Service : Costable
         ExecuteableServices = new List<OrderService>();
     }
 
-    public Service(string title, string description) : base(title, description)
+    public Service(string title, string description, ServiceType type) : this()
     {
-        Inventories = new List<Inventory>();
-        ExecuteableServices = new List<OrderService>();
+        Title = title;
+        Description = description;
+        Type = type;
     }
 
-    public Service(string title, string description, decimal cost) : base(title, description, cost)
+    public Service(string title, string description, ServiceType type, decimal cost) : this(title, description, type)
     {
-        Inventories = new List<Inventory>();
-        ExecuteableServices = new List<OrderService>();
+        Cost = cost;
     }
 
     #endregion

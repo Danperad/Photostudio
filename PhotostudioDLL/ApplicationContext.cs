@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using PhotostudioDLL.Entities;
+using PhotostudioDLL.Entities.Services;
 
 namespace PhotostudioDLL;
 
@@ -104,7 +105,11 @@ public sealed class ApplicationContext : DbContext
     public DbSet<Service> Service { get; set; } = null!;
     public DbSet<Hall> Hall { get; set; } = null!;
     public DbSet<RentedItem> RentedItem { get; set; } = null!;
-    public DbSet<OrderService> ExecuteableService { get; set; } = null!;
+    public DbSet<OrderService> OrderService { get; set; } = null!;
+    public DbSet<HallRentService> HallRentService { get; set; } = null!;
+    public DbSet<PhotoVideoService> PhotoVideoService { get; set; } = null!;
+    public DbSet<RentService> RentService { get; set; } = null!;
+    public DbSet<StyleService> StyleService { get; set; } = null!;
     public DbSet<Order> Order { get; set; } = null!;
 
     #endregion

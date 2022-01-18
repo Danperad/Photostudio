@@ -1,4 +1,5 @@
-﻿using PhotostudioGUI.Windows;
+﻿using PhotostudioDLL.Entities.Services;
+using PhotostudioGUI.Windows;
 
 namespace PhotostudioGUI.Pages.Services;
 
@@ -7,7 +8,7 @@ namespace PhotostudioGUI.Pages.Services;
 /// </summary>
 public partial class StylePage
 {
-    private readonly OrderService _orderService;
+    private readonly StyleService _orderService;
     private readonly ProvidedServiceWindow _window;
 
     /// <summary>
@@ -15,7 +16,7 @@ public partial class StylePage
     /// </summary>
     /// <param name="orderService"></param>
     /// <param name="window"></param>
-    public StylePage(OrderService orderService, ProvidedServiceWindow window)
+    public StylePage(StyleService orderService, ProvidedServiceWindow window)
     {
         _orderService = orderService;
         _window = window;
@@ -61,7 +62,7 @@ public partial class StylePage
         _orderService.EndTime =
             EndDatePicker.SelectedDate!.Value + EndTimePicker.SelectedTime!.Value.TimeOfDay;
 
-        var hours = (_orderService.EndTime - _orderService.StartTime)!.Value.TotalHours;
+        var hours = (_orderService.EndTime - _orderService.StartTime).TotalHours;
         // Заполнение списка сотрудников
         MessageTextBlock.Text = "";
         FillEmployees(hours);
@@ -73,7 +74,7 @@ public partial class StylePage
     private void FillEmployees(double hours)
     {
         EmployeeComboBox.ItemsSource =
-            Employee.GetStyleWithTime(_orderService.StartTime!.Value, _orderService.EndTime!.Value);
+            Employee.GetStyleWithTime(_orderService.StartTime, _orderService.EndTime);
         // Проверка на количество доступных сотрудников
         if (EmployeeComboBox.Items.Count != 0)
         {

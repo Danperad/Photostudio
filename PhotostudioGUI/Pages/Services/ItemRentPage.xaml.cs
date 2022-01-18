@@ -1,4 +1,5 @@
 ﻿using Castle.Core.Internal;
+using PhotostudioDLL.Entities.Services;
 using PhotostudioGUI.Windows;
 
 namespace PhotostudioGUI.Pages.Services;
@@ -8,7 +9,7 @@ namespace PhotostudioGUI.Pages.Services;
 /// </summary>
 public partial class ItemRentPage
 {
-    private readonly OrderService _orderService;
+    private readonly RentService _orderService;
     private readonly ProvidedServiceWindow _window;
     private readonly char[] numbers = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 
@@ -17,7 +18,7 @@ public partial class ItemRentPage
     /// </summary>
     /// <param name="orderService"></param>
     /// <param name="window"></param>
-    public ItemRentPage(OrderService orderService, ProvidedServiceWindow window)
+    public ItemRentPage(RentService orderService, ProvidedServiceWindow window)
     {
         _orderService = orderService;
         _window = window;
@@ -71,10 +72,9 @@ public partial class ItemRentPage
         ItemComboBox.IsEnabled = true;
         ItemComboBox.ItemsSource = _orderService.Service.ID switch
         {
-            5 => RentedItem.GetСlothes(_orderService.StartTime!.Value, _orderService.EndTime!.Value),
-            6 => RentedItem.GetNoDress(_orderService.StartTime!.Value, _orderService.EndTime!.Value),
-            10 => RentedItem.GetKidsСlothes(_orderService.StartTime!.Value,
-                _orderService.EndTime!.Value),
+            5 => RentedItem.GetСlothes(_orderService.StartTime, _orderService.EndTime),
+            6 => RentedItem.GetNoDress(_orderService.StartTime, _orderService.EndTime),
+            10 => RentedItem.GetKidsСlothes(_orderService.StartTime, _orderService.EndTime),
             _ => ItemComboBox.ItemsSource
         };
     }
@@ -94,7 +94,7 @@ public partial class ItemRentPage
             Counts.IsEnabled = true;
             _orderService.RentedItem = item;
             TotalUnits.Text =
-                item.GetAvailable(_orderService.StartTime!.Value, _orderService.EndTime!.Value)
+                item.GetAvailable(_orderService.StartTime, _orderService.EndTime)
                     .ToString();
             _orderService.Number = 1;
             Counts.Text = "1";
@@ -104,7 +104,7 @@ public partial class ItemRentPage
         Counts.IsEnabled = false;
         Counts.Text = "";
         _orderService.RentedItem = item;
-        _orderService.Number = null;
+        _orderService.Number = 0;
         DescriptionBlock.Text = string.Empty;
         PricePerUnit.Text = string.Empty;
         TotalUnits.Text = string.Empty;

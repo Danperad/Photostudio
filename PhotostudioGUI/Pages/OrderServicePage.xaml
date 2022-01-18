@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:entities="clr-namespace:PhotostudioDLL.Entities;assembly=PhotostudioDLL"
+      xmlns:services="clr-namespace:PhotostudioDLL.Entities.Services;assembly=PhotostudioDLL"
       mc:Ignorable="d">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -22,7 +23,7 @@
         <StackPanel Grid.Column="0" Grid.Row="1">
             <ListView Name="ServicesListView" Initialized="ServicesListView_OnInitialized">
                 <ListView.DataContext>
-                    <entities:OrderService />
+                    <services:OrderService />
                 </ListView.DataContext>
                 <ListView.View>
                     <GridView>

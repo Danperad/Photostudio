@@ -1,13 +1,15 @@
-﻿namespace PhotostudioGUI.Pages.Services;
+﻿using PhotostudioDLL.Entities.Services;
+
+namespace PhotostudioGUI.Pages.Services;
 
 /// <summary>
 ///     Страница для заполнения услуг требующих только сотрудника
 /// </summary>
-public partial class VoidPage
+public partial class SimplePage
 {
     private readonly OrderService _orderService;
 
-    public VoidPage(OrderService orderService, Action<OrderService> removeService)
+    public SimplePage(OrderService orderService, Action<OrderService> removeService)
     {
         _orderService = orderService;
         RemoveService = removeService;
