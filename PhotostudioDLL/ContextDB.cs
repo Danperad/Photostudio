@@ -40,9 +40,9 @@ internal static class ContextDb
 
     #region Hall
 
-    internal static List<Hall> GetHalls()
+    internal static IEnumerable<Hall> GetHalls()
     {
-        return Db.Hall.ToList();
+        return Db.Hall.OrderBy(h => h.Title);
     }
 
     #endregion
@@ -51,8 +51,7 @@ internal static class ContextDb
 
     internal static List<Service> GetServices()
     {
-        Console.WriteLine(Db.Service.GetType().Name);
-        return Db.Service.ToList();
+        return Db.Service.OrderBy(s => s.Title).ToList();
     }
 
     #endregion
@@ -76,7 +75,7 @@ internal static class ContextDb
 
     internal static List<Client> GetClients()
     {
-        return Db.Client.ToList();
+        return Db.Client.OrderBy(c => c.LastName).ThenBy(c => c.FirstName).ToList();
     }
 
     #endregion
@@ -91,7 +90,7 @@ internal static class ContextDb
 
     internal static List<Employee> GetEmployees()
     {
-        return Db.Employee.ToList();
+        return Db.Employee.OrderBy(c => c.LastName).ThenBy(c => c.FirstName).ToList();
     }
 
     internal static Employee? GetAuth(string login, string pass)
@@ -161,7 +160,7 @@ internal static class ContextDb
 
     internal static List<RentedItem> GetRentedItems()
     {
-        return Db.RentedItem.ToList();
+        return Db.RentedItem.OrderBy(r => r.Title).ToList();
     }
 
     #endregion

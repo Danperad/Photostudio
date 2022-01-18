@@ -37,6 +37,7 @@
                         <GridViewColumn Header="Отчество" DisplayMemberBinding="{Binding Path=MiddleName}" />
                         <GridViewColumn Header="EMail" DisplayMemberBinding="{Binding Path=EMail}" />
                         <GridViewColumn Header="Телефон" DisplayMemberBinding="{Binding Path=PhoneNumber}" />
+                        <GridViewColumn Header="Компания" DisplayMemberBinding="{Binding Path=Company}" />
                     </GridView>
                 </ListView.View>
                 <ListView.ItemContainerStyle>
@@ -58,7 +59,8 @@
                          FontSize="15" Margin="5" MaxLength="10" />
 
             </DockPanel>
-            <TextBox Name="EMailBox" mD:HintAssist.Hint="E-Mail" FontSize="15" Margin="5" />
+            <TextBox Name="EMailBox" mD:HintAssist.Hint="E-Mail (если есть)" FontSize="15" Margin="5" />
+            <TextBox Name="CompanyBox" mD:HintAssist.Hint="Компания (если есть)" FontSize="15" Margin="5" />
             <Button Content="Добавить" Click="AddClientClick" Margin="0 15 0 0" Height="50" Width="125" />
             <TextBlock Name="ErrorBlock" TextAlignment="Center" Foreground="DarkRed" FontSize="13" Margin="15" />
         </StackPanel>

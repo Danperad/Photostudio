@@ -10,10 +10,6 @@ public partial class App
     /// <param name="e"></param>
     protected override void OnStartup(StartupEventArgs e)
     {
-#if DEBUG
-        ApplicationContext.LoadDb();
-        Order.CheckStatusTime();
-#else
         base.OnStartup(e);
         try
         {
@@ -25,6 +21,5 @@ public partial class App
             MessageBox.Show("Заполните файл конфигурации");
             Shutdown();
         }
-#endif
     }
 }

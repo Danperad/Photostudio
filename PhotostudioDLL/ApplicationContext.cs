@@ -65,9 +65,17 @@ public sealed class ApplicationContext : DbContext
     /// <summary>
     ///     Загрузка базы данных
     /// </summary>
-    public static void LoadDb()
+    public static bool LoadDb()
     {
-        new ApplicationContext(GetDb());
+        try
+        {
+            new ApplicationContext(GetDb());
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
 
     /// <summary>

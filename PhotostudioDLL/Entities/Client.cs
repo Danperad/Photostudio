@@ -1,4 +1,6 @@
-﻿namespace PhotostudioDLL.Entities;
+﻿using Castle.Core.Internal;
+
+namespace PhotostudioDLL.Entities;
 
 public class Client : People
 {
@@ -35,8 +37,11 @@ public class Client : People
     #region Properties
 
     public int ID { get; set; }
+    public string? Company { get; set; }
     public virtual List<Order> Orders { get; set; }
     public virtual List<Contract> Contracts { get; set; }
+
+    public override string FullName => Company.IsNullOrEmpty() ? base.FullName : Company!;
 
     #endregion
 

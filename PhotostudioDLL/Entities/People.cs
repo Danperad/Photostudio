@@ -23,7 +23,7 @@ public abstract class People
     public string PhoneNumber { get; set; }
     public string? EMail { get; set; }
 
-    public string FullName
+    public virtual string FullName
     {
         get
         {

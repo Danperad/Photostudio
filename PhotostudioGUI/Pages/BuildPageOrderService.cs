@@ -116,6 +116,24 @@ internal static class BuildPageOrderService
                 listBlock.Add(startRent);
                 listBlock.Add(endRent);
                 break;
+            case 13:
+                startTime = new TextBlock
+                {
+                    FontSize = 15,
+                    Text =
+                        $"Время начала: {service.StartTime!.Value:g}",
+                    Margin = margin
+                };
+                endTime = new TextBlock
+                {
+                    FontSize = 15,
+                    Text =
+                        $"Время окончания: {service.EndTime!.Value:g}",
+                    Margin = margin
+                };
+                listBlock.Add(startTime);
+                listBlock.Add(endTime);
+                break;
         }
 
         return listBlock;

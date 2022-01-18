@@ -9,7 +9,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Remove="sunrise.png"/>
+        <None Remove="sunrise.png" />
+        <None Remove="bin\**" />
     </ItemGroup>
 
     <ItemGroup>
@@ -20,35 +21,41 @@
             <SubType>Code</SubType>
             <DependentUpon>ClientPage.xaml</DependentUpon>
         </Compile>
+        <Compile Remove="bin\**" />
     </ItemGroup>
 
     <ItemGroup>
         <Page Update="Pages\ClientPage.xaml">
             <SubType>Designer</SubType>
         </Page>
+        <Page Remove="bin\**" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="FluentWPF" Version="0.10.2"/>
-        <PackageReference Include="FontAwesome5" Version="2.1.6"/>
-        <PackageReference Include="MaterialDesignColors" Version="2.0.4"/>
-        <PackageReference Include="MaterialDesignThemes" Version="4.3.0"/>
+        <PackageReference Include="FluentWPF" Version="0.10.2" />
+        <PackageReference Include="FontAwesome5" Version="2.1.6" />
+        <PackageReference Include="MaterialDesignColors" Version="2.0.4" />
+        <PackageReference Include="MaterialDesignThemes" Version="4.3.0" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\PhotostudioDLL\PhotostudioDLL.csproj"/>
+        <ProjectReference Include="..\PhotostudioDLL\PhotostudioDLL.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="bin\Debug\net6.0-windows\ref"/>
+        <Folder Include="bin\Debug\net6.0-windows\ref" />
     </ItemGroup>
 
     <ItemGroup>
-        <Resource Include="sunrise.png"/>
+        <Resource Include="sunrise.png" />
     </ItemGroup>
 
     <ItemGroup>
-        <None Include="bin\Debug\net6.0-windows\appsettings1.json"/>
+        <None Include="bin\Debug\net6.0-windows\appsettings1.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="bin\**" />
     </ItemGroup>
 
 </Project>

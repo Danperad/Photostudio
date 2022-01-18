@@ -44,6 +44,7 @@ public partial class ClientPage
         );
         if (!EMailBox.Text.IsNullOrEmpty()) client.EMail = EMailBox.Text;
         if (!MiddleNameBox.Text.IsNullOrEmpty()) client.MiddleName = MiddleNameBox.Text;
+        if (!CompanyBox.Text.IsNullOrEmpty()) client.Company = CompanyBox.Text;
         try
         {
             Client.Add(client);
